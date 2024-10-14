@@ -1,6 +1,8 @@
 nav {
     background-color: #333;
     padding: 10px;
+    border: 2px;
+    border-color: blue;
 }
 
 nav ul {
@@ -26,6 +28,16 @@ nav ul li a:hover {
 }
 /* estilo botones reserva */
 .boton-reservar {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+.boton-contacto {
     display: inline-block;
     padding: 10px 20px;
     background-color: #007bff;
