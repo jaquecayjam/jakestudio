@@ -1,0 +1,26 @@
+nav {
+    background-color: #333;
+    padding: 10px;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* Para hacer el menú horizontal */
+    justify-content: flex-end; /* Para alinear el contenido a la derecha */
+}
+
+nav ul li {
+    margin-left: 20px; /* Espacio entre los elementos del menú */
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
