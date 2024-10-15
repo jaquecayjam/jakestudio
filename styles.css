@@ -1,6 +1,7 @@
 body{
     background-color: #a12929;
 }
+/* estilo menu ---------------*/
 nav {
     width: 100%;
     background-color: black;
@@ -36,12 +37,12 @@ nav ul li a {
 nav ul li a:hover {
     text-decoration: underline;
 }
-/* Estilo contenedores */
+/* Estilo contenedores--------- */
 #container-1 {
     text-align: center; /* Centra el texto dentro del div */
     margin: 20px; /* Añade un margen alrededor del div */
 }
-/* estilo contenedor 2 */
+/* estilo contenedor 2---------- */
 #container-2 {
     width: 50%;
     background-color: aliceblue;
@@ -50,7 +51,7 @@ nav ul li a:hover {
     align-items: flex-start; /* Alinea elementos al principio */
     padding: 20px; /* Espaciado interno */
 }
-/* Estilo específico para la sección "¿Qué Ofrecemos?" */
+/* Estilo específico para la sección "¿Qué Ofrecemos?" ---------*/
 #section-ofrecemos {
     display: flex; /* Habilitar flexbox dentro de la sección */
     align-items: center; /* Alinea verticalmente el h2 y la lista */
@@ -72,7 +73,7 @@ nav ul li a:hover {
 #section-ofrecemos li {
     margin-right: 30px; /* Espacio entre los elementos de la lista */
 }
-/* estilo botones reserva */
+/* estilo botones reserva --------------------*/
 .boton-reservar {
     display: inline-block;
     padding: 10px 20px;
@@ -93,6 +94,7 @@ nav ul li a:hover {
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
+/* Estilo foooter------------ */
 footer {
     position: fixed;
     bottom: 0;
