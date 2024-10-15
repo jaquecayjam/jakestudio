@@ -1,30 +1,76 @@
+body{
+    background-color: #a12929;
+}
 nav {
-    background-color: #333;
-    padding: 10px;
-    border: 2px;
-    border-color: blue;
+    width: 100%;
+    background-color: black;
+    padding: 10px;    
+    border: 2px solid ;
+    border-color: white;
 }
 
 nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 50px;
     display: flex; /* Para hacer el menú horizontal */
     justify-content: flex-end; /* Para alinear el contenido a la derecha */
+    
 }
 
 nav ul li {
     margin-left: 20px; /* Espacio entre los elementos del menú */
+    
 }
 
 nav ul li a {
     color: white;
     text-decoration: none;
     font-size: 18px;
+    
 }
 
 nav ul li a:hover {
     text-decoration: underline;
+}
+/* Estilo contenedores */
+#container-1 {
+    text-align: center; /* Centra el texto dentro del div */
+    margin: 20px; /* Añade un margen alrededor del div */
+}
+/* estilo contenedor 2 */
+#container-2 {
+    width: 50%;
+    background-color: aliceblue;
+    display: flex; /* Habilitar flexbox */
+    justify-content: flex-start; /* Alinea los elementos al inicio (izquierda) */
+    align-items: flex-start; /* Alinea elementos al principio */
+    padding: 20px; /* Espaciado interno */
+}
+/* Estilo específico para la sección "¿Qué Ofrecemos?" */
+#section-ofrecemos {
+    display: flex; /* Habilitar flexbox dentro de la sección */
+    align-items: center; /* Alinea verticalmente el h2 y la lista */
+}
+/* Estilo específico para la sección "¿Qué Ofrecemos?" */
+#section-ofrecemos h2 {
+    margin-right: 20px; /* Espacio entre el título y la lista */
+    padding-left: 50px;
+}
+
+/* Estilo de la lista */
+#section-ofrecemos ul {
+   
+    list-style-type: none; 
+   
+}
+
+/* Estilo de los elementos de la lista */
+#section-ofrecemos li {
+    margin-right: 30px; /* Espacio entre los elementos de la lista */
 }
 /* estilo botones reserva */
 .boton-reservar {
@@ -46,4 +92,13 @@ nav ul li a:hover {
     border-radius: 5px;
     font-weight: bold;
     transition: background-color 0.3s ease;
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    background-color: black; /* Color de fondo */
+    color: white; /* Color del texto */
+    text-align: center; /* Centra el texto */
+    padding: 20px; /* Espaciado interno */
+    position: relative; /* Permite posicionar elementos dentro del footer */
 }
