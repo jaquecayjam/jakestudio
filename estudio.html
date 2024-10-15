@@ -91,6 +91,27 @@
             <p>Si estás buscando un lugar donde tu música pueda brillar, no dudes en <strong>contactarnos</strong> para más información o para reservar una sesión en <strong> NOMBRE</strong>. ¡Estamos aquí para ayudarte a hacer realidad tus proyectos musicales!</p>
         </section>
     </main>
+    <h2>Formulario de Reserva</h2>
+    <form id="form-reserva">
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="nombre">Apellido:</label><br>
+        <input type="text" id="apellido" name="apellido" required><br><br>
+
+        <label for="correo">Correo Electrónico:</label><br>
+        <input type="email" id="correo" name="correo" required><br><br>
+
+        <label for="fecha">Fecha de Reserva:</label><br>
+        <input type="date" id="fecha" name="fecha" required><br><br>
+
+        <div id="horarios"></div><br>
+
+        <input type="submit" value="Reservar">
+    </form>
+
+    <script src="script.js"></script>  <!--script para manipular las horas de reserva-->
+    <input type="hidden" name="hora" value="">
     <div class="footer-container"> <!-- contenedor footer-->
         <footer>
             <p>&copy; JakeStudio 2024</p>
