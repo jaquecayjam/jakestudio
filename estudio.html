@@ -91,8 +91,9 @@
             <p>Si estás buscando un lugar donde tu música pueda brillar, no dudes en <strong>contactarnos</strong> para más información o para reservar una sesión en <strong> NOMBRE</strong>. ¡Estamos aquí para ayudarte a hacer realidad tus proyectos musicales!</p>
         </section>
     </main>
+    <!-- formulario -->
     <h2>Formulario de Reserva</h2>
-    <form id="form-reserva">
+    <form id="form-reserva" action="reserva.php" method="POST"> 
         <label for="nombre">Nombre:</label><br>
         <input type="text" id="nombre" name="nombre" required><br><br>
 
@@ -105,12 +106,22 @@
         <label for="fecha">Fecha de Reserva:</label><br>
         <input type="date" id="fecha" name="fecha" required><br><br>
 
+        <label for="horas-necesarias">Horas necesarias:</label><br>
+        <input type="number" id="horas-necesarias" name="horas-necesarias" min="1" max="9" required><br><br>
+
+        <!-- Contenedor para mostrar las horas -->
         <div id="horarios"></div><br>
 
         <input type="submit" value="Reservar">
     </form>
 
-    <script src="script.js"></script>  <!--script para manipular las horas de reserva-->
+    <!-- Contenedor donde se mostrará la selección del usuario -->
+    <div id="resumen-seleccion" style="display: none;">
+        <h3>Resumen de tu selección</h3>
+        <p id="resumen-texto"></p>
+    </div>
+
+    <script src="formulario_reserva.js"></script>  <!--script para manipular las horas de reserva-->
     <input type="hidden" name="hora" value="">
     <div class="footer-container"> <!-- contenedor footer-->
         <footer>
