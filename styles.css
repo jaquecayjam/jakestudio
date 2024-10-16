@@ -2,7 +2,7 @@ body{
     background-color: #a12929;
     
 }
-/* estilo menu ---------------*/
+/* estilo menu ------------------*/
 nav {
     
     background-color: black;
@@ -97,7 +97,7 @@ nav ul li a:hover {
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+
 }
 .boton-contacto {
     display: inline-block;
@@ -107,7 +107,7 @@ nav ul li a:hover {
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    
 }
 /* Estilo formulario---------------*/
 
