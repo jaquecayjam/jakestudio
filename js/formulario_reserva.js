@@ -14,6 +14,7 @@ const disponibilidad = [
     { fecha: '2024-10-16', horas: [9, 10, 11, 12] },                     // 16 de octubre tiene horas disponibles
     { fecha: '2024-10-17', horas: [10, 11, 14, 15, 16] },       // 17 de octubre tiene horas disponibles
     { fecha: '2024-10-18', horas: [9, 10] },                             // 18 de octubre tiene horas limitadas
+    { fecha: '2024-10-19', horas: [9, 10,11,17,18] },
 ];
 
 // Función para generar y mostrar las horas disponibles
@@ -36,19 +37,15 @@ function generarHorarios() {
     // Obtener la cantidad de horas necesarias seleccionadas
     const horasNecesarias = parseInt(horasNecesariasInput.value);
 
-    if (!horasNecesarias) {
-        return; // No hacer nada si no se ha seleccionado la cantidad de horas
-    }
-
-    // Buscar la disponibilidad para la fecha seleccionada
-    const disponibilidadDia = disponibilidad.find(d => d.fecha === fechaSeleccionada);
-
-    if (!disponibilidadDia) {
-        return; // No hay disponibilidad para la fecha seleccionada
-    }
-
     // Mostrar solo las horas consecutivas disponibles
     const horasDisponibles = disponibilidadDia.horas;
+    debugger;
+    // Buscar la disponibilidad para la fecha seleccionada
+    if (horasNecesarias > horasDisponibles) {
+        let alertaNoHorasDisponible = document.createElement('div');
+        alertaNoHorasDisponible.textContent = "No hay horas disponibles";
+        horariosDiv.insertAdjacentElement('afterend', alertaNoHorasDisponible);
+    }
 
     for (let i = 0; i <= horasDisponibles.length - horasNecesarias; i++) {
         const horaInicio = horasDisponibles[i];
