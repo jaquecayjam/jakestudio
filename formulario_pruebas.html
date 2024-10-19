@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pruebas formulario</title>
+</head>
+<body>
+    <h2>Formulario de Reserva</h2>
+<form id="form-reserva" action="php/pruebas_formulario.php" method="POST"> 
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+
+    <label for="apellido">Apellido:</label><br>
+    <input type="text" id="apellido" name="apellido" required><br><br>
+
+    <label for="correo">Correo Electrónico:</label><br>
+    <input type="email" id="correo" name="correo" required><br><br>
+
+    <label for="fecha">Fecha de Reserva:</label><br>
+    <input type="date" id="fecha" name="fecha" required onchange="mostrarHoras()"><br><br>
+
+    <label for="horas-necesarias">Selecciona una hora:</label><br>
+    <select id="horarios" name="horas-necesarias" required>
+        <option value="">Seleccione una hora</option>
+        <!-- Las horas disponibles se agregarán aquí mediante JavaScript -->
+    </select><br><br>
+
+    <input type="submit" value="Reservar">
+</form>
+<script>
+    function mostrarHoras() {
+        const horariosSelect = document.getElementById('horarios');
+        horariosSelect.innerHTML = ''; // Limpiar horas previas
+
+        const horasDisponibles = [
+            '09:00', '10:00', '11:00', '12:00', 
+            '13:00', '14:00', '15:00', '16:00', 
+            '17:00', '18:00'
+        ];
+
+        // Agregar las horas disponibles al select
+        horasDisponibles.forEach(hora => {
+            const option = document.createElement('option');
+            option.value = hora;
+            option.textContent = hora;
+            horariosSelect.appendChild(option);
+        });
+    }
+</script>
+</body>
+</html>
