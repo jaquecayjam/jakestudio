@@ -12,26 +12,47 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 }
+// Esta conexion me guarda solo la hora de la reserva---------------
+// // Obtener datos del formulario
+// $nombre = $_POST['nombre'];
+// $apellido = $_POST['apellido'];
+// $correo = $_POST['correo'];
+// $fecha = $_POST['fecha'];
+// $horas_necesarias = $_POST['horas-necesarias'];
 
-// Obtener datos del formulario
+// // Preparar y vincular la declaración
+// $stmt = $conn->prepare("INSERT INTO reservas (nombre, apellido, correo, fecha, horas_necesarias) VALUES (?, ?, ?, ?, ?)");
+// $stmt->bind_param("ssssi", $nombre, $apellido, $correo, $fecha, $horas_necesarias);
+
+// // Ejecutar la declaración
+// if ($stmt->execute()) {
+//     echo "Reserva guardada con éxito.";
+// } else {
+//     echo "Error: " . $stmt->error;
+// }
+
+// // Cerrar la declaración y la conexión
+// $stmt->close();
+// $conn->close();
+//
+// Esta conexion me guarda  hora y inicio de la reserva---------------
 $nombre = $_POST['nombre'];
 $apellido = $_POST['apellido'];
 $correo = $_POST['correo'];
 $fecha = $_POST['fecha'];
-$horas_necesarias = $_POST['horas-necesarias'];
+$hora_inicio = $_POST['hora_inicio'];
+$hora_fin = $_POST['hora_fin'];
 
-// Preparar y vincular la declaración
-$stmt = $conn->prepare("INSERT INTO reservas (nombre, apellido, correo, fecha, horas_necesarias) VALUES (?, ?, ?, ?, ?)");
-$stmt->bind_param("ssssi", $nombre, $apellido, $correo, $fecha, $horas_necesarias);
+// Insertar los datos en la base de datos
+$sql = "INSERT INTO reservas (nombre, apellido, correo, fecha, hora_inicio, hora_fin) 
+        VALUES ('$nombre', '$apellido', '$correo', '$fecha', '$hora_inicio', '$hora_fin')";
 
-// Ejecutar la declaración
-if ($stmt->execute()) {
-    echo "Reserva guardada con éxito.";
+if ($conn->query($sql) === TRUE) {
+    echo "Reserva guardada con éxito";
 } else {
-    echo "Error: " . $stmt->error;
+    echo "Error: " . $sql . "<br>" . $conn->error;
 }
 
-// Cerrar la declaración y la conexión
-$stmt->close();
+// Cerrar la conexión
 $conn->close();
 ?>
