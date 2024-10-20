@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estudio</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/reservas_formulario.js"></script>  <!--script para manipular las horas de reserva-->
 </head>
 <body>
     <nav>
@@ -91,8 +92,8 @@
             <p>Si estás buscando un lugar donde tu música pueda brillar, no dudes en <strong>contactarnos</strong> para más información o para reservar una sesión en <strong> NOMBRE</strong>. ¡Estamos aquí para ayudarte a hacer realidad tus proyectos musicales!</p>
         </section>
     </main>
-    <!-- formulario -->
-    <h2>Formulario de Reserva-JakeStudio</h2>
+    <!-- formulario que uso sin conexion BD--------------------->
+    <!-- <h2>Formulario de Reserva-JakeStudio</h2>
     <form id="form-reserva" action="reserva.php" method="POST"> 
         <label for="nombre">Nombre:</label><br>
         <input type="text" id="nombre" name="nombre" required><br><br>
@@ -109,22 +110,45 @@
         <label for="horas-necesarias">Horas necesarias:</label><br>
         <input type="number" id="horas-necesarias" name="horas-necesarias" min="1" max="9" required><br><br>
 
-        <!-- Contenedor para mostrar las horas -->
+        Contenedor para mostrar las horas
         <div id="horarios"></div><br>
         
-        <!-- Contenedor para mostrar disponible -->
+       Contenedor para mostrar disponible 
        
         <input type="submit" value="Reservar">
     </form>
 
-    <!-- Contenedor donde se mostrará la selección del usuario -->
+     Contenedor donde se mostrará la selección del usuario
     <div id="resumen-seleccion" style="display: none;">
         <h3>Resumen de tu selección</h3>
         <p id="resumen-texto"></p>
     </div>
+fin formulario sin conexion BD-->
 
-    <script src="formulario_reserva.js"></script>  <!--script para manipular las horas de reserva-->
+<!-- este formulario,me muestra un desplegable de las horas de 9:00 a 18, y las guarda en la base de datos -->
+<form id="form-reserva" action="php/reservas.php" method="POST"> 
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+
+    <label for="apellido">Apellido:</label><br>
+    <input type="text" id="apellido" name="apellido" required><br><br>
+
+    <label for="correo">Correo Electrónico:</label><br>
+    <input type="email" id="correo" name="correo" required><br><br>
+
+    <label for="fecha">Fecha de Reserva:</label><br>
+    <input type="date" id="fecha" name="fecha" required onchange="mostrarHoras()"><br><br>
+
+    <label for="horas-necesarias">Selecciona una hora:</label><br>
+    <select id="horarios" name="horas-necesarias" required>
+        <option value="">Seleccione una hora</option>
+        <!-- Las horas 9:00 a 18:00  apareceren aqui con JavaScript  -->
+    </select><br><br>
+
+    <input type="submit" value="Reservar">
     <input type="hidden" name="hora" value="">
+</form>
+    <input type="hidden" name="hora" value=""> 
     <div class="footer-container"> <!-- contenedor footer-->
         <footer>
             <p>&copy; JakeStudio 2024</p>
