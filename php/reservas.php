@@ -26,7 +26,7 @@ $hora_fin = $_POST['hora_fin'];
 
 //  $conn->prepare,sentencia,dentro tiene los insert que hara a cada value ????
 $stmt = $conn->prepare("INSERT INTO reservas (nombre, apellido, correo, fecha, hora_inicio, hora_fin) VALUES (?, ?, ?, ?, ?, ?)");
-// FIX: solucion: $stmt->bind_param("ssssss")
+// FIX: error en las horas al guardar: 00:00:12 Solucion: $stmt->bind_param("ssssss")
 $stmt->bind_param("ssssss", $nombre, $apellido, $correo, $fecha, $hora_inicio, $hora_fin);
 
 // Ejecutar la declaración
