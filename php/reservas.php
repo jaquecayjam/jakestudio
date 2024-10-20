@@ -4,7 +4,7 @@
 $servername = "localhost"; // 
 $username = "root"; // usuario de MySQL
 $password = "root1234_"; // contraseña de MySQL
-$dbname = "jakestudio_v1"; // Nombre de la base de datos
+$dbname = "jakestudio_v2"; // Nombre de la base de datos
 
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -20,11 +20,13 @@ $nombre = $_POST['nombre'];
 $apellido = $_POST['apellido'];
 $correo = $_POST['correo'];
 $fecha = $_POST['fecha'];
-$horas_necesarias = $_POST['horas-necesarias'];
+$hora_inicio = $_POST['hora_inicio'];
+$hora_fin = $_POST['hora_fin'];
+// $horas_necesarias = $_POST['horas-necesarias'];
 
 //  $conn->prepare,sentencia,dentro tiene los insert que hara a cada value ????
-$stmt = $conn->prepare("INSERT INTO reservas (nombre, apellido, correo, fecha, horas_necesarias) VALUES (?, ?, ?, ?, ?)");
-$stmt->bind_param("sssss", $nombre, $apellido, $correo, $fecha, $horas_necesarias);
+$stmt = $conn->prepare("INSERT INTO reservas (nombre, apellido, correo, fecha, hora_inicio, hora_fin) VALUES (?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssii", $nombre, $apellido, $correo, $fecha, $hora_inicio, $hora_fin);
 
 // Ejecutar la declaración
 if ($stmt->execute()) {

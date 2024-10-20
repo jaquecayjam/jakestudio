@@ -138,15 +138,28 @@ fin formulario sin conexion BD-->
 
     <label for="fecha">Fecha de Reserva:</label><br>
     <input type="date" id="fecha" name="fecha" required onchange="mostrarHoras()"><br><br>
+    <!-- El usuario puede elegir la hora inicial y la hora final -->
+      <!--Hora de Inicio -->
+    <label for="hora-inicio">Hora de Inicio:</label><br>
+    <select id="hora-inicio" name="hora_inicio" required>
+        <option value="">Seleccione una hora de inicio</option>
+    </select><br><br>
 
-    <label for="horas-necesarias">Selecciona una hora:</label><br>
-    <select id="horarios" name="horas-necesarias" required>
-        <option value="">Seleccione una hora</option>
-        <!-- Las horas 9:00 a 18:00  apareceren aqui con JavaScript  -->
+    <!-- Hora de Fin -->
+    <label for="hora-fin">Hora  Fin:</label><br>
+    <select id="hora-fin" name="hora_fin" required>
+        <option value="">Seleccione hasta que hora</option>
     </select><br><br>
 
     <input type="submit" value="Reservar">
-    <input type="hidden" name="hora" value="">
+    <!-- <label for="horas-necesarias">Selecciona una hora:</label><br>
+    <select id="horarios" name="horas-necesarias" required>
+        <option value="">Seleccione una hora</option>
+         Las horas 9:00 a 18:00  apareceren aqui con JavaScript 
+    </select><br><br>
+
+    <input type="submit" value="Reservar">
+    <input type="hidden" name="hora" value=""> -->
 </form>
     <input type="hidden" name="hora" value=""> 
     <div class="footer-container"> <!-- contenedor footer-->
