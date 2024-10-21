@@ -3,7 +3,7 @@
 $servername = "localhost"; // Por ejemplo, "localhost"
 $username = "root"; // Tu nombre de usuario de MySQL
 $password = "root1234_"; // Tu contraseña de MySQL
-$dbname = "pruebas_reservas"; // Nombre de la base de datos
+$dbname = "jakestudio_v2"; // Nombre de la base de datos
 
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
