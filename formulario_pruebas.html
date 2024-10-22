@@ -120,6 +120,52 @@
 
 
 <!-- Formulario, muestra las horas de 09:00 a 18:00 en vertical-------------------------------->
+<!-- <form id="form-reserva" action="php/pruebas_formulario.php" method="POST">
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+
+    <label for="apellido">Apellido:</label><br>
+    <input type="text" id="apellido" name="apellido" required><br><br>
+
+    <label for="correo">Correo Electrónico:</label><br>
+    <input type="email" id="correo" name="correo" required><br><br>
+
+    <label for="fecha">Fecha de Reserva:</label><br>
+    <input type="date" id="fecha" name="fecha" required onchange="mostrarHoras()">
+        Mostrar una lista cuando el usuario haga click en el dia que quiere 
+        <label for="horarios"></label><br> 
+         name=horario[] me deja selecionar vario valores y enviarlo a la base de datos 
+        <select id="horarios" name="horarios[]" multiple required size="10" style="width: 200px;">
+             Las opciones serán generadas dinámicamente con JavaScript 
+         </select><br><br> 
+         <input type="submit" value="Reservar"> 
+    </form> -->
+        <!-- <script> 
+            // // Función para mostrar las horas en el selector múltiple las horas s emuestran en vertical de 09:00 a 18:00
+            // function mostrarHoras() {
+            // const selectHorarios = document.getElementById("horarios");
+
+            // //  Limpiar las opciones previas
+            //  selectHorarios.innerHTML = '';
+
+            // //  Definir el rango de horas (9:00 a 18:00)
+            // const horaInicio = 9;
+            //  const horaFin = 18;
+
+            // //  Generar las opciones de horas
+            // for (let i = horaInicio; i <= horaFin; i++) {
+            //  let hora = `${i}:00`;
+
+            // // Crear opción para cada hora
+            // let option = document.createElement("option");
+            // option.value = hora;
+            // option.text = hora;
+            // selectHorarios.appendChild(option);
+            //  }
+            // }
+        </script>-->
+<!-- FIN Formulario, muestra las horas de 09:00 a 18:00 en vertical-------------------------------->
+ <!-- Formulario, selecciono hora inicio y final, en el desplegable y las guarda -->
 <form id="form-reserva" action="php/pruebas_formulario.php" method="POST">
     <label for="nombre">Nombre:</label><br>
     <input type="text" id="nombre" name="nombre" required><br><br>
@@ -145,50 +191,26 @@
         <!-- FIN Añado lo siguiente, para que se guarden la hora inicio y final,para mi desplegable de 09:00 a 18:00 -->
          <input type="submit" value="Reservar"> 
     </form>
-        <script>
-            // Función para mostrar las horas en el selector múltiple las horas s emuestran en vertical de 09:00 a 18:00--------------
-            function mostrarHoras() {
-            const selectHorarios = document.getElementById("horarios");
 
-            //  Limpiar las opciones previas
-             selectHorarios.innerHTML = '';
-
-            //  Definir el rango de horas (9:00 a 18:00)
-            const horaInicio = 9;
-             const horaFin = 18;
-
-            //  Generar las opciones de horas
-            for (let i = horaInicio; i <= horaFin; i++) {
-             let hora = `${i}:00`;
-
-            // Crear opción para cada hora
-            let option = document.createElement("option");
-            option.value = hora;
-            option.text = hora;
-            selectHorarios.appendChild(option);
-             }
-            }
-        </script>
-<!-- FIN Formulario, muestra las horas de 09:00 a 18:00 en vertical-------------------------------->
            <script>
-    //         function mostrarHoras() {
-    //     const horariosSelect = document.getElementById('horarios');
-    //     horariosSelect.innerHTML = ''; // Limpiar horas previas
+     function mostrarHoras() {
+   const horariosSelect = document.getElementById('horarios');
+    horariosSelect.innerHTML = ''; // Limpiar horas previas
 
-    //     const horasDisponibles = [
-    //         '09:00', '10:00', '11:00', '12:00', 
-    //         '13:00', '14:00', '15:00', '16:00', 
-    //         '17:00', '18:00'
-    //     ];
+    const horasDisponibles = [
+     '09:00', '10:00', '11:00', '12:00', 
+      '13:00', '14:00', '15:00', '16:00', 
+    '17:00', '18:00'
+        ];
 
     //     // Agregar las horas disponibles al select
-    //     horasDisponibles.forEach(hora => {
-    //         const option = document.createElement('option');
-    //         option.value = hora;
-    //         option.textContent = hora;
-    //         horariosSelect.appendChild(option);
-    //     });
-    // }
+      horasDisponibles.forEach(hora => {
+      const option = document.createElement('option');
+     option.value = hora;
+     option.textContent = hora;
+   horariosSelect.appendChild(option);
+    });
+    }
     // function seleccionarHoras() {
     //         const selectHorarios = document.getElementById("horarios");
     //         const selectedOptions = Array.from(selectHorarios.selectedOptions);
