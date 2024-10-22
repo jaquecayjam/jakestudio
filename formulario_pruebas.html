@@ -67,8 +67,8 @@
         <label for="fecha">Fecha de Reserva:</label><br>
         <input type="date" id="fecha" name="fecha" required onchange="mostrarHoras()"><br><br>
 
-        <!-- Campos para seleccionar hora inicio y final -->
-        <!-- Seleccionar Hora de Inicio
+        <!-- Campos para seleccionar hora inicio y final 
+         Seleccionar Hora de Inicio
     <label for="horarios-inicio">Hora de Inicio:</label><br>
     <select id="horarios-inicio" name="hora_inicio" required>
         <option value="">Seleccione una hora de inicio</option>
@@ -78,8 +78,9 @@
     <label for="horarios-fin">Hora de Fin:</label><br>
     <select id="horarios-fin" name="hora_fin" required>
         <option value="">Seleccione una hora de fin</option>
-    </select><br><br> -->
-        <!-- FIN para seleccionar hora inicio y final -->
+    </select><br><br> 
+    Campos para seleccionar hora inicio y final -------------->
+
         <!-- Formularo, muestra las horas de 09:00 a 18:00 en vertical------- -->
         <!-- Mostrar una lista cuando el usuario haga click en el dia que quiere -->
         <label for="horarios">Selecciona las horas disponibles:</label><br>
@@ -87,11 +88,14 @@
         <select id="horarios" name="horarios[]" multiple required size="10" style="width: 200px;">
             <!-- Las opciones serán generadas dinámicamente con JavaScript -->
         </select><br><br>
-        
-        
-        <!-- FIN Formularo, muestra las horas de 09:00 a 18:00 en vertical------- -->
-
+        <!-- Añado lo siguiente, para que se guarden la hora inicio y final,para mi desplegable de 09:00 a 18:00 -->
+        <!-- Campos ocultos para almacenar hora de inicio y hora de fin -->
+        <input type="hidden" id="hora_inicio" name="hora_inicio">
+        <input type="hidden" id="hora_fin" name="hora_fin">
+        <!-- FIN Añado lo siguiente, para que se guarden la hora inicio y final,para mi desplegable de 09:00 a 18:00 -->
         <input type="submit" value="Reservar">
+    </form>
+<!-- FIN Formularo, muestra las horas de 09:00 a 18:00 en vertical------------ -->
         <!-- con este script me guarda en la base de datos, la hora de la reserva y la hora fin de la reserva, ademas de los demas campos<script>-->
         <script>
             // este script me muestra un rango de 9:00, en los 2 campos, hora inicio y hora fin-------------------
@@ -129,28 +133,61 @@
             // FIN este script me muestra un rango de 9:00, en los 2 campos, hora inicio y hora fin-------------------
 
             // Función para mostrar las horas en el selector múltiple las horas s emuestran en vertical de 09:00 a 18:00--------------
-            function mostrarHoras() {
-                const selectHorarios = document.getElementById("horarios");
+            // function mostrarHoras() {
+            //     const selectHorarios = document.getElementById("horarios");
 
-                // Limpiar las opciones previas
-                selectHorarios.innerHTML = '';
+            //     // Limpiar las opciones previas
+            //     selectHorarios.innerHTML = '';
 
-                // Definir el rango de horas (9:00 a 18:00)
-                const horaInicio = 9;
-                const horaFin = 18;
+            //     // Definir el rango de horas (9:00 a 18:00)
+            //     const horaInicio = 9;
+            //     const horaFin = 18;
 
-                // Generar las opciones de horas
-                for (let i = horaInicio; i <= horaFin; i++) {
-                    let hora = `${i}:00`;
+            //     // Generar las opciones de horas
+            //     for (let i = horaInicio; i <= horaFin; i++) {
+            //         let hora = `${i}:00`;
 
-                    // Crear opción para cada hora
-                    let option = document.createElement("option");
-                    option.value = hora;
-                    option.text = hora;
-                    selectHorarios.appendChild(option);
-                }
-            }
+            //         // Crear opción para cada hora
+            //         let option = document.createElement("option");
+            //         option.value = hora;
+            //         option.text = hora;
+            //         selectHorarios.appendChild(option);
+            //     }
+            // }
             // FIN Función para mostrar las horas en el selector múltiple las horas s emuestran en vertical de 09:00 a 18:00--------------
+            function mostrarHoras() {
+        const horariosSelect = document.getElementById('horarios');
+        horariosSelect.innerHTML = ''; // Limpiar horas previas
+
+        const horasDisponibles = [
+            '09:00', '10:00', '11:00', '12:00', 
+            '13:00', '14:00', '15:00', '16:00', 
+            '17:00', '18:00'
+        ];
+
+        // Agregar las horas disponibles al select
+        horasDisponibles.forEach(hora => {
+            const option = document.createElement('option');
+            option.value = hora;
+            option.textContent = hora;
+            horariosSelect.appendChild(option);
+        });
+    }
+    function seleccionarHoras() {
+            const selectHorarios = document.getElementById("horarios");
+            const selectedOptions = Array.from(selectHorarios.selectedOptions);
+
+            if (selectedOptions.length > 0) {
+                // La primera opción seleccionada es la hora de inicio
+                const horaInicio = selectedOptions[0].value;
+                // La última opción seleccionada es la hora de fin
+                const horaFin = selectedOptions[selectedOptions.length - 1].value;
+
+                // Guardar las horas de inicio y fin en campos ocultos
+                document.getElementById("hora_inicio").value = horaInicio;
+                document.getElementById("hora_fin").value = horaFin;
+            }
+        }
         </script>
     </form>
 </body>
