@@ -33,8 +33,8 @@
     <input type="submit" value="Reservar">
 </form>  -->
 
-     <!-- con este script me guarda en la base de datos, SOLO la hora de la reserva, ademas de los demas campos -->
-     <!-- <script> -->
+    <!-- con este script me guarda en la base de datos, SOLO la hora de la reserva, ademas de los demas campos -->
+    <!-- <script> -->
     <!-- function mostrarHoras() {
         const horariosSelect = document.getElementById('horarios');
         horariosSelect.innerHTML = ''; // Limpiar horas previas
@@ -53,9 +53,9 @@
             horariosSelect.appendChild(option);
         });
     } -->
-<!-- </script> -->
-<!-- FIN este formulario,me muestra un desplegable de las horas de 9:00 a 18, y las guarda en la base de datos ------------------->
-<!-- con este formulario, almaceno la hora inicial y la hora final 2 campos , desplegable 9:00 a 18:00,hora inicial y final----------->
+    <!-- </script> -->
+    <!-- FIN este formulario,me muestra un desplegable de las horas de 9:00 a 18, y las guarda en la base de datos ------------------->
+    <!-- con este formulario, almaceno la hora inicial y la hora final 2 campos , desplegable 9:00 a 18:00,hora inicial y final----------->
     <!-- <form id="form-reserva" action="php/pruebas_formulario.php" method="POST">
         <label for="nombre">Nombre:</label><br>
         <input type="text" id="nombre" name="nombre" required><br><br>
@@ -69,8 +69,8 @@
         <label for="fecha">Fecha de Reserva:</label><br>
         <input type="date" id="fecha" name="fecha" required onchange="mostrarHoras()"><br><br> -->
 
-        <!-- Campos para seleccionar hora inicio y final--> 
-         <!-- Seleccionar Hora de Inicio
+    <!-- Campos para seleccionar hora inicio y final-->
+    <!-- Seleccionar Hora de Inicio
     <label for="horarios-inicio">Hora de Inicio:</label><br>
     <select id="horarios-inicio" name="hora_inicio" required>
         <option value="">Seleccione una hora de inicio</option>
@@ -82,7 +82,7 @@
         <option value="">Seleccione una hora de fin</option>
     </select><br><br> 
 </form> -->
-<!-- <script> -->
+    <!-- <script> -->
     <!-- // este script me muestra un rango de 9:00, en los 2 campos, hora inicio y hora fin
     function mostrarHoras() {
             //  Obtener los select donde se agregarán las horas
@@ -115,12 +115,12 @@
                 }
             }
           document.getElementById("fecha").addEventListener("change", mostrarHoras); -->
-<!-- </script> -->
-<!-- FIN con este formulario, almaceno la hora inicial y la hora final 2 campos, desplegable 9:00 a 18:00,hora inicial y final---------------->
+    <!-- </script> -->
+    <!-- FIN con este formulario, almaceno la hora inicial y la hora final 2 campos, desplegable 9:00 a 18:00,hora inicial y final---------------->
 
 
-<!-- Formulario, muestra las horas de 09:00 a 18:00 en vertical-------------------------------->
-<!-- <form id="form-reserva" action="php/pruebas_formulario.php" method="POST">
+    <!-- Formulario, muestra las horas de 09:00 a 18:00 en vertical-------------------------------->
+    <!-- <form id="form-reserva" action="php/pruebas_formulario.php" method="POST">
     <label for="nombre">Nombre:</label><br>
     <input type="text" id="nombre" name="nombre" required><br><br>
 
@@ -140,7 +140,7 @@
          </select><br><br> 
          <input type="submit" value="Reservar"> 
     </form> -->
-        <!-- <script> 
+    <!-- <script> 
             // // Función para mostrar las horas en el selector múltiple las horas s emuestran en vertical de 09:00 a 18:00
             // function mostrarHoras() {
             // const selectHorarios = document.getElementById("horarios");
@@ -164,9 +164,9 @@
             //  }
             // }
         </script>-->
-<!-- FIN Formulario, muestra las horas de 09:00 a 18:00 en vertical-------------------------------->
- <!-- Formulario, selecciono hora inicio y final, en el desplegable y las guarda -->
-<form id="form-reserva" action="php/pruebas_formulario.php" method="POST">
+    <!-- FIN Formulario, muestra las horas de 09:00 a 18:00 en vertical-------------------------------->
+    <!-- Formulario, selecciono hora inicio y final, en el desplegable y las guarda ARREGLAR------------------->
+    <!-- <form id="form-reserva" action="php/pruebas_formulario.php" method="POST">
     <label for="nombre">Nombre:</label><br>
     <input type="text" id="nombre" name="nombre" required><br><br>
 
@@ -178,21 +178,21 @@
 
     <label for="fecha">Fecha de Reserva:</label><br>
     <input type="date" id="fecha" name="fecha" required onchange="mostrarHoras()">
-        <!-- Mostrar una lista cuando el usuario haga click en el dia que quiere -->
+        <Mostrar una lista cuando el usuario haga click en el dia que quiere 
         <label for="horarios"></label><br> 
-        <!-- name=horario[] me deja selecionar vario valores y enviarlo a la base de datos -->
+        name=horario[] me deja selecionar vario valores y enviarlo a la base de datos 
         <select id="horarios" name="horarios[]" multiple required size="10" style="width: 200px;">
-            <!-- Las opciones serán generadas dinámicamente con JavaScript -->
+             Las opciones serán generadas dinámicamente con JavaScript 
          </select><br><br> 
-        <!-- Añado lo siguiente, para que se guarden la hora inicio y final,para mi desplegable de 09:00 a 18:00 -->
-        <!-- Campos ocultos para almacenar hora de inicio y hora de fin -->
+         Añado lo siguiente, para que se guarden la hora inicio y final,para mi desplegable de 09:00 a 18:00
+        Campos ocultos para almacenar hora de inicio y hora de fin ARREGLAR
         <input type="hidden" id="hora_inicio" name="hora_inicio">
         <input type="hidden" id="hora_fin" name="hora_fin"> 
-        <!-- FIN Añado lo siguiente, para que se guarden la hora inicio y final,para mi desplegable de 09:00 a 18:00 -->
+         FIN Añado lo siguiente, para que se guarden la hora inicio y final,para mi desplegable de 09:00 a 18:00
          <input type="submit" value="Reservar"> 
-    </form>
+    </form> -->
 
-           <script>
+    <!--  <script>
      function mostrarHoras() {
    const horariosSelect = document.getElementById('horarios');
     horariosSelect.innerHTML = ''; // Limpiar horas previas
@@ -227,7 +227,451 @@
     //         }
     //     }
     //  
+    </script>-->
+    <!--  Formulario, selecciono hora inicio y final, en el desplegable y las guarda lo muestro en una casilla
+      : me deja solo seleccionar horas posterior.ej 13:00, ya no puedo volver a seleccionae una hora inferior-------------------------------->
+    <!--
+    <h2>Formulario de Reserva</h2>
+    <form id="form-reserva" action="php/pruebas_formulario.php" method="POST">
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="apellido">Apellido:</label><br>
+        <input type="text" id="apellido" name="apellido" required><br><br>
+
+        <label for="correo">Correo Electrónico:</label><br>
+        <input type="email" id="correo" name="correo" required><br><br>
+
+        <label for="fecha">Fecha de Reserva:</label><br>
+        <input type="date" id="fecha" name="fecha" required onchange="mostrarHoras()">
+        Mostrar una lista cuando el usuario haga click en el dia que quiere  
+        <label for="horarios"></label><br>
+         name=horario[] me deja selecionar vario valores y enviarlo a la base de datos  
+        <select id="horarios" name="horarios" multiple required size="10" style="width: 200px;">
+             Las opciones serán generadas dinámicamente con JavaScript  
+        </select><br><br>
+        <p id="hora-inicio-seleccionada"></p>
+        <p id="hora-fin-seleccionada"></p>
+
+    </form>
+    <input type="submit" value="Reservar">
+-->
+
+    <!-- <script>
+        // let horaInicio = null;
+        // let horaFin = null;
+        function mostrarHoras() {
+            const horariosSelect = document.getElementById('horarios');
+            horariosSelect.innerHTML = ''; // Limpiar horas previas
+
+            const horasDisponibles = [
+                '09:00', '10:00', '11:00', '12:00',
+                '13:00', '14:00', '15:00', '16:00',
+                '17:00', '18:00'
+            ];
+
+            //     // Agregar las horas disponibles al select,se crean option,con cada hora de 9:00 a 18:00
+            horasDisponibles.forEach(hora => {
+                const option = document.createElement('option');
+                option.value = hora;
+                option.textContent = hora;
+                horariosSelect.appendChild(option);
+            });
+            // Me muestra debajo de todas las options, las horas seleccionada
+            // horariosSelect... Evento para capturar la selección de la hora.
+            horariosSelect.addEventListener('change', function () {
+                const selectedHora = horariosSelect.value;
+
+                 if (!horaInicio) {
+                    horaInicio = selectedHora;
+                     document.getElementById('hora-inicio-seleccionada').textContent = "Hora de inicio: " + horaInicio;
+                 } else {
+           //         / / Si la hora seleccionada es mayor que la hora de inicio, será la hora de fin
+                    if (selectedHora > horaInicio) {
+                      horaFin = selectedHora;
+                         document.getElementById('hora-fin-seleccionada').textContent = "Hora de fin: " + horaFin;
+                    } else {
+                        // Si la hora seleccionada es menor que la de inicio, la reiniciamos
+                        alert("La hora de fin debe ser posterior a la hora de inicio");
+                     }
+                }
+             });
+        // FIN horariosSelect... Evento para capturar la selección de la hora: me deja solo seleccionar horas posterior.ej 13:00, ya no puedo volver a seleccionae una hora inferior
+  
+        }
+
     </script>
+-->
+    <!--  Formulario, selecciono hora inicio y final, en el desplegable y las guarda lo muestro en una casilla
+      : me deja solo seleccionar horas posterior.ej 13:00, ya no puedo volver a seleccionae una hora inferior-------------------------------->
+    <!-- <h2>Formulario de Reserva</h2>
+    <form id="form-reserva" action="php/pruebas_formulario.php" method="POST">
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="apellido">Apellido:</label><br>
+        <input type="text" id="apellido" name="apellido" required><br><br>
+
+        <label for="correo">Correo Electrónico:</label><br>
+        <input type="email" id="correo" name="correo" required><br><br>
+
+        <label for="fecha">Fecha de Reserva:</label><br>
+        <input type="date" id="fecha" name="fecha" required onchange="mostrarHoras()">
+       Mostrar una lista cuando el usuario haga click en el dia que quiere  
+        <label for="horarios"></label><br>
+      name=horario[] me deja selecionar vario valores y enviarlo a la base de datos  
+        <select id="horarios" name="horarios[]" multiple size="10" style="width: 200px;"></select><br><br>
+           
+        </select><br><br>
+        <p id="hora-inicio-seleccionada"></p>
+        <p id="hora-fin-seleccionada"></p>
+    </form>
+    <input type="submit" value="Reservar"> -->
+   <!--
+    Script, selecciono hora inicio y final, en el desplegable y las guarda lo muestro en una casilla
+      : me deja solo seleccionar horas posterior.ej 13:00, ya no puedo volver a seleccionae una hora inferior
+   <script>
+    
+        function mostrarHoras() {
+            const horariosSelect = document.getElementById('horarios');
+            horariosSelect.innerHTML = ''; // Limpiar horas previas
+
+            const horasDisponibles = [
+                '09:00', '10:00', '11:00', '12:00',
+                '13:00', '14:00', '15:00', '16:00',
+                '17:00', '18:00'
+            ];
+
+            //     // Agregar las horas disponibles al select,se crean option,con cada hora de 9:00 a 18:00
+            horasDisponibles.forEach(hora => {
+                const option = document.createElement('option');
+                option.value = hora;
+                option.textContent = hora;
+                horariosSelect.appendChild(option);
+            });
+            horariosSelect.addEventListener('change', function () {
+                // Obtener todas las opciones seleccionadas
+                const selectedOptions = Array.from(horariosSelect.selectedOptions).map(option => option.value);
+
+                if (selectedOptions.length > 0) {
+                    // Determinar la hora de inicio (mínima) y la hora de fin (máxima)
+                    const horaInicio = Math.min(...selectedOptions);
+                    const horaFin = Math.max(...selectedOptions);
+
+                    // Mostrar las horas de inicio y fin
+                    document.getElementById('hora-inicio-seleccionada').textContent = "Hora de inicio: " + horaInicio;
+                    document.getElementById('hora-fin-seleccionada').textContent = "Hora de fin: " + horaFin;
+                } else {
+                    // Si no hay selección, limpiar los textos
+                    document.getElementById('hora-inicio-seleccionada').textContent = "";
+                    document.getElementById('hora-fin-seleccionada').textContent = "";
+                }
+
+            });
+        }
+    </script> -->
+
+
+    <!-- <script>
+        SCRIPT me deja seleccionar una hora inicio y final bien, eje: 13:00 a 18:00, si selecciono 17:00, no se actuliza la hora fin
+        
+    function mostrarHoras() {
+        const horariosSelect = document.getElementById('horarios');
+        horariosSelect.innerHTML = ''; // Limpiar horas previas
+
+        const horasDisponibles = [
+            '09:00', '10:00', '11:00', '12:00',
+            '13:00', '14:00', '15:00', '16:00',
+            '17:00', '18:00'
+        ];
+
+        // Agregar las horas disponibles al select, se crean option con cada hora de 9:00 a 18:00
+        horasDisponibles.forEach(hora => {
+            const option = document.createElement('option');
+            option.value = hora;
+            option.textContent = hora;
+            horariosSelect.appendChild(option);
+        });
+
+        horariosSelect.addEventListener('change', function () {
+            // Obtener todas las opciones seleccionadas
+            const selectedOptions = Array.from(horariosSelect.selectedOptions).map(option => option.value);
+
+            if (selectedOptions.length > 0) {
+                // Convertir las horas a números eliminando los dos puntos
+                const selectedNumbers = selectedOptions.map(hora => parseInt(hora.replace(':', ''), 10));
+
+                // Determinar la hora de inicio (mínima) y la hora de fin (máxima)
+                const horaInicio = Math.min(...selectedNumbers);
+                const horaFin = Math.max(...selectedNumbers);
+
+                // Convertir las horas de vuelta a formato 'HH:MM'
+                const horaInicioFormateada = `${String(horaInicio).padStart(4, '0').slice(0, 2)}:${String(horaInicio).padStart(4, '0').slice(2)}`;
+                const horaFinFormateada = `${String(horaFin).padStart(4, '0').slice(0, 2)}:${String(horaFin).padStart(4, '0').slice(2)}`;
+
+                // Mostrar las horas de inicio y fin
+                document.getElementById('hora-inicio-seleccionada').textContent = "Hora de inicio: " + horaInicioFormateada;
+                document.getElementById('hora-fin-seleccionada').textContent = "Hora de fin: " + horaFinFormateada;
+            } else {
+                // Si no hay selección, limpiar los textos
+                document.getElementById('hora-inicio-seleccionada').textContent = "";
+                document.getElementById('hora-fin-seleccionada').textContent = "";
+            }
+        });
+    }
+</script>
+-->
+
+<!-- si selecciono:ej: 10:00 a 18:00, me deja seleccionar un hora inferio e superior entre el rango y me laconvierte en la hora fin,pero si seleccion una hora 
+inferior a mi hora inicio , NO se actuliza -->
+<!-- <h2>Formulario de Reserva</h2>
+    <form id="form-reserva" action="php/pruebas_formulario.php" method="POST">
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="apellido">Apellido:</label><br>
+        <input type="text" id="apellido" name="apellido" required><br><br>
+
+        <label for="correo">Correo Electrónico:</label><br>
+        <input type="email" id="correo" name="correo" required><br><br>
+
+        <label for="fecha">Fecha de Reserva:</label><br>
+        <input type="date" id="fecha" name="fecha" required onchange="mostrarHoras()">
+        Mostrar una lista cuando el usuario haga click en el dia que quiere  
+        <label for="horarios"></label><br>
+       name=horario[] me deja selecionar vario valores y enviarlo a la base de datos  
+        <select id="horarios" name="horarios[]" multiple size="10" style="width: 200px;"></select><br><br>
+           
+        </select><br><br>
+        <p id="hora-inicio-seleccionada"></p>
+        <p id="hora-fin-seleccionada"></p>
+    </form>
+    <input type="submit" value="Reservar"> -->
+<!-- <script>
+    function mostrarHoras() {
+        const horariosSelect = document.getElementById('horarios');
+        horariosSelect.innerHTML = ''; // Limpiar horas previas
+
+        const horasDisponibles = [
+            '09:00', '10:00', '11:00', '12:00',
+            '13:00', '14:00', '15:00', '16:00',
+            '17:00', '18:00'
+        ];
+
+        // Agregar las horas disponibles al select
+        horasDisponibles.forEach(hora => {
+            const option = document.createElement('option');
+            option.value = hora;
+            option.textContent = hora;
+            horariosSelect.appendChild(option);
+        });
+
+        let horaInicio = null;
+        let horaFin = null;
+
+        horariosSelect.addEventListener('change', function () {
+            const selectedOptions = Array.from(horariosSelect.selectedOptions).map(option => option.value);
+
+            if (selectedOptions.length > 0) {
+                // Obtener las horas seleccionadas, convertidas a números (eliminando los dos puntos)
+                const selectedNumbers = selectedOptions.map(hora => parseInt(hora.replace(':', ''), 10));
+
+                // Si no hay hora de inicio seleccionada aún, la primera selección será la hora de inicio
+                if (!horaInicio) {
+                    horaInicio = Math.min(...selectedNumbers);
+                }
+
+                // Si ya hay una hora de inicio, cada nueva selección que sea mayor a la hora de inicio será la hora de fin
+                const nuevasHoras = selectedNumbers.filter(hora => hora > horaInicio);
+
+                if (nuevasHoras.length > 0) {
+                    horaFin = Math.min(...nuevasHoras); // Se selecciona la hora más baja que sea mayor que la hora de inicio
+                }
+
+                // Convertir la hora inicio y fin de vuelta a formato 'HH:MM'
+                const horaInicioFormateada = `${String(horaInicio).padStart(4, '0').slice(0, 2)}:${String(horaInicio).padStart(4, '0').slice(2)}`;
+                const horaFinFormateada = horaFin
+                    ? `${String(horaFin).padStart(4, '0').slice(0, 2)}:${String(horaFin).padStart(4, '0').slice(2)}`
+                    : 'No seleccionada';
+
+                // Mostrar las horas de inicio y fin
+                document.getElementById('hora-inicio-seleccionada').textContent = "Hora de inicio: " + horaInicioFormateada;
+                document.getElementById('hora-fin-seleccionada').textContent = "Hora de fin: " + horaFinFormateada;
+            } else {
+                // Si no hay selección, limpiar los textos
+                document.getElementById('hora-inicio-seleccionada').textContent = "";
+                document.getElementById('hora-fin-seleccionada').textContent = "";
+                horaInicio = null; // Restablecer hora inicio
+                horaFin = null; // Restablecer hora fin
+            }
+        });
+    }
+</script>-->
+<!-- si selecciono:ej: 10:00 a 18:00, me deja seleccionar un hora inferio e superior entre el rango y me laconvierte en la hora fin,pero si seleccion una hora 
+inferior a mi hora inicio , NO se actuliza -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Reserva</title>
+    <link rel="stylesheet" href="./css/formulario_estilo.css">
+</head>
+<body>
+
+<h2>Formulario de Reserva</h2>
+<form id="form-reserva" action="reserva.php" method="POST"> 
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+
+    <label for="apellido">Apellido:</label><br>
+    <input type="text" id="apellido" name="apellido" required><br><br>
+
+    <label for="correo">Correo Electrónico:</label><br>
+    <input type="email" id="correo" name="correo" required><br><br>
+
+    <label for="fecha">Fecha de Reserva:</label><br>
+    <input type="date" id="fecha" name="fecha" required onchange="mostrarHoras()"><br><br>
+
+    <label for="horarios">Selecciona las horas disponibles:</label><br>
+    <select id="horarios" name="horarios[]" multiple required size="10" style="width: 200px;"></select><br><br>
+
+    <div id="hora-inicio-seleccionada"></div>
+    <div id="hora-fin-seleccionada"></div>
+
+    <input type="hidden" id="hora_inicio" name="hora_inicio">
+    <input type="hidden" id="hora_fin" name="hora_fin">
+    <input type="submit" value="Reservar">
+</form>
+<!---
+<script>
+    function mostrarHoras() {
+        const horariosSelect = document.getElementById('horarios');
+        horariosSelect.innerHTML = ''; // Limpiar horas previas
+
+        const horasDisponibles = [
+            '09:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00',
+            '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00',
+            '17:00 - 18:00'
+        ];
+
+        // Agregar las horas disponibles al select
+        horasDisponibles.forEach(intervalo => {
+            const option = document.createElement('option');
+            option.value = intervalo; // Guardar el intervalo completo
+            option.textContent = intervalo; // Mostrar el intervalo completo
+            horariosSelect.appendChild(option);
+        });
+
+        horariosSelect.addEventListener('change', function () {
+            const selectedOptions = Array.from(horariosSelect.selectedOptions).map(option => option.value);
+
+            if (selectedOptions.length > 0) {
+                let horaInicio = null;
+                let horaFin = null;
+
+                selectedOptions.forEach(intervalo => {
+                    const [inicio, fin] = intervalo.split(' - '); // Separar inicio y fin
+                    const horaInicioNum = parseInt(inicio.replace(':', ''), 10); // Convertir a número
+                    const horaFinNum = parseInt(fin.replace(':', ''), 10); // Convertir a número
+
+                    // Determinar la hora de inicio (mínima) y la hora de fin (máxima)
+                    if (horaInicio === null || horaInicioNum < horaInicio) {
+                        horaInicio = horaInicioNum;
+                    }
+                    if (horaFin === null || horaFinNum > horaFin) {
+                        horaFin = horaFinNum;
+                    }
+                });
+
+                // Convertir las horas de vuelta a formato 'HH:MM'
+                const horaInicioFormateada = `${String(horaInicio).padStart(4, '0').slice(0, 2)}:${String(horaInicio).padStart(4, '0').slice(2)}`;
+                const horaFinFormateada = `${String(horaFin).padStart(4, '0').slice(0, 2)}:${String(horaFin).padStart(4, '0').slice(2)}`;
+
+                // Mostrar las horas de inicio y fin
+                document.getElementById('hora-inicio-seleccionada').textContent = "Hora de inicio: " + horaInicioFormateada;
+                document.getElementById('hora-fin-seleccionada').textContent = "Hora de fin: " + horaFinFormateada;
+
+                // Guardar en los campos ocultos
+                document.getElementById('hora_inicio').value = horaInicioFormateada;
+                document.getElementById('hora_fin').value = horaFinFormateada;
+            } else {
+                // Si no hay selección, limpiar los textos
+                document.getElementById('hora-inicio-seleccionada').textContent = "";
+                document.getElementById('hora-fin-seleccionada').textContent = "";
+                // Restablecer campos ocultos
+                document.getElementById('hora_inicio').value = '';
+                document.getElementById('hora_fin').value = '';
+            }
+        });
+    }
+</script>
+-->
+<script>
+    function mostrarHoras() {
+        const horariosSelect = document.getElementById('horarios');
+        horariosSelect.innerHTML = ''; // Limpiar horas previas
+
+        const horasDisponibles = [
+            '09:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00',
+            '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00',
+            '17:00 - 18:00'
+        ];
+
+        // Agregar las horas disponibles al select
+        horasDisponibles.forEach(intervalo => {
+            const option = document.createElement('option');
+            option.value = intervalo; // Guardar el intervalo completo
+            option.textContent = intervalo; // Mostrar el intervalo completo
+            horariosSelect.appendChild(option);
+        });
+
+        horariosSelect.addEventListener('change', function () {
+            const selectedOptions = Array.from(horariosSelect.selectedOptions).map(option => option.value);
+
+            if (selectedOptions.length > 0) {
+                let horaInicio = null;
+                let horaFin = null;
+
+                selectedOptions.forEach(intervalo => {
+                    const [inicio, fin] = intervalo.split(' - '); // Separar inicio y fin
+                    const horaInicioNum = parseInt(inicio.replace(':', ''), 10); // Convertir a número
+                    const horaFinNum = parseInt(fin.replace(':', ''), 10); // Convertir a número
+
+                    // Determinar la hora de inicio (mínima) y la hora de fin (máxima)
+                    if (horaInicio === null || horaInicioNum < horaInicio) {
+                        horaInicio = horaInicioNum; // Actualizar hora de inicio
+                    }
+                    if (horaFin === null || horaFinNum > horaFin) {
+                        horaFin = horaFinNum; // Actualizar hora de fin
+                    }
+                });
+
+                // Convertir las horas de vuelta a formato 'HH:MM'
+                const horaInicioFormateada = `${String(horaInicio).padStart(4, '0').slice(0, 2)}:${String(horaInicio).padStart(4, '0').slice(2)}`;
+                const horaFinFormateada = `${String(horaFin).padStart(4, '0').slice(0, 2)}:${String(horaFin).padStart(4, '0').slice(2)}`;
+
+                // Mostrar las horas de inicio y fin
+                document.getElementById('hora-inicio-seleccionada').textContent = "Hora de inicio: " + horaInicioFormateada;
+                document.getElementById('hora-fin-seleccionada').textContent = "Hora de fin: " + horaFinFormateada;
+
+                // Guardar en los campos ocultos
+                document.getElementById('hora_inicio').value = horaInicioFormateada;
+                document.getElementById('hora_fin').value = horaFinFormateada;
+            } else {
+                // Si no hay selección, limpiar los textos
+                document.getElementById('hora-inicio-seleccionada').textContent = "";
+                document.getElementById('hora-fin-seleccionada').textContent = "";
+                // Restablecer campos ocultos
+                document.getElementById('hora_inicio').value = '';
+                document.getElementById('hora_fin').value = '';
+            }
+        });
+    }
+</script>
+</body>
+</html>
+
 </body>
 
 </html>
