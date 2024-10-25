@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</body>
+</html>
+<h2>Formulario de Reserva</h2>
+<label for="fecha">Fecha:</label><br>
+<input type="date" id="fecha" name="fecha" required><br><br>
+<title>Calendario prueba</title>
+<style>
+    /* css directo */
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f4f4f9;
+}
+
+/* Título */
+h2 {
+    text-align: center;
+    color: #333;
+}
+/* Estilo para el título del mes */
+.titulo-mes {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Contenedor del calendario */
+#calendario {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Días del calendario */
+.dia {
+    background-color: #fff;
+    padding: 15px;
+    text-align: center;
+    font-size: 14px;
+
+}
+/* Día actual */
+.dia.hoy {
+    background-color: #ffeb3b;
+    font-weight: bold;
+}
+
+/* Tabla de horas en el día actual */
+table {
+    margin-top: 10px;
+    width: 100%;
+
+}
+
+table td {
+    padding: 8px;
+    text-align: center;
+    border-top: 1px solid #ddd;
+}
+    </style>
+
+<div class="navegacion">
+    <button id="btn-anterior"> Mes Anterior</button>
+    <button id="btn-siguiente">Mes Siguiente &#10095;</button>
+</div>
+
+<div class="titulo-mes" id="titulo-mes"></div> <!-- Título del mes y año -->
+<div id="calendario"></div>
+
+<!-- js directo al documento-->
+<script>
+    const horasDisponibles = [
+        '09:00 - 10:00',
+        '10:00 - 11:00',
+        '11:00 - 12:00',
+        '12:00 - 13:00',
+        '13:00 - 14:00',
+        '14:00 - 15:00',
+        '15:00 - 16:00',
+        '16:00 - 17:00',
+        '17:00 - 18:00'
+    ];
+
+    // const calendario = document.getElementById("calendario");
+    const fechaInput = document.getElementById("fecha");
+    const btnAnterior = document.getElementById("btn-anterior");
+    const btnSiguiente = document.getElementById("btn-siguiente");
+    const tituloMes = document.getElementById("titulo-mes");
+
+
+    function obtenerDiasDelMes(año, mes) {
+        return new Date(año, mes + 1, 0).getDate(); // Último día del mes
+    }
+
+    function obtenerNombreMes(mes) {
+        const nombresMeses = [
+            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+        ];
+        return nombresMeses[mes];
+    }
+// funcion calendarioFull, donde llamo a los demas funciones, para la creacion del calendario------
+    function calendarioFull() {
+    const año = fechaSeleccionada.getFullYear();
+    const mes = fechaSeleccionada.getMonth();
+    const diasEnMes = obtenerDiasDelMes(año, mes);
+    const primerDiaDeLaSemana = new Date(año, mes, 1).getDay();
+
+    limpiarCalendario(); // Limpidor de el calendario
+    mostrarTituloMes(año, mes); // Muestra
+    generarEspaciosVacios(primerDiaDeLaSemana); // Generar espacios vacíos antes del primer día
+    generarDiasDelMes(diasEnMes, año, mes); // Generar los días del mes
+}
+            // funciones segun accion-----------
+function limpiarCalendario() {
+    calendario.innerHTML = ''; // Limpidor de el calendario
+}
+
+function mostrarTituloMes(año, mes) {
+    tituloMes.textContent = `${obtenerNombreMes(mes)} ${año}`; // Mostrar el nombre del mes y el año
+}
+
+function generarEspaciosVacios(primerDiaDeLaSemana) {
+    for (let i = 0; i < primerDiaDeLaSemana; i++) {
+        const espacioVacio = document.createElement("div");
+        espacioVacio.classList.add("dia");
+        calendario.appendChild(espacioVacio); // Añadir espacios vacíos antes del primer día
+    }
+}
+
+function esDiaActual(dia, mes, año) {
+    const diaActual = new Date();
+    return dia === diaActual.getDate() && mes === diaActual.getMonth() && año === diaActual.getFullYear();
+}
+
+function generarDiasDelMes(diasEnMes, año, mes) {
+    for (let dia = 1; dia <= diasEnMes; dia++) {
+        const diaElem = crearCasillaDia(dia, mes, año); // Crear elemento del día
+        calendario.appendChild(diaElem); // Añadir el día al calendario
+    }
+}
+
+function crearCasillaDia(dia, mes, año) {
+    const diaElem = document.createElement("div");
+    diaElem.classList.add("dia");
+    diaElem.textContent = dia;
+    // Si es el día actual, añadir la clase "hoy" y la tabla de horas
+    if (esDiaActual(dia, mes, año)) {
+        diaElem.classList.add("hoy");
+        const horasTable = crearTablaHoras(); // Crear la tabla de horas
+        diaElem.appendChild(horasTable); // Añadir la tabla al día actual
+    }
+
+    return diaElem; // devuelve el elemento del día
+}
+
+function crearTablaHoras() {
+    const horasTable = document.createElement("table"); // Crear la tabla para las horas
+    horasDisponibles.forEach(hora => {
+        const horaRow = document.createElement("tr");
+        const horaCell = document.createElement("td");
+        horaCell.textContent = hora; // Añadir la hora al cell
+        horaRow.appendChild(horaCell); // Añadir cell a la row
+        horasTable.appendChild(horaRow); // Añadir row a la tabla
+    });
+    return horasTable; // devuelve la tabla de horas
+}
+// FIN uncion calendarioFull, donde llamo a los demas funciones, para la crearion del calendario------
+// fechaInput.addEventListener añadimos un escuchado al campo con id "date" en este caso la variable es fechaInput,('change', (event) =>: caudno el usuario cambie de fecha se ejecuta la función
+    fechaInput.addEventListener('change', (event) => {
+         fechaSeleccionada = new Date(event.target.value);//new Date(event.target.value), obtiene el valor de la fecha que el usuario selecciona
+        calendarioFull();
+    });
+
+    const fechaInicial = new Date();// almacena la fecha actual
+    fechaSeleccionada = new Date(fechaInicial.getFullYear(), fechaInicial.getMonth(), 1); //fechaSeleccionada newDate(guarda el año,mes, y el dia 1 del mes.)
+    calendarioFull();
+
+    btnAnterior.addEventListener('click', () => {
+        fechaSeleccionada.setMonth(fechaSeleccionada.getMonth() - 1);
+        calendarioFull();
+    });
+
+    btnSiguiente.addEventListener('click', () => {
+        fechaSeleccionada.setMonth(fechaSeleccionada.getMonth() + 1);
+        calendarioFull();
+    });
+</script>
+</body>
+</html>
