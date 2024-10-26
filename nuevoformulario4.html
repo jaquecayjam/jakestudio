@@ -1,0 +1,702 @@
+<!-- <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla con Fila Marcada</title>
+    <style>
+        /* Estilo para la fila 2 en rojo */
+        .fila-roja {
+            background-color: red;
+            color: white; /* Color de texto blanco para contraste */
+        }
+    </style>
+</head>
+<body>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Columna 1</th>
+                <th>Columna 2</th>
+                <th>Columna 3</th>
+                <th>Columna 4</th>
+                <th>Columna 5</th>
+                <th>Columna 6</th>
+                <th>Columna 7</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Fila 1, Celda 1</td>
+                <td>Fila 1, Celda 2</td>
+                <td>Fila 1, Celda 3</td>
+                <td>Fila 1, Celda 4</td>
+                <td>Fila 1, Celda 5</td>
+                <td>Fila 1, Celda 6</td>
+                <td>Fila 1, Celda 7</td>
+            </tr>
+            <tr class="fila-roja">
+                <td>Fila 2, Celda 1</td>
+                <td>Fila 2, Celda 2</td>
+                <td>Fila 2, Celda 3</td>
+                <td>Fila 2, Celda 4</td>
+                <td>Fila 2, Celda 5</td>
+                <td>Fila 2, Celda 6</td>
+                <td>Fila 2, Celda 7</td>
+            </tr>
+            <tr>
+                <td>Fila 3, Celda 1</td>
+                <td>Fila 3, Celda 2</td>
+                <td>Fila 3, Celda 3</td>
+                <td>Fila 3, Celda 4</td>
+                <td>Fila 3, Celda 5</td>
+                <td>Fila 3, Celda 6</td>
+                <td>Fila 3, Celda 7</td>
+            </tr>
+            <tr>
+                <td>Fila 4, Celda 1</td>
+                <td>Fila 4, Celda 2</td>
+                <td>Fila 4, Celda 3</td>
+                <td>Fila 4, Celda 4</td>
+                <td>Fila 4, Celda 5</td>
+                <td>Fila 4, Celda 6</td>
+                <td>Fila 4, Celda 7</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html> -->
+<!-- <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario</title>
+    <style>
+        /* Estilos generales para la tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 10px;
+        }
+        /* Estilo para la fila de encabezado */
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        /* Estilo para los fines de semana */
+        .fin-de-semana {
+            background-color: #ffcccc;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+                <th class="fin-de-semana">Sábado</th>
+                <th class="fin-de-semana">Domingo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+                <td class="fin-de-semana">6</td>
+                <td class="fin-de-semana">7</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>9</td>
+                <td>10</td>
+                <td>11</td>
+                <td>12</td>
+                <td class="fin-de-semana">13</td>
+                <td class="fin-de-semana">14</td>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td>16</td>
+                <td>17</td>
+                <td>18</td>
+                <td>19</td>
+                <td class="fin-de-semana">20</td>
+                <td class="fin-de-semana">21</td>
+            </tr>
+            <tr>
+                <td>22</td>
+                <td>23</td>
+                <td>24</td>
+                <td>25</td>
+                <td>26</td>
+                <td class="fin-de-semana">27</td>
+                <td class="fin-de-semana">28</td>
+            </tr>
+            <tr>
+                <td>29</td>
+                <td>30</td>
+                <td>31</td>
+                <td></td>
+                <td></td>
+                <td class="fin-de-semana"></td>
+                <td class="fin-de-semana"></td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Dinámico</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 10px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .fin-de-semana {
+            background-color: #ffcccc;
+            color: black;
+        }
+        .header {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .header select {
+            margin: 0 10px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <select id="month-select">
+            <option value="0">Enero</option>
+            <option value="1">Febrero</option>
+            <option value="2">Marzo</option>
+            <option value="3">Abril</option>
+            <option value="4">Mayo</option>
+            <option value="5">Junio</option>
+            <option value="6">Julio</option>
+            <option value="7">Agosto</option>
+            <option value="8">Septiembre</option>
+            <option value="9">Octubre</option>
+            <option value="10">Noviembre</option>
+            <option value="11">Diciembre</option>
+        </select>
+        <select id="year-select"></select>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+                <th class="fin-de-semana">Sábado</th>
+                <th class="fin-de-semana">Domingo</th>
+            </tr>
+        </thead>
+        <tbody id="calendar-body">
+             El calendario se generará aquí dinámicamente 
+        </tbody>
+    </table>
+
+    <script>
+        const monthSelect = document.getElementById('month-select');
+        const yearSelect = document.getElementById('year-select');
+        const calendarBody = document.getElementById('calendar-body');
+
+        // Rellena el selector de año con un rango de años
+        const currentYear = new Date().getFullYear();
+        for (let i = currentYear - 10; i <= currentYear + 10; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            if (i === currentYear) option.selected = true;
+            yearSelect.appendChild(option);
+        }
+
+        // Función para generar el calendario dinámicamente
+        function generateCalendar(month, year) {
+            calendarBody.innerHTML = ''; // Limpia el calendario existente
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            let date = 1;
+            for (let i = 0; i < 6; i++) { // Máximo 6 filas (semanas)
+                const row = document.createElement('tr');
+                for (let j = 0; j < 7; j++) {
+                    const cell = document.createElement('td');
+                    if ((i === 0 && j < (firstDay === 0 ? 6 : firstDay - 1)) || date > daysInMonth) {
+                        // Celdas vacías antes del día 1 y después del último día
+                        cell.textContent = '';
+                    } else {
+                        cell.textContent = date;
+                        if (j === 5 || j === 6) {
+                            cell.classList.add('fin-de-semana'); // Resalta sábados y domingos
+                        }
+                        date++;
+                    }
+                    row.appendChild(cell);
+                }
+                calendarBody.appendChild(row);
+                if (date > daysInMonth) break; // Sale si se han colocado todos los días del mes
+            }
+        }
+
+        // Eventos para actualizar el calendario al cambiar el mes o año
+        monthSelect.addEventListener('change', () => generateCalendar(parseInt(monthSelect.value), parseInt(yearSelect.value)));
+        yearSelect.addEventListener('change', () => generateCalendar(parseInt(monthSelect.value), parseInt(yearSelect.value)));
+
+        // Genera el calendario inicial
+        generateCalendar(new Date().getMonth(), currentYear);
+    </script>
+
+</body>
+</html> -->
+
+<!-- añade los horario de lunes a viernes -->
+ <!--
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario con Horas de Lunes a Viernes</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th, td {
+            font-size: 0.8 em;
+            border: 1px solid #333;
+            padding: 2px;
+            vertical-align: top;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .fin-de-semana {
+            background-color: #ffcccc;
+            color: black;
+        }
+        .hora {
+            font-size: 12px;
+            color: #555;
+        }
+        .header {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .header select {
+            margin: 0 10px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <select id="month-select">
+            <option value="0">Enero</option>
+            <option value="1">Febrero</option>
+            <option value="2">Marzo</option>
+            <option value="3">Abril</option>
+            <option value="4">Mayo</option>
+            <option value="5">Junio</option>
+            <option value="6">Julio</option>
+            <option value="7">Agosto</option>
+            <option value="8">Septiembre</option>
+            <option value="9">Octubre</option>
+            <option value="10">Noviembre</option>
+            <option value="11">Diciembre</option>
+        </select>
+        <select id="year-select"></select>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+                <th class="fin-de-semana">Sábado</th>
+                <th class="fin-de-semana">Domingo</th>
+            </tr>
+        </thead>
+        <tbody id="calendar-body">
+         El calendario se generará aquí dinámicamenteaaa
+        </tbody>
+    </table>
+
+    <script>
+        const monthSelect = document.getElementById('month-select');
+        const yearSelect = document.getElementById('year-select');
+        const calendarBody = document.getElementById('calendar-body');
+
+        // Rellena el selector de año con un rango de años
+        const currentYear = new Date().getFullYear();
+        for (let i = currentYear - 10; i <= currentYear + 10; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            if (i === currentYear) option.selected = true;
+            yearSelect.appendChild(option);
+        }
+
+        // Genera el rango de horas en formato "09:00 - 10:00"
+        function generateHourRanges() {
+            const hours = [];
+            for (let i = 9; i < 18; i++) {
+                const startHour = i < 10 ? `0${i}:00` : `${i}:00`;
+                const endHour = (i + 1) < 10 ? `0${i + 1}:00` : `${i + 1}:00`;
+                hours.push(`${startHour} - ${endHour}`);
+            }
+            return hours;
+        }
+
+        // Función para generar el calendario dinámicamente
+        function generateCalendar(month, year) {
+            calendarBody.innerHTML = ''; // Limpia el calendario existente
+            const firstDay = new Date(year, month, 1).getDay(); // 0 (Domingo) a 6 (Sábado)
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const hours = generateHourRanges();
+
+            let date = 1;
+            for (let i = 0; i < 6; i++) { // Máximo 6 filas (semanas)
+                const row = document.createElement('tr');
+                for (let j = 0; j < 7; j++) { // Genera todas las columnas de lunes a domingo
+                    const cell = document.createElement('td');
+                    if ((i === 0 && j < (firstDay === 0 ? 6 : firstDay - 1)) || date > daysInMonth) {
+                        // Celdas vacías antes del día 1 y después del último día
+                        cell.textContent = '';
+                    } else {
+                        // Crear contenedor para la fecha
+                        const dateDiv = document.createElement('div');
+                        dateDiv.textContent = date;
+                        cell.appendChild(dateDiv);
+
+                        // Agregar el rango de horas solo si es un día de lunes a viernes
+                        if (j >= 0 && j <= 4) { // Lunes a Viernes
+                            hours.forEach(hour => {
+                                const hourDiv = document.createElement('div');
+                                hourDiv.classList.add('hora');
+                                hourDiv.textContent = hour;
+                                cell.appendChild(hourDiv);
+
+                                // Añadir datos de fecha y hora para guardar en la base de datos
+                                hourDiv.dataset.date = `${year}-${month + 1}-${date}`;
+                                hourDiv.dataset.hourRange = hour;
+
+                                // Agrega evento para guardar la hora seleccionada
+                                hourDiv.addEventListener('click', () => {
+                                    console.log(`Seleccionado: ${hourDiv.dataset.date} ${hourDiv.dataset.hourRange}`);
+                                    // Aquí puedes agregar el código para guardar en la base de datos
+                                });
+                            });
+                        }
+
+                        // Resalta sábados y domingos
+                        if (j === 5 || j === 6) {
+                            cell.classList.add('fin-de-semana');
+                        }
+
+                        date++;
+                    }
+                    row.appendChild(cell);
+                }
+                calendarBody.appendChild(row);
+                if (date > daysInMonth) break; // Sale si se han colocado todos los días del mes
+            }
+        }
+
+        // Eventos para actualizar el calendario al cambiar el mes o año
+        monthSelect.addEventListener('change', () => generateCalendar(parseInt(monthSelect.value), parseInt(yearSelect.value)));
+        yearSelect.addEventListener('change', () => generateCalendar(parseInt(monthSelect.value), parseInt(yearSelect.value)));
+
+        // Genera el calendario inicial
+        generateCalendar(new Date().getMonth(), currentYear);
+    </script>
+
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario con Horas</title>
+    <style>
+        table {
+            width: 70%; /* Ancho de la tabla reducido */
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 5px; /* Espacio alrededor del texto */
+            vertical-align: top;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .fin-de-semana {
+            background-color: #ffcccc;
+            color: black;
+        }
+        .hora {
+            padding: 5px;
+            border: 1px solid red;
+            font-size: 0.8em; /* Tamaño de letra ajustado */
+            cursor: pointer; /* Indica que es interactivo */
+        }
+        .selected {
+            background-color: #ddd; /* Resalta la celda seleccionada */
+        }
+        .header {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .header select {
+            margin: 0 10px;
+            padding: 5px;
+        }
+        .hora-inicio, .hora-fin {
+            margin-top: 10px; /* Espacio encima del campo */
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <select id="month-select"></select>
+        <select id="year-select"></select>
+    </div>
+
+    <div class="hora-inicio">
+        <label for="hora-inicio-input">Hora de inicio:</label>
+        <input type="time" id="hora-inicio-input" value="09:00" readonly>
+    </div>
+
+    <div class="hora-fin">
+        <label for="hora-fin-input">Hora de fin:</label>
+        <input type="time" id="hora-fin-input" value="10:00" readonly>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+                <th class="fin-de-semana">Sábado</th>
+                <th class="fin-de-semana">Domingo</th>
+            </tr>
+        </thead>
+        <tbody id="calendar-body">
+            <!-- El calendario se generará aquí dinámicamente -->
+        </tbody>
+    </table>
+
+    <script>
+        const monthSelect = document.getElementById('month-select');
+        const yearSelect = document.getElementById('year-select');
+        const calendarBody = document.getElementById('calendar-body');
+        const horaInicioInput = document.getElementById('hora-inicio-input');
+        const horaFinInput = document.getElementById('hora-fin-input');
+
+        // Inicializa los selectores de mes y año
+        function initializeSelectors() {
+            fillMonthSelect();
+            fillYearSelect();
+        }
+
+        function fillMonthSelect() {
+            for (let i = 0; i < 12; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = new Date(0, i).toLocaleString('es-ES', { month: 'long' });
+                monthSelect.appendChild(option);
+            }
+        }
+
+        function fillYearSelect() {
+            const currentYear = new Date().getFullYear();
+            for (let i = currentYear - 10; i <= currentYear + 10; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                if (i === currentYear) option.selected = true;
+                yearSelect.appendChild(option);
+            }
+        }
+
+        // Genera el rango de horas en formato "09:00 - 10:00"
+        function generateHourRanges(startHour) {
+            const hours = [];
+            for (let i = startHour; i < 18; i++) {
+                const startHourFormatted = i < 10 ? `0${i}:00` : `${i}:00`;
+                const endHourFormatted = (i + 1) < 10 ? `0${i + 1}:00` : `${i + 1}:00`;
+                hours.push(`${startHourFormatted} - ${endHourFormatted}`);
+            }
+            return hours;
+        }
+
+        // Genera el calendario
+        function generateCalendar(month, year) {
+            calendarBody.innerHTML = ''; // Limpia el calendario existente
+            const firstDay = new Date(year, month, 1).getDay(); // 0 (Domingo) a 6 (Sábado)
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const startHour = parseInt(horaInicioInput.value.split(':')[0]); // Hora de inicio
+            const hours = generateHourRanges(startHour);
+            const occupiedSlots = {}; // Objeto para rastrear horas ocupadas
+
+            let date = 1;
+            for (let i = 0; i < 6; i++) { // Máximo 6 filas (semanas)
+                const row = document.createElement('tr');
+                for (let j = 0; j < 7; j++) { // Genera todas las columnas de lunes a domingo
+                    const cell = createCell(month, year, daysInMonth, date, hours, j);
+                    row.appendChild(cell);
+                    date++;
+                }
+                calendarBody.appendChild(row);
+                if (date > daysInMonth) break; // Sale si se han colocado todos los días del mes
+            }
+        }
+
+        // Crea una celda en el calendario
+        function createCell(month, year, daysInMonth, date, hours, dayOfWeek) {
+            const cell = document.createElement('td');
+            if ((date === 1 && dayOfWeek < (new Date(year, month, 1).getDay() === 0 ? 6 : new Date(year, month, 1).getDay() - 1)) || date > daysInMonth) {
+                // Celdas vacías antes del día 1 y después del último día
+                cell.textContent = '';
+            } else {
+                const dateDiv = document.createElement('div');
+                dateDiv.textContent = date;
+                cell.appendChild(dateDiv);
+
+                // Agregar el rango de horas solo si es un día de lunes a viernes
+                if (dayOfWeek >= 0 && dayOfWeek <= 4) { // Lunes a Viernes
+                    cell.addEventListener('click', () => handleCellClick(cell, hours, year, month, date));
+                }
+
+                // Resalta sábados y domingos
+                if (dayOfWeek === 5 || dayOfWeek === 6) {
+                    cell.classList.add('fin-de-semana');
+                }
+            }
+            return cell;
+        }
+
+        // Maneja el clic en la celda del día
+        function handleCellClick(cell, hours, year, month, date) {
+            // Limpiar selección previa
+            const previousSelected = document.querySelector('.selected');
+            if (previousSelected) previousSelected.classList.remove('selected');
+
+            // Marcar la celda seleccionada
+            cell.classList.add('selected');
+
+            // Limpiar las horas de la celda previamente seleccionada
+            clearHourSelections();
+
+            // Mostrar horas en la celda del día seleccionado
+            hours.forEach(hour => {
+                const hourDiv = createHourDiv(hour, year, month, date);
+                cell.appendChild(hourDiv);
+            });
+        }
+
+        // Crea un div para cada rango de hora
+        function createHourDiv(hour, year, month, date) {
+            const hourDiv = document.createElement('div');
+            hourDiv.classList.add('hora');
+            hourDiv.textContent = hour;
+            hourDiv.dataset.date = `${year}-${month + 1}-${date}`;
+            hourDiv.dataset.hourRange = hour;
+
+            // Agrega evento para cada rango de hora
+            hourDiv.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evita que el clic en la hora cierre el div de selección
+                updateTimeInputs(hourDiv);
+            });
+
+            return hourDiv;
+        }
+
+        // Actualiza las horas de inicio y fin
+        function updateTimeInputs(hourDiv) {
+            horaInicioInput.value = hourDiv.dataset.hourRange.split(' - ')[0];
+            horaFinInput.value = hourDiv.dataset.hourRange.split(' - ')[1];
+            console.log(`Seleccionado: ${hourDiv.dataset.date} ${hourDiv.dataset.hourRange}`);
+        }
+
+        // Limpia las selecciones de horas en las celdas
+        function clearHourSelections() {
+            const hourCells = document.querySelectorAll('td');
+            hourCells.forEach(h => {
+                const existingHours = h.querySelectorAll('.hora');
+                existingHours.forEach(existingHour => existingHour.remove());
+            });
+        }
+
+        // Eventos para actualizar el calendario al cambiar el mes o año
+        monthSelect.addEventListener('change', () => generateCalendar(parseInt(monthSelect.value), parseInt(yearSelect.value)));
+        yearSelect.addEventListener('change', () => generateCalendar(parseInt(monthSelect.value), parseInt(yearSelect.value)));
+        horaInicioInput.addEventListener('change', () => generateCalendar(parseInt(monthSelect.value), parseInt(yearSelect.value))); // Generar de nuevo al cambiar la hora de inicio
+
+        // Inicializa la aplicación
+        initializeSelectors();
+        generateCalendar(new Date().getMonth(), new Date().getFullYear());
+    </script>
+</body>
+</html>
+
+
