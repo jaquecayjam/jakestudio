@@ -1,6 +1,5 @@
 body{
     background-color: #a12929;
-    
 }
 /* estilo menu ------------------*/
 nav {
@@ -79,10 +78,6 @@ nav ul li a:hover {
     margin-right: 30px; /* Espacio entre los elementos de la lista en index */
 }
 
-/* estilo container crear--------- */
-#container-espacio{
-    
-}
 /* estilo container h2+ parrafo centrado  */
 #container-titulo-espacio{
     background-color: white;
@@ -109,9 +104,6 @@ nav ul li a:hover {
     font-weight: bold;
     
 }
-/* Estilo formulario---------------*/
-
-/* -------------------------*/
 /* Estilo foooter------------ */
 footer {
     position: fixed;
@@ -121,4 +113,13 @@ footer {
     text-align: center; /* Centra el texto */
     padding: 20px; /* Espaciado interno */
     position: relative; /* Permite posicionar elementos dentro del footer */
+}
+
+element.style {
+    display: block;
+    background-color: blue;
+}
+
+div#calendario-modal {
+    background-color: blue;
 }
