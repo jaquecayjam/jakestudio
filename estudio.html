@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estudio</title>
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/estilos.css">
 </head>
 
 <body>
@@ -116,9 +116,9 @@
         </section>
     </main>
     <!-- formulario -->
-     
+
     <h2>Formulario de Reserva-JakeStudio</h2>
-    <form id="form-reserva" action="reserva.php" method="POST"> 
+    <form id="form-reserva" action="reserva.php" method="POST">
         <label for="nombre">Nombre:</label><br>
         <input type="text" id="nombre" name="nombre" required><br><br>
 
@@ -131,25 +131,22 @@
         <p>Selecciona fecha:</p>
         <button type="button" id="elegir-fecha">calendario</button><br><br>
 
-        <label for="horas-necesarias">Horas necesarias:</label><br>
-        <input type="number" id="horas-necesarias" name="horas-necesarias" min="1" max="9" required><br><br>
+        <!-- Modal para el calendario -->
+        <div id="calendario-modal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <p>aqui aparece el calendario</p>
+                    <tbody id="calendar-body">
+                        <!--aqui aparecera modal -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-        <!-- Contenedor para mostrar las horas -->
-        <div id="horarios"></div><br>
-        
-        <!-- Contenedor para mostrar disponible -->
-       
         <input type="submit" value="Reservar">
     </form>
     <script src="./js/formulario_reserva.js"></script> <!--script para manipular las horas de reserva-->
 
-    <!-- Contenedor donde se mostrará la selección del usuario -->
-    <div id="resumen-seleccion" style="display: none;">
-        <h3>Resumen de tu selección</h3>
-        <p id="resumen-texto"></p>
-    </div>
 
-    <script src="formulario_reserva.js"></script>  <!--script para manipular las horas de reserva-->
     <input type="hidden" name="hora" value="">
     <div class="footer-container"> <!-- contenedor footer-->
         <footer>
