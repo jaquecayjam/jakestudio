@@ -110,6 +110,48 @@ nav ul li a:hover {
     
 }
 /* Estilo formulario---------------*/
+table {
+    width: 70%; /* Ancho de la tabla reducido */
+    border-collapse: collapse;
+    text-align: center;
+}
+td {
+    border: 1px solid;
+}
+th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px;
+    /* padding: 5px; */
+    border: 1px solid #333;
+    vertical-align: top;
+}
+.fin-de-semana {
+    background-color: #ffcccc;
+    color: black;
+}
+.hora {
+    padding: 5px;
+    border: 1px solid red;
+    font-size: 0.8em; /* Tamaño de letra ajustado */
+    cursor: pointer; /* Indica que es interactivo */
+}
+.selected {
+    background-color: #ddd; /* Resalta la celda seleccionada */
+}
+.header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.header select {
+    margin: 0 10px;
+    padding: 5px;
+}
+.hora-inicio, .hora-fin {
+    margin-top: 10px; /* Espacio encima del campo */
+    text-align: center;
+}
 
 /* -------------------------*/
 /* Estilo foooter------------ */

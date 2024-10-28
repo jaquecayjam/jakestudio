@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estudio</title>
-    <link rel="stylesheet" href="./css/estilos.css">
+    <link rel="stylesheet" href="./css/styles.css">
 </head>
 
 <body>
@@ -134,10 +134,28 @@
         <!-- Modal para el calendario -->
         <div id="calendario-modal" class="modal" style="display:none;">
             <div class="modal-content">
+                <span class="close">&times;</span>
                 <p>aqui aparece el calendario</p>
-                    <tbody id="calendar-body">
-                        <!--aqui aparecera modal -->
+                <select id="elegir-mes"></select>
+                <select id="elegir-año"></select>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Lunes</th>
+                            <th>Martes</th>
+                            <th>Miércoles</th>
+                            <th>Jueves</th>
+                            <th>Viernes</th>
+                            <th class="fin-de-semana">Sábado</th>
+                            <th class="fin-de-semana">Domingo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendario-full">
+                        <!-- El calendario se generará aquí dinámicamente -->
                     </tbody>
+                </table>
+
+                </tbody>
                 </table>
             </div>
         </div>
