@@ -1,5 +1,6 @@
 body{
     background-color: #a12929;
+    height: 80vh;
     
 }
 /* estilo menu ------------------*/
@@ -47,23 +48,22 @@ nav ul li a:hover {
 /* estilo contenedor ¿Que ofrecemos? 2---------- */
 #container-2 {
     background-color: aliceblue;
-    display: flex; /* Habilitar flexbox */
-    justify-content: center; /* Alinea los elementos al inicio (izquierda) */
-    
-    padding: 20px; /* Espaciado interno */
+    display: flex;
+    justify-content: center;  
+    padding: 20px;
     border: 2px solid #000;
 
 }
 /* Estilo  para la sección "¿Qué Ofrecemos?" ---------*/
 #section-ofrecemos {
     width: 70%;
-    display: flex; /* Habilitar flexbox dentro de la sección */
-    align-items: center; /* Alinea verticalmente el h2 y la lista */
+    display: flex;
+    align-items: center;
     border: 2px solid #000;
 }
 /* Estilo específico para la sección "¿Qué Ofrecemos?" */
 #section-ofrecemos h2 {
-    margin-right: 20px; /* Espacio entre el título y la lista */
+    margin-right: 20px;
     padding-left: 50px;
 }
 
@@ -79,15 +79,21 @@ nav ul li a:hover {
     margin-right: 30px; /* Espacio entre los elementos de la lista en index */
 }
 
-/* estilo container crear--------- */
-#container-espacio{
-    
-}
-/* estilo container h2+ parrafo centrado  */
+
+/* estilos container Un espacio Diseñado para crear  */
 #container-titulo-espacio{
     background-color: white;
     text-align: center;
 }
+#container-titulo-espacio h2{
+font-size: 2.5em;
+letter-spacing: 0.3em;
+margin-bottom: 0px;
+}
+#container-titulo-espacio p{
+    padding-bottom: 2em;
+}
+/* FIN * estilos container Un espacio Diseñado para crear  */ */
 /* estilo botones reserva --------------------*/
 .boton-reservar {
     display: inline-block;
@@ -109,7 +115,48 @@ nav ul li a:hover {
     font-weight: bold;
     
 }
+/* Estilos caracteristicas Estudio SCROLL*/
+/* .toggle-section {
+    display: none; Inicialmente oculto 
+    background-color: #f0f0f0;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    opacity: 0; Comienza como completamente transparente 
+    transform: translateY(20px); /* Comienza desplazado hacia abajo 
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Transición suave 
+}
+.toggle-section.show {
+    display: block; /* Muestra la sección 
+    opacity: 1; /* Totalmente visible 
+    transform: translateY(0); /* Regresa a su posición original
+} */
+ /* Estilo caracteristicas estudio---------- */
+ .flex-container {
+    display: flex;            /* Flexbox en el contenedor */
+    justify-content: center;  /* divs centrados horizontalmente */
+    gap: 10px;               /* Espacio entre los divs */
+    flex-wrap: wrap;
+    margin: 0 auto;             /* Centra el contenedor en la página */
+}
+#caract-estudio {
+    width: 240px;
+    height: 350px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    overflow: auto;          /* Permitir desplazamiento si el contenido excede el tamaño */
+}
 /* Estilo formulario---------------*/
+
+/* titulo año y mes */
+#tituloMesAño {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
 table {
     width: 70%; /* Ancho de la tabla reducido */
     border-collapse: collapse;
@@ -130,37 +177,14 @@ th {
     background-color: #ffcccc;
     color: black;
 }
-.hora {
-    padding: 5px;
-    border: 1px solid red;
-    font-size: 0.8em; /* Tamaño de letra ajustado */
-    cursor: pointer; /* Indica que es interactivo */
-}
-.selected {
-    background-color: #ddd; /* Resalta la celda seleccionada */
-}
-.header {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-.header select {
-    margin: 0 10px;
-    padding: 5px;
-}
-.hora-inicio, .hora-fin {
-    margin-top: 10px; /* Espacio encima del campo */
-    text-align: center;
-}
-
 /* -------------------------*/
 /* Estilo foooter------------ */
 footer {
     position: fixed;
     bottom: 0;
-    background-color: black; /* Color de fondo */
-    color: white; /* Color del texto */
-    text-align: center; /* Centra el texto */
-    padding: 20px; /* Espaciado interno */
-    position: relative; /* Permite posicionar elementos dentro del footer */
+    background-color: black; 
+    color: white;
+    text-align: center;
+    padding: 20px; 
+    position: relative;
 }

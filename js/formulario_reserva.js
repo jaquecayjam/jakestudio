@@ -15,7 +15,7 @@ closeButton.addEventListener("click", () => {
 });
 // FIN Creacion del modal-------------
 
-// Creacion del calendario
+// Creación del calendario
 const slccionMes = document.getElementById('elegir-mes');
 const slccionAño = document.getElementById('elegir-año');
 const calendarioFull = document.getElementById('calendario-full');
@@ -49,8 +49,11 @@ function añadirAños() {
 }
 
 // Genera el calendario
-functiongenerarCalendario(selectMes, selectAño) {
+function generarCalendario(selectMes, selectAño) {
     calendarioFull.innerHTML = ''; // Limpia el calendario existente
+    // Actualiza el título con el mes y año actuales
+    const nombreMes = new Date(selectAño, selectMes).toLocaleString('es-ES', { month: 'long', year: 'numeric' });
+    tituloMesAño.textContent = nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1); // Capitaliza el primer carácter
 
     const primerDiaMes = new Date(selectAño, selectMes, 1).getDay(); // Día de la semana del primer día del mes
     const diasTotalMes = new Date(selectAño, selectMes + 1, 0).getDate(); // Total de días en el mes
@@ -64,12 +67,13 @@ functiongenerarCalendario(selectMes, selectAño) {
         // Crear columnas para cada día de la semana
         for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
             const celdaDia = document.createElement('td'); // Crear una nueva celda para el día
-                        if (weekIndex === 0 && dayIndex < initialOffset) {
+            // Si es la primera fila, coloca celdas vacías antes del primer día
+            if (weekIndex === 0 && dayIndex < initialOffset) {
                 celdaDia.textContent = ''; // Celdas vacías antes del primer día
             } else if (currentDate <= diasTotalMes) {
-                               const dayElement = crearCeldasDias(selectMes, selectAño, currentDate, dayIndex);
-               
-                celdaDia.textContent = dayElement.textContent; 
+                // Si hay un día válido, crea la celda del día
+                const dayElement = crearCeldasDias(currentDate, dayIndex);
+                celdaDia.textContent = dayElement.textContent; // Esto establece el texto directamente
                 currentDate++; // Avanza al siguiente día
             } else {
                 celdaDia.textContent = ''; // Celdas vacías después del último día del mes
@@ -84,27 +88,45 @@ functiongenerarCalendario(selectMes, selectAño) {
     }
 }
 
-
-
-function crearCeldasDias(dia, dayOfWeek) {
-    constcelda = document.createElement('td'); // Crear la celda del día
-   celda.textContent = dia; // Establecer el texto de la celda como la fecha
+// Crea una celda para un día específico
+function crearCeldasDias(dia, dayOfWeek, selectMes, selectAño) {
+    const celda = document.createElement('td'); // Crear la celda del día
+    celda.textContent = dia; // Establecer el texto de la celda como la fecha
 
     // Resalta sábados y domingos
     if (dayOfWeek === 5 || dayOfWeek === 6) {
-       celda.classList.add('fin-de-semana'); // Añadir clase para fines de semana
+        celda.classList.add('fin-de-semana'); // Añadir clase para fines de semana
     }
 
-    returncelda; // Retornar la celda completa
+    // Resalta el día actual
+    const hoy = new Date();
+    const diaActual = hoy.getDate();
+    const mesActual = hoy.getMonth();
+    const añoActual = hoy.getFullYear();
+
+    if (dia === diaActual && selectMes === mesActual && selectAño === añoActual) {
+        celda.style.backgroundColor = 'yellow'; // Marca el día actual de color amarillo
+    }
+
+    return celda; // Retornar la celda completa
 }
 
-// actualizar el calendario al cambiar el mes o año
-slccionMes.addEventListener('change', () =>generarCalendario(parseInt(slccionMes.value), parseInt(slccionAño.value)));
-slccionAño.addEventListener('change', () =>generarCalendario(parseInt(slccionMes.value), parseInt(slccionAño.value)));
+// Actualizar el calendario al cambiar el mes o año
+slccionMes.addEventListener('change', () => generarCalendario(parseInt(slccionMes.value), parseInt(slccionAño.value)));
+slccionAño.addEventListener('change', () => generarCalendario(parseInt(slccionMes.value), parseInt(slccionAño.value)));
 
+// calendario aparece en el dia,mes,año actual
+calendarioFull.addEventListener('click', () => {
+    const hoy = new Date();
+    slccionMes.value = hoy.getMonth(); // Establece el mes actual
+    slccionAño.value = hoy.getFullYear(); // Establece el año actual
+    generarCalendario(hoy.getMonth(), hoy.getFullYear()); // Genera el calendario para la fecha actual
+});
 
 // Inicializa la aplicación
 initializeSelectors();
-generateCalendar(new Date().getMonth(), new Date().getFullYear());
-
-// FIN Creacion del calendario-------------------
+// el selector de messe apararece segun el mes y año actual:
+const hoy = new Date(); // me crea un objeto, con la fecha actual
+slccionMes.value = hoy.getMonth(); // Selecciona el mes actual
+slccionAño.value = hoy.getFullYear(); // Selecciona el año actual
+generarCalendario(new Date().getMonth(), new Date().getFullYear());
