@@ -177,6 +177,14 @@ th {
     background-color: #ffcccc;
     color: black;
 }
+
+
+/* Estilo de las horas */
+
+.hora{
+    border: 0.5px solid;
+    border-color: #000;
+}
 /* -------------------------*/
 /* Estilo foooter------------ */
 footer {
