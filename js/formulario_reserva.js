@@ -3,7 +3,7 @@
 const modal = document.getElementById("calendario-modal");
 const elegirFechaBtn = document.getElementById("elegir-fecha");
 const closeButton = document.querySelector(".close");
-
+const formReserva = document.getElementById("form-reserva");
 // Cuando hacemos clic en Elegir fecha botón
 elegirFechaBtn.addEventListener("click", () => {
     modal.style.display = "block";
@@ -15,7 +15,7 @@ closeButton.addEventListener("click", () => {
 });
 // FIN Creación del modal-------------
 
-// Creación del calendario
+// Creación del calendario-------------------
 const slccionMes = document.getElementById('elegir-mes');
 const slccionAño = document.getElementById('elegir-año');
 const calendarioFull = document.getElementById('calendario-full');
@@ -46,53 +46,52 @@ function añadirAños() {
     }
 }
 
-// Genera el calendario
 function generarCalendario(selectMes, selectAño) {
-    calendarioFull.innerHTML = ''; 
+    calendarioFull.innerHTML = '';
     const nombreMes = new Date(selectAño, selectMes).toLocaleString('es-ES', { month: 'long', year: 'numeric' });
-    tituloMesAño.textContent = nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1); // Capitaliza el primer carácter
+    tituloMesAño.textContent = nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
 
-    const primerDiaMes = new Date(selectAño, selectMes, 1).getDay(); // Día de la semana del primer día del mes
-    const diasTotalMes = new Date(selectAño, selectMes + 1, 0).getDate(); // Total de días en el mes
-    const initialOffset = (primerDiaMes + 6) % 7; // Ajusta el día para iniciar desde Lunes
+    const primerDiaMes = new Date(selectAño, selectMes, 1).getDay();
+    const diasTotalMes = new Date(selectAño, selectMes + 1, 0).getDate();
+    const initialOffset = (primerDiaMes + 6) % 7;
 
-    let currentDate = 1; // Representa el 1 dia del mes
+    let currentDate = 1;
 
-    // Filas para el calendario
     for (let weekIndex = 0; weekIndex < 6; weekIndex++) {
-        const weekRow = document.createElement('tr'); // Crear una nueva fila por semana
+        const weekRow = document.createElement('tr');
 
         for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
-            const celdaDia = document.createElement('td'); // Crear celda para el día
+            const celdaDia = document.createElement('td');
 
-            // Rellenar las celdas weekIndex===0, representa si estamos en la pruemra semana
             if (weekIndex === 0 && dayIndex < initialOffset) {
-                celdaDia.textContent = ''; // Celdas vacías antes del primer día
+                celdaDia.textContent = '';
             } else if (currentDate <= diasTotalMes) {
-                celdaDia.textContent = currentDate; // Establece el texto de la celda como la fecha
+                celdaDia.textContent = currentDate;
 
-                // Solo agregar horas de Lunes a Viernes
-                if (dayIndex >= 0 && dayIndex <= 4) { // 0 es Lunes y 4 es Viernes
-                    const horas = crearRangoHoras(); // Crea el rango de horas
-                    celdaDia.appendChild(horas); // Agrega el rango de horas a la celda
+                if (dayIndex >= 0 && dayIndex <= 4) {
+                    const diaSeleccionado = currentDate;
+                    const mesSeleccionado = selectMes;
+                    const añoSeleccionado = selectAño;
+
+                    const horas = crearRangoHoras(diaSeleccionado, mesSeleccionado, añoSeleccionado);
+                    celdaDia.appendChild(horas);
                 }
-                currentDate++; // Avanza al siguiente día
+                currentDate++;
             } else {
-                celdaDia.textContent = ''; // Celdas vacías después del último día del mes
+                celdaDia.textContent = '';
             }
 
-            weekRow.appendChild(celdaDia); // Añadir la celda a la fila
+            weekRow.appendChild(celdaDia);
         }
 
-        calendarioFull.appendChild(weekRow); // Añadir la fila al cuerpo del calendario
+        calendarioFull.appendChild(weekRow);
     }
 }
 
 // Crea un rango de horas
-function crearRangoHoras() {
-    const horasContainer = document.createElement('div'); // Crear un contenedor para las horas
+function crearRangoHoras(dia, mes, año) {
+    const horasContainer = document.createElement('div');
 
-    // Definición de horas (09:00 a 18:00)
     const horas = [
         "09:00 - 10:00",
         "10:00 - 11:00",
@@ -106,15 +105,77 @@ function crearRangoHoras() {
     ];
 
     horas.forEach(hora => {
-        const horaElement = document.createElement('p'); // Crear un elemento para cada hora
-        horaElement.textContent = hora; // Establecer el texto de la hora
-        horaElement.classList.add('hora'); // Clase CSS
-
-        horasContainer.appendChild(horaElement); // Añadir el elemento de hora al contenedor
+        const horaElement = document.createElement('p');
+        horaElement.textContent = hora;
+        horaElement.classList.add('hora');
+        horasContainer.appendChild(horaElement);
     });
 
-    return horasContainer; // Retornar el contenedor con las horas
+    horasContainer.addEventListener('click', (event) => {
+        const horaSeleccionada = event.target.textContent;
+        if (horaSeleccionada) {
+            guardarFechaHoraSeleccionada(dia, mes, año, horaSeleccionada);
+        }
+    });
+
+    return horasContainer;
 }
+// FIN Creación del calendario-------------------
+// Guarda la fecha y hora seleccionadas en los campos ocultos
+function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
+    const fechaInput = document.getElementById('fecha');
+    const horaInicioInput = document.getElementById('hora_inicio');
+    const horaFinInput = document.getElementById('hora_fin');
+
+    const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+
+    fechaInput.value = fechaSeleccionada;
+
+    const [horaInicio, horaFin] = hora.split(' - ');
+    horaInicioInput.value = horaInicio;
+    horaFinInput.value = horaFin;
+}
+//utilizo API FECH para enviar los datos sl servidor sin recargar la pagina----------------
+formReserva.addEventListener('submit', function (event) {
+    event.preventDefault(); // Evita el envío normal del formulario
+    // datos de mi formulario
+    const nombre = document.getElementById('nombre').value;
+    const apellido = document.getElementById('apellido').value;
+    const correo = document.getElementById('correo').value;
+    const fecha = document.getElementById('fecha').value; // La fecha que has guardado
+    const horaInicio = document.getElementById('hora_inicio').value; // Hora de inicio
+    const horaFin = document.getElementById('hora_fin').value; // Hora de fin
+
+    // creamos un objeto FormData para enviar los datos
+    const formData = new FormData();
+    formData.append('nombre', nombre);
+    formData.append('apellido', apellido);
+    formData.append('correo', correo);
+    formData.append('fecha', fecha);
+    formData.append('hora_inicio', horaInicio);
+    formData.append('hora_fin', horaFin);
+
+    // Envio de  los datos al servidor
+    fetch('./php/reservas.php', {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.text(); // Obtener respuesta como texto
+            }
+            throw new Error('Error al enviar datos'); // Si no está bien, lanza un error
+        })
+        .then(data => {
+            console.log(data); // Aquí puedes ver el mensaje de éxito o error
+            alert(data); // Mostrar un mensaje al usuario
+        })
+        .catch(error => {
+            console.error('Error:', error); // Manejar errores
+            alert('Error al enviar la solicitud');
+        });
+});
+
 
 // Actualizar el calendario al cambiar el mes o año
 slccionMes.addEventListener('change', () => generarCalendario(parseInt(slccionMes.value), parseInt(slccionAño.value)));
