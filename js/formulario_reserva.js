@@ -4,14 +4,23 @@ const modal = document.getElementById("calendario-modal");
 const elegirFechaBtn = document.getElementById("elegir-fecha");
 const closeButton = document.querySelector(".close");
 const formReserva = document.getElementById("form-reserva");
+
+// Añadiomo variables globales para saber  el mes y año que seleccionamos
+let mesSeleccionado = new Date().getMonth(); // Inicializa con el mes actual
+let añoSeleccionado = new Date().getFullYear(); // Inicializa con el año actual
+
 // Cuando hacemos clic en Elegir fecha botón
 elegirFechaBtn.addEventListener("click", () => {
-    modal.style.display = "block";
+    modal.style.display = "block"; // Muestra el modal
+    // Al abrir el modal, asegurarse de que los selectores reflejen la fecha actual
+    slccionMes.value = mesSeleccionado; // Actualiza el mes seleccionado
+    slccionAño.value = añoSeleccionado; // Actualiza el año seleccionado
+    generarCalendario(mesSeleccionado, añoSeleccionado); // Genera el calendario con el mes y año actuales
 });
 
 // Modal se cierra al hacer clic en la "X"
 closeButton.addEventListener("click", () => {
-    modal.style.display = "none";
+    modal.style.display = "none"; // Oculta el modal
 });
 // FIN Creación del modal-------------
 
@@ -22,8 +31,8 @@ const calendarioFull = document.getElementById('calendario-full');
 
 // Inicializa los selectores de mes y año
 function initializeSelectors() {
-    añadirMeses();
-    añadirAños();
+    añadirMeses(); // Llenar el selector de meses
+    añadirAños();  // Llenar el selector de años
 }
 
 function añadirMeses() {
@@ -41,19 +50,19 @@ function añadirAños() {
         const option = document.createElement('option');
         option.value = i;
         option.textContent = i;
-        if (i === añoActual) option.selected = true;
+        if (i === añoActual) option.selected = true; // Marca el año actual como seleccionado
         slccionAño.appendChild(option);
     }
 }
 
 function generarCalendario(selectMes, selectAño) {
-    calendarioFull.innerHTML = '';
+    calendarioFull.innerHTML = ''; // Limpia el calendario previo
     const nombreMes = new Date(selectAño, selectMes).toLocaleString('es-ES', { month: 'long', year: 'numeric' });
     tituloMesAño.textContent = nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
 
-    const primerDiaMes = new Date(selectAño, selectMes, 1).getDay();
-    const diasTotalMes = new Date(selectAño, selectMes + 1, 0).getDate();
-    const initialOffset = (primerDiaMes + 6) % 7;
+    const primerDiaMes = new Date(selectAño, selectMes, 1).getDay(); // Determina el primer día del mes
+    const diasTotalMes = new Date(selectAño, selectMes + 1, 0).getDate(); // Total de días en el mes
+    const initialOffset = (primerDiaMes + 6) % 7; // Ajuste para el inicio de la semana
 
     let currentDate = 1;
 
@@ -63,17 +72,16 @@ function generarCalendario(selectMes, selectAño) {
         for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
             const celdaDia = document.createElement('td');
 
+            // Dejar celdas vacías hasta alcanzar el primer día del mes
             if (weekIndex === 0 && dayIndex < initialOffset) {
                 celdaDia.textContent = '';
             } else if (currentDate <= diasTotalMes) {
                 celdaDia.textContent = currentDate;
 
+                // Solo añade horarios si es un día de la semana permitido
                 if (dayIndex >= 0 && dayIndex <= 4) {
                     const diaSeleccionado = currentDate;
-                    const mesSeleccionado = selectMes;
-                    const añoSeleccionado = selectAño;
-
-                    const horas = crearRangoHoras(diaSeleccionado, mesSeleccionado, añoSeleccionado);
+                    const horas = crearRangoHoras(diaSeleccionado, selectMes, selectAño); // Crear rango de horas
                     celdaDia.appendChild(horas);
                 }
                 currentDate++;
@@ -81,10 +89,10 @@ function generarCalendario(selectMes, selectAño) {
                 celdaDia.textContent = '';
             }
 
-            weekRow.appendChild(celdaDia);
+            weekRow.appendChild(celdaDia); // Añade la celda a la fila
         }
 
-        calendarioFull.appendChild(weekRow);
+        calendarioFull.appendChild(weekRow); // Añade la fila al calendario
     }
 }
 
@@ -112,15 +120,16 @@ function crearRangoHoras(dia, mes, año) {
     });
 
     horasContainer.addEventListener('click', (event) => {
-        const horaSeleccionada = event.target.textContent;
+        const horaSeleccionada = event.target.textContent; // Captura la hora seleccionada
         if (horaSeleccionada) {
-            guardarFechaHoraSeleccionada(dia, mes, año, horaSeleccionada);
+            guardarFechaHoraSeleccionada(dia, mes, año, horaSeleccionada); // Guarda la fecha y hora
         }
     });
 
-    return horasContainer;
+    return horasContainer; // Devuelve el contenedor con las horas
 }
 // FIN Creación del calendario-------------------
+
 // Guarda la fecha y hora seleccionadas en los campos ocultos
 function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
     const fechaInput = document.getElementById('fecha');
@@ -128,17 +137,18 @@ function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
     const horaFinInput = document.getElementById('hora_fin');
 
     const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
-
     fechaInput.value = fechaSeleccionada;
 
     const [horaInicio, horaFin] = hora.split(' - ');
     horaInicioInput.value = horaInicio;
     horaFinInput.value = horaFin;
 }
-//utilizo API FECH para enviar los datos sl servidor sin recargar la pagina----------------
+
+// Utilizo API FETCH para enviar los datos al servidor sin recargar la página----------------
 formReserva.addEventListener('submit', function (event) {
     event.preventDefault(); // Evita el envío normal del formulario
-    // datos de mi formulario
+
+    // Datos de mi formulario
     const nombre = document.getElementById('nombre').value;
     const apellido = document.getElementById('apellido').value;
     const correo = document.getElementById('correo').value;
@@ -146,7 +156,7 @@ formReserva.addEventListener('submit', function (event) {
     const horaInicio = document.getElementById('hora_inicio').value; // Hora de inicio
     const horaFin = document.getElementById('hora_fin').value; // Hora de fin
 
-    // creamos un objeto FormData para enviar los datos
+    // Creamos un objeto FormData para enviar los datos
     const formData = new FormData();
     formData.append('nombre', nombre);
     formData.append('apellido', apellido);
@@ -155,7 +165,7 @@ formReserva.addEventListener('submit', function (event) {
     formData.append('hora_inicio', horaInicio);
     formData.append('hora_fin', horaFin);
 
-    // Envio de  los datos al servidor
+    // Envío de los datos al servidor
     fetch('./php/reservas.php', {
         method: 'POST',
         body: formData,
@@ -176,23 +186,24 @@ formReserva.addEventListener('submit', function (event) {
         });
 });
 
+// Actualizamos esta parte de codigo, ya que el anterio hace que cargara siempre al mes actual, ej:
+// al hacer click en un mes difrente al actual,no nos deja interactuar con los dias del mes.
 
-// Actualizar el calendario al cambiar el mes o año
-slccionMes.addEventListener('change', () => generarCalendario(parseInt(slccionMes.value), parseInt(slccionAño.value)));
-slccionAño.addEventListener('change', () => generarCalendario(parseInt(slccionMes.value), parseInt(slccionAño.value)));
+    // calendarioFull.addEventListener('click', () => {
+    //     const hoy = new Date();
+    //     slccionMes.value = hoy.getMonth(); // Establece el mes actual
+    //     slccionAño.value = hoy.getFullYear(); // Establece el año actual
+    //     generarCalendario(hoy.getMonth(), hoy.getFullYear()); // Genera el calendario para la fecha actual
+    // }
+slccionMes.addEventListener('change', (event) => {
+    mesSeleccionado = parseInt(event.target.value); // Actualiza el mes seleccionado
+    generarCalendario(mesSeleccionado, añoSeleccionado); // Genera el calendario con el mes seleccionado
+});
 
-// calendario aparece en el dia, mes, año actual
-calendarioFull.addEventListener('click', () => {
-    const hoy = new Date();
-    slccionMes.value = hoy.getMonth(); // Establece el mes actual
-    slccionAño.value = hoy.getFullYear(); // Establece el año actual
-    generarCalendario(hoy.getMonth(), hoy.getFullYear()); // Genera el calendario para la fecha actual
+slccionAño.addEventListener('change', (event) => {
+    añoSeleccionado = parseInt(event.target.value); // Actualiza el año seleccionado
+    generarCalendario(mesSeleccionado, añoSeleccionado); // Genera el calendario con el año seleccionado
 });
 
 // Inicializa la aplicación
-initializeSelectors();
-// el selector de mes aparece según el mes y año actual:
-const hoy = new Date(); // me crea un objeto, con la fecha actual
-slccionMes.value = hoy.getMonth(); // Selecciona el mes actual
-slccionAño.value = hoy.getFullYear(); // Selecciona el año actual
-generarCalendario(new Date().getMonth(), new Date().getFullYear());
+initializeSelectors(); // Llama a la función para inicializar los select
