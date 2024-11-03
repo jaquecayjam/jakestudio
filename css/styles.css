@@ -149,6 +149,14 @@ margin-bottom: 0px;
     overflow: auto;          /* Permitir desplazamiento si el contenido excede el tamaño */
 }
 /* Estilo formulario---------------*/
+/* estilos modal */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* Centrado vertical y horizontal */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Ancho del modal */
+}
 
 /* titulo año y mes */
 #tituloMesAño {
@@ -184,7 +192,10 @@ th {
 .hora{
     border: 0.5px solid;
     border-color: #000;
+    
+    
 }
+
 /* -------------------------*/
 /* Estilo foooter------------ */
 footer {

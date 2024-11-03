@@ -5,10 +5,11 @@ const elegirFechaBtn = document.getElementById("elegir-fecha");
 const closeButton = document.querySelector(".close");
 const formReserva = document.getElementById("form-reserva");
 
+
 // Añadiomo variables globales para saber  el mes y año que seleccionamos
 let mesSeleccionado = new Date().getMonth(); // Inicializa con el mes actual
 let añoSeleccionado = new Date().getFullYear(); // Inicializa con el año actual
-
+let fechaSeleccionadaGlobal = null;
 // Cuando hacemos clic en Elegir fecha botón
 elegirFechaBtn.addEventListener("click", () => {
     modal.style.display = "block"; // Muestra el modal
@@ -60,9 +61,9 @@ function generarCalendario(selectMes, selectAño) {
     const nombreMes = new Date(selectAño, selectMes).toLocaleString('es-ES', { month: 'long', year: 'numeric' });
     tituloMesAño.textContent = nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
 
-    const primerDiaMes = new Date(selectAño, selectMes, 1).getDay(); // Determina el primer día del mes
-    const diasTotalMes = new Date(selectAño, selectMes + 1, 0).getDate(); // Total de días en el mes
-    const initialOffset = (primerDiaMes + 6) % 7; // Ajuste para el inicio de la semana
+    const primerDiaMes = new Date(selectAño, selectMes, 1).getDay();
+    const diasTotalMes = new Date(selectAño, selectMes + 1, 0).getDate();
+    const initialOffset = (primerDiaMes + 6) % 7;
 
     let currentDate = 1;
 
@@ -72,30 +73,59 @@ function generarCalendario(selectMes, selectAño) {
         for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
             const celdaDia = document.createElement('td');
 
-            // Dejar celdas vacías hasta alcanzar el primer día del mes
             if (weekIndex === 0 && dayIndex < initialOffset) {
                 celdaDia.textContent = '';
             } else if (currentDate <= diasTotalMes) {
-                celdaDia.textContent = currentDate;
+                const diaElemento = document.createElement('span');
+                diaElemento.textContent = currentDate;
+                celdaDia.appendChild(diaElemento);
 
-                // Solo añade horarios si es un día de la semana permitido
+                // Asignar un data-attribute con la fecha completa
+                celdaDia.dataset.fecha = `${selectAño}-${String(selectMes + 1).padStart(2, '0')}-${String(currentDate).padStart(2, '0')}`;
+
                 if (dayIndex >= 0 && dayIndex <= 4) {
-                    const diaSeleccionado = currentDate;
-                    const horas = crearRangoHoras(diaSeleccionado, selectMes, selectAño); // Crear rango de horas
-                    celdaDia.appendChild(horas);
+                    celdaDia.addEventListener('click', () => {
+                        if (diaElemento.textContent.trim() !== '') {
+                            // Limpia horas de todos los días anteriores
+                            limpiarHorasEnCalendario();
+                            // limpiarHorasEnFila(weekRow);
+
+                            // Genera las horas para cada celda de lunes a viernes en la fila actual
+                            Array.from(weekRow.children).forEach((celda, index) => {
+                                if (index >= 0 && index <= 4 && celda.textContent.trim() !== '') {
+                                    const horas = crearRangoHoras(currentDate, selectMes, selectAño);
+                                    horas.classList.add('horas-container');
+                                    celda.appendChild(horas);
+                                }
+                            });
+                        }
+                    });
                 }
                 currentDate++;
             } else {
                 celdaDia.textContent = '';
             }
 
-            weekRow.appendChild(celdaDia); // Añade la celda a la fila
+            weekRow.appendChild(celdaDia);
         }
 
-        calendarioFull.appendChild(weekRow); // Añade la fila al calendario
+        calendarioFull.appendChild(weekRow);
     }
 }
 
+
+
+
+
+
+function limpiarHorasEnCalendario() {
+    const horasContainers = calendarioFull.querySelectorAll('.horas-container');
+    horasContainers.forEach(container => container.remove()); // Elimina todos los contenedores de horas existentes
+}
+// function limpiarHorasEnFila(weekRow) {
+//     const horasContainers = weekRow.querySelectorAll('.horas-container');
+//     horasContainers.forEach(container => container.remove()); // Elimina todos los contenedores de horas existentes en el tr actual
+// }
 // Crea un rango de horas
 function crearRangoHoras(dia, mes, año) {
     const horasContainer = document.createElement('div');
@@ -119,15 +149,25 @@ function crearRangoHoras(dia, mes, año) {
         horasContainer.appendChild(horaElement);
     });
 
+    // Evento de clic en el contenedor de horas
     horasContainer.addEventListener('click', (event) => {
-        const horaSeleccionada = event.target.textContent; // Captura la hora seleccionada
+        const horaSeleccionada = event.target.textContent;
         if (horaSeleccionada) {
-            guardarFechaHoraSeleccionada(dia, mes, año, horaSeleccionada); // Guarda la fecha y hora
+            // Obtiene la fecha de la celda del día correspondiente
+            const diaCelda = event.currentTarget.closest('td').dataset.fecha.split('-');
+            const diaSeleccionado = parseInt(diaCelda[2], 10);
+            const mesSeleccionado = parseInt(diaCelda[1], 10) - 1; // Ajusta porque meses son 0-index
+            const añoSeleccionado = parseInt(diaCelda[0], 10);
+
+            // Llama a guardarFechaHoraSeleccionada con la fecha y hora correctas
+            guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, horaSeleccionada);
         }
     });
 
-    return horasContainer; // Devuelve el contenedor con las horas
+    return horasContainer;
 }
+
+
 // FIN Creación del calendario-------------------
 
 // Guarda la fecha y hora seleccionadas en los campos ocultos
@@ -136,13 +176,27 @@ function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
     const horaInicioInput = document.getElementById('hora_inicio');
     const horaFinInput = document.getElementById('hora_fin');
 
+    // Formatea la fecha seleccionada como YYYY-MM-DD
     const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
     fechaInput.value = fechaSeleccionada;
 
+    // Verifica que el formato de hora sea correcto
+    if (!hora.includes(' - ')) {
+        console.error("El formato de hora no es válido:", hora);
+        return;
+    }
+
+    // Divide el rango de horas en inicio y fin
     const [horaInicio, horaFin] = hora.split(' - ');
     horaInicioInput.value = horaInicio;
     horaFinInput.value = horaFin;
+
+    // Consola para verificar que se guardaron los datos
+    console.log("Fecha seleccionada:", fechaSeleccionada);
+    console.log("Hora de inicio seleccionada:", horaInicio);
+    console.log("Hora de fin seleccionada:", horaFin);
 }
+
 
 // Utilizo API FETCH para enviar los datos al servidor sin recargar la página----------------
 formReserva.addEventListener('submit', function (event) {
