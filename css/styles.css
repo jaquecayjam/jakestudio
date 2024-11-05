@@ -1,5 +1,10 @@
 body{
     background-color: #a12929;
+<<<<<<< HEAD
+=======
+    height: 80vh;
+    
+>>>>>>> main
 }
 /* estilo menu ------------------*/
 nav {
@@ -46,23 +51,22 @@ nav ul li a:hover {
 /* estilo contenedor ¿Que ofrecemos? 2---------- */
 #container-2 {
     background-color: aliceblue;
-    display: flex; /* Habilitar flexbox */
-    justify-content: center; /* Alinea los elementos al inicio (izquierda) */
-    
-    padding: 20px; /* Espaciado interno */
+    display: flex;
+    justify-content: center;  
+    padding: 20px;
     border: 2px solid #000;
 
 }
 /* Estilo  para la sección "¿Qué Ofrecemos?" ---------*/
 #section-ofrecemos {
     width: 70%;
-    display: flex; /* Habilitar flexbox dentro de la sección */
-    align-items: center; /* Alinea verticalmente el h2 y la lista */
+    display: flex;
+    align-items: center;
     border: 2px solid #000;
 }
 /* Estilo específico para la sección "¿Qué Ofrecemos?" */
 #section-ofrecemos h2 {
-    margin-right: 20px; /* Espacio entre el título y la lista */
+    margin-right: 20px;
     padding-left: 50px;
 }
 
@@ -78,11 +82,25 @@ nav ul li a:hover {
     margin-right: 30px; /* Espacio entre los elementos de la lista en index */
 }
 
+<<<<<<< HEAD
 /* estilo container h2+ parrafo centrado  */
+=======
+
+/* estilos container Un espacio Diseñado para crear  */
+>>>>>>> main
 #container-titulo-espacio{
     background-color: white;
     text-align: center;
 }
+#container-titulo-espacio h2{
+font-size: 2.5em;
+letter-spacing: 0.3em;
+margin-bottom: 0px;
+}
+#container-titulo-espacio p{
+    padding-bottom: 2em;
+}
+/* FIN * estilos container Un espacio Diseñado para crear  */ */
 /* estilo botones reserva --------------------*/
 .boton-reservar {
     display: inline-block;
@@ -104,10 +122,108 @@ nav ul li a:hover {
     font-weight: bold;
     
 }
+<<<<<<< HEAD
+=======
+/* Estilos caracteristicas Estudio SCROLL*/
+/* .toggle-section {
+    display: none; Inicialmente oculto 
+    background-color: #f0f0f0;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    opacity: 0; Comienza como completamente transparente 
+    transform: translateY(20px); /* Comienza desplazado hacia abajo 
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Transición suave 
+}
+.toggle-section.show {
+    display: block; /* Muestra la sección 
+    opacity: 1; /* Totalmente visible 
+    transform: translateY(0); /* Regresa a su posición original
+} */
+ /* Estilo caracteristicas estudio---------- */
+ .flex-container {
+    display: flex;            /* Flexbox en el contenedor */
+    justify-content: center;  /* divs centrados horizontalmente */
+    gap: 10px;               /* Espacio entre los divs */
+    flex-wrap: wrap;
+    margin: 0 auto;             /* Centra el contenedor en la página */
+}
+#caract-estudio {
+    width: 240px;
+    height: 350px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    overflow: auto;          /* Permitir desplazamiento si el contenido excede el tamaño */
+}
+/* Estilo formulario---------------*/
+/* estilos modal */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* Centrado vertical y horizontal */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Ancho del modal */
+}
+
+/* titulo año y mes */
+#tituloMesAño {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+table {
+    width: 70%; /* Ancho de la tabla reducido */
+    border-collapse: collapse;
+    text-align: center;
+}
+td {
+    border: 1px solid;
+}
+th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px;
+    /* padding: 5px; */
+    border: 1px solid #333;
+    vertical-align: top;
+}
+.fin-de-semana {
+    background-color: #ffcccc;
+    color: black;
+}
+
+
+/* Estilo de las horas */
+
+.hora {
+    cursor: pointer; /* Para indicar que es clickeable */
+    border: 1px solid black;
+    padding: 2px;
+}
+/* .hora:hover{
+    background-color: #4CAF50;
+} */
+
+/* .hora.clicked{
+    color: blue; /* Cambia a rojo para probar 
+} */
+
+
+
+/* pruebas */
+.seleccionado {
+    background-color: orange;
+}
+/* -------------------------*/
+>>>>>>> main
 /* Estilo foooter------------ */
 footer {
     position: fixed;
     bottom: 0;
+<<<<<<< HEAD
     background-color: black; /* Color de fondo */
     color: white; /* Color del texto */
     text-align: center; /* Centra el texto */
@@ -122,4 +238,11 @@ element.style {
 
 div#calendario-modal {
     background-color: blue;
+=======
+    background-color: black; 
+    color: white;
+    text-align: center;
+    padding: 20px; 
+    position: relative;
+>>>>>>> main
 }

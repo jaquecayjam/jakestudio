@@ -6,7 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estudio</title>
+<<<<<<< HEAD
     <link rel="stylesheet" href="./css/estilos.css">
+=======
+    <link rel="stylesheet" href="./css/styles.css">
+>>>>>>> main
 </head>
 
 <body>
@@ -18,6 +22,7 @@
         </ul>
     </nav>
     <!-- contenido del estudio -->
+<<<<<<< HEAD
     <main>
         <section>
             <h1>Características de Nuestro Estudio de Grabación</h1>
@@ -48,20 +53,51 @@
                     limpias.</li>
                 <li><strong>Difusores Acústicos:</strong> Mejoran la dispersión del sonido, creando un ambiente de
                     grabación natural y agradable.</li>
-            </ul>
-        </section>
-
-        <section>
-            <h2>3. Espacios Versátiles</h2>
-            <p>Disponemos de diferentes salas que se adaptan a tus necesidades:</p>
+=======
+    <section>
+        <h1>Nuestro estudio</h1>
+        <p>En <strong> JakeStudio</strong>, entendemos que un gran sonido comienza en un entorno de grabación de
+            calidad. Aquí te presentamos las características que hacen de nuestro estudio un lugar excepcional para
+            tus proyectos musicales.</p>
+    </section>
+    <!-- prueba para ver si aparece y desaparece -->
+    <!-- <div class="toggle-section" id="toggleSection"> -->
+    <div class="flex-container" id="contenedor-flex">
+        <div id="caract-estudio">
+            <h2>Equipo de Grabación</h2>
             <ul>
+                <li><strong>Micrófonos Profesionales:</strong> Desde condensadores hasta dinámicos, capturando cada
+                    matiz del sonido.</li>
+                <li><strong>Interfaces de Audio de Alta Definición:</strong> Garantizando grabaciones nítidas y
+                    claras.</li>
+                <li><strong>Monitores de Estudio:</strong> Para una mezcla y masterización precisas.</li>
+            </ul>
+        </div>
+        <div id="caract-estudio">
+            <h2>Acústica Optimizada</h2>
+            <ul>
+                <li><strong>Paneles Absorbentes:</strong> Reducen la reverberación para grabaciones limpias.</li>
+                <li><strong>Difusores Acústicos:</strong> Mejoran la dispersión del sonido.</li>
+>>>>>>> main
+            </ul>
+        </div>
+
+        <div id="caract-estudio">
+            <h2>Salas</h2>
+            <ul>
+<<<<<<< HEAD
                 <li><strong>Sala de Grabación Principal:</strong> Amplia y equipada para grabar bandas y conjuntos en
                     vivo.</li>
                 <li><strong>Cabinas Aisladas:</strong> Perfectas para grabaciones de voces e instrumentos individuales,
                     asegurando que cada toma suene perfecta.</li>
+=======
+                <li><strong>Sala de Grabación Principal:</strong> Amplia y equipada para bandas en vivo.</li>
+                <li><strong>Cabinas Aisladas:</strong> Perfectas para voces e instrumentos individuales.</li>
+>>>>>>> main
             </ul>
-        </section>
+        </div>
 
+<<<<<<< HEAD
         <section>
             <h2>4. Software de Producción Avanzado</h2>
             <p>Nuestro estudio está equipado con los últimos DAWs (Digital Audio Workstations) y plugins de producción:
@@ -83,9 +119,36 @@
                     a cabo, ofreciendo sugerencias y apoyo en cada etapa del proceso.</li>
                 <li><strong>Sesiones Efectivas:</strong> Nos enfocamos en maximizar tu tiempo en el estudio, asegurando
                     que cada sesión sea productiva.</li>
+=======
+        <div id="caract-estudio">
+            <h2>Software de Producción Avanzado</h2>
+            <p>Equipado con los últimos <strong>DAWs</strong> y plugins, incluyendo:</p>
+            <ul>
+                <li><strong>Logic Pro, Pro Tools y Ableton Live:</strong> Para grabar, editar y mezclar
+                    profesionalmente.</li>
+                <li><strong>Bibliotecas de Sonido:</strong> Acceso a una amplia gama de muestras y loops.</li>
             </ul>
-        </section>
+        </div>
+        <div id="caract-estudio">
+            <h2>Personal Profesional y Experimentado</h2>
+            <p>Nuestro equipo de ingenieros y productores ofrece:</p>
+            <ul>
+                <li><strong>Asesoramiento Personalizado:</strong> Entendemos tu visión y te apoyamos en cada etapa.</li>
+                <li><strong>Sesiones Efectivas:</strong> Maximizamos tu tiempo en el estudio.</li>
+>>>>>>> main
+            </ul>
+        </div>
+    </div>
+    <h2>Servicios Adicionales</h2>
+    <p>Además de grabación, ofrecemos:</p>
+    <ul>
+        <li><strong>Mezcla y Masterización:</strong> Transformamos tus grabaciones en pistas profesionales.</li>
+        <li><strong>Producción Musical:</strong> Apoyamos tus ideas desde la pre-producción hasta la
+            post-producción.</li>
+    </ul>
+    </div>
 
+<<<<<<< HEAD
         <section>
             <h2>6. Ambientes Cómodos y Acogedores</h2>
             <p>Creemos que la creatividad florece en un ambiente agradable:</p>
@@ -119,6 +182,12 @@
 
     <h2>Formulario de Reserva-JakeStudio</h2>
     <form id="form-reserva" action="reserva.php" method="POST">
+=======
+    <!-- formulario -->
+
+    <h2>Formulario de Reserva-JakeStudio</h2>
+    <form id="form-reserva" action="./php/reserva.php" method="POST">
+>>>>>>> main
         <label for="nombre">Nombre:</label><br>
         <input type="text" id="nombre" name="nombre" required><br><br>
 
@@ -130,6 +199,7 @@
         <!-- Campo fecha, para abrir modal con calendario----------------------------- -->
         <p>Selecciona fecha:</p>
         <button type="button" id="elegir-fecha">calendario</button><br><br>
+<<<<<<< HEAD
 
         <!-- Modal para el calendario -->
         <div id="calendario-modal" class="modal" style="display:none;">
@@ -147,6 +217,55 @@
     <script src="./js/formulario_reserva.js"></script> <!--script para manipular las horas de reserva-->
 
 
+=======
+        <!-- Campos ocultos para alamacenr fecha, hora_inicio , hora_fin -->
+        <input type="hidden" id="fecha" name="fecha">
+        <input type="hidden" id="hora_inicio" name="hora_inicio">
+        <input type="hidden" id="hora_fin" name="hora_fin">
+
+
+        <!-- Modal para el calendario -->
+        <div id="calendario-modal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>aqui aparece el calendario</p>
+                <!-- titulo mes y alo -->
+                <div id="tituloMesAño"></div>
+                <select id="elegir-mes"></select>
+                <select id="elegir-año"></select>
+                <!-- Contenedor del título del mes y año -->
+
+                <!-- Contenedor del calendario -->
+                <table id="calendarioFull"></table>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Lunes</th>
+                            <th>Martes</th>
+                            <th>Miércoles</th>
+                            <th>Jueves</th>
+                            <th>Viernes</th>
+                            <th class="fin-de-semana">Sábado</th>
+                            <th class="fin-de-semana">Domingo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendario-full">
+                        <!-- El calendario se generará aquí dinámicamente -->
+                    </tbody>
+                </table>
+
+                </tbody>
+                </table>
+            </div>
+        </div>
+
+        <input type="submit" value="Reservar">
+    </form>
+    <script src="./js/formulario_reserva.js"></script> <!--script para manipular las horas de reserva-->
+    <!-- <script src="./js/scroll-estudio.js"></script>  -->
+
+>>>>>>> main
     <input type="hidden" name="hora" value="">
     <div class="footer-container"> <!-- contenedor footer-->
         <footer>

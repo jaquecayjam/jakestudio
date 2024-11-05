@@ -1,19 +1,3 @@
-<<<<<<< HEAD
-//  elementos del DOM
-const modal = document.getElementById("calendario-modal");
-const elegirFechaBtn = document.getElementById("elegir-fecha");
-const closeButton = document.querySelector(".close");
-
-// cuando hacemos click en Elegir fecha boton
-elegirFechaBtn.addEventListener("click", () => {
-    modal.style.display = "block";
-});
-
-//modal se cierra al hacer clic en la "X"
-closeButton.addEventListener("click", () => {
-    modal.style.display = "none";
-});
-=======
 // Creación del modal-------------
 // Elementos del DOM
 const modal = document.getElementById("calendario-modal");
@@ -72,22 +56,6 @@ function añadirAños() {
         slccionAño.appendChild(option);
     }
 }
-// obtiene las reservas e la base ded atos
-async function obtenerReservas() {
-    console.log("Iniciando la obtención de datos...");
-    try {
-        const response = await fetch('./php/obtener_reservas.php'); // Cambia la ruta si es necesario
-        if (!response.ok) throw new Error("Error al cargar las reservas");
-        const reservas = await response.json(); // Devuelve las reservas en formato [{ fecha: "YYYY-MM-DD", hora: "HH:MM - HH:MM" }]
-        console.log(reservas); // Agrega esto para verificar los datos
-        return reservas;
-    } catch (error) {
-        console.error("Error al obtener reservas:", error);
-        return [];
-    }
-}
-
-
 
 function generarCalendario(selectMes, selectAño) {
     calendarioFull.innerHTML = ''; // Limpia el calendario previo
@@ -156,7 +124,7 @@ function generarCalendario(selectMes, selectAño) {
 }
 
 // Modificación de la función crearRangoHoras para que acepte un contenedor
-async function crearRangoHoras(dia, mes, año, celda) {
+function crearRangoHoras(dia, mes, año, celda) {
     const horas = [
         "09:00 - 10:00",
         "10:00 - 11:00",
@@ -169,24 +137,10 @@ async function crearRangoHoras(dia, mes, año, celda) {
         "17:00 - 18:00"
     ];
 
-    // Obtén las reservas del servidor
-    const reservas = await obtenerReservas();
-    const reservasPorFecha = reservas.filter(reserva => reserva.fecha === `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`);
-
     horas.forEach(hora => {
         const horaElement = document.createElement('p');
         horaElement.textContent = hora;
         horaElement.classList.add('hora');
-
-        // Verifica si la hora está ocupada
-        const horaOcupada = reservasPorFecha.some(reserva => {
-            const [horaInicio, horaFin] = [reserva.hora.split(' - ')[0], reserva.hora.split(' - ')[1]];
-            return (horaInicio <= hora && horaFin > hora);
-        });
-
-        if (horaOcupada) {
-            horaElement.style.color = 'red'; // Cambia el color a rojo si está ocupada
-        }
 
         // Agregar evento de clic a cada hora
         horaElement.addEventListener('click', () => {
@@ -207,7 +161,6 @@ async function crearRangoHoras(dia, mes, año, celda) {
         celda.appendChild(horaElement); // Agrega el elemento directamente a la celda
     });
 }
-
 
 
 function limpiarHorasEnCalendario() {
@@ -314,4 +267,3 @@ slccionAño.addEventListener('change', (event) => {
 
 // Inicializa la aplicación
 initializeSelectors(); // Llama a la función para inicializar los select
->>>>>>> main

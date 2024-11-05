@@ -1,0 +1,71 @@
+
+<h2>Formulario de Reserva-JakeStudio</h2>
+<form id="form-reserva" action="./php/reserva.php" method="POST">
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+
+    <label for="nombre">Apellido:</label><br>
+    <input type="text" id="apellido" name="apellido" required><br><br>
+
+    <label for="correo">Correo Electrónico:</label><br>
+    <input type="email" id="correo" name="correo" required><br><br>
+    <!-- Campo fecha, para abrir modal con calendario----------------------------- -->
+    <p>Selecciona fecha:</p>
+    <button type="button" id="elegir-fecha">calendario</button><br><br>
+    <!-- Campos ocultos para alamacenr fecha, hora_inicio , hora_fin -->
+    <input type="hidden" id="fecha" name="fecha">
+    <input type="hidden" id="hora_inicio" name="hora_inicio">
+    <input type="hidden" id="hora_fin" name="hora_fin">
+
+
+    <!-- Modal para el calendario -->
+    <div id="calendario-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>aqui aparece el calendario</p>
+            <!-- titulo mes y alo -->
+            <div id="tituloMesAño"></div>
+            <select id="elegir-mes"></select>
+            <select id="elegir-año"></select>
+            <!-- Contenedor del título del mes y año -->
+
+            <!-- Contenedor del calendario -->
+            <table id="calendarioFull"></table>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Lunes</th>
+                        <th>Martes</th>
+                        <th>Miércoles</th>
+                        <th>Jueves</th>
+                        <th>Viernes</th>
+                        <th class="fin-de-semana">Sábado</th>
+                        <th class="fin-de-semana">Domingo</th>
+                    </tr>
+                </thead>
+                <tbody id="calendario-full">
+                    <!-- El calendario se generará aquí dinámicamente -->
+                </tbody>
+            </table>
+
+            </tbody>
+            </table>
+        </div>
+    </div>
+
+    <input type="submit" value="Reservar">
+</form>
+</form>
+<script src="./js/formulario_reserva.js"></script> <!--script para manipular las horas de reserva-->
+<!-- <script src="./js/scroll-estudio.js"></script>  -->
+
+<input type="hidden" name="hora" value="">
+<div class="footer-container"> <!-- contenedor footer-->
+    <footer>
+        <p>&copy; JakeStudio 2024</p>
+    </footer>
+</div>
+</body>
+
+</html>
