@@ -1,19 +1,3 @@
-<<<<<<< HEAD
-//  elementos del DOM
-const modal = document.getElementById("calendario-modal");
-const elegirFechaBtn = document.getElementById("elegir-fecha");
-const closeButton = document.querySelector(".close");
-
-// cuando hacemos click en Elegir fecha boton
-elegirFechaBtn.addEventListener("click", () => {
-    modal.style.display = "block";
-});
-
-//modal se cierra al hacer clic en la "X"
-closeButton.addEventListener("click", () => {
-    modal.style.display = "none";
-});
-=======
 // Creación del modal-------------
 // Elementos del DOM
 const modal = document.getElementById("calendario-modal");
@@ -314,4 +298,3 @@ slccionAño.addEventListener('change', (event) => {
 
 // Inicializa la aplicación
 initializeSelectors(); // Llama a la función para inicializar los select
->>>>>>> main
