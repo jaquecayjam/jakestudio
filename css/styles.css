@@ -1,10 +1,7 @@
 body{
     background-color: #a12929;
-<<<<<<< HEAD
-=======
     height: 80vh;
     
->>>>>>> main
 }
 /* estilo menu ------------------*/
 nav {
@@ -82,12 +79,8 @@ nav ul li a:hover {
     margin-right: 30px; /* Espacio entre los elementos de la lista en index */
 }
 
-<<<<<<< HEAD
-/* estilo container h2+ parrafo centrado  */
-=======
 
 /* estilos container Un espacio Diseñado para crear  */
->>>>>>> main
 #container-titulo-espacio{
     background-color: white;
     text-align: center;
@@ -122,8 +115,6 @@ margin-bottom: 0px;
     font-weight: bold;
     
 }
-<<<<<<< HEAD
-=======
 /* Estilos caracteristicas Estudio SCROLL*/
 /* .toggle-section {
     display: none; Inicialmente oculto 
@@ -211,38 +202,22 @@ th {
     color: blue; /* Cambia a rojo para probar 
 } */
 
-
+.reservado {
+    color: red;
+}
 
 /* pruebas */
 .seleccionado {
     background-color: orange;
 }
 /* -------------------------*/
->>>>>>> main
 /* Estilo foooter------------ */
 footer {
     position: fixed;
     bottom: 0;
-<<<<<<< HEAD
-    background-color: black; /* Color de fondo */
-    color: white; /* Color del texto */
-    text-align: center; /* Centra el texto */
-    padding: 20px; /* Espaciado interno */
-    position: relative; /* Permite posicionar elementos dentro del footer */
-}
-
-element.style {
-    display: block;
-    background-color: blue;
-}
-
-div#calendario-modal {
-    background-color: blue;
-=======
     background-color: black; 
     color: white;
     text-align: center;
     padding: 20px; 
     position: relative;
->>>>>>> main
 }
