@@ -99,13 +99,14 @@
         <input type="hidden" id="fecha" name="fecha">
         <input type="hidden" id="hora_inicio" name="hora_inicio">
         <input type="hidden" id="hora_fin" name="hora_fin">
+        
+
 
 
         <!-- Modal para el calendario -->
         <div id="calendario-modal" class="modal" style="display:none;">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <p>aqui aparece el calendario</p>
                 <!-- titulo mes y alo -->
                 <div id="tituloMesAño"></div>
                 <select id="elegir-mes"></select>
@@ -135,11 +136,19 @@
                 </tbody>
                 </table>
             </div>
+             <!-- Esta sección solo se mostrará en móviles -->
+        <div id="mobile-calendar" style="display:none;">
+            <h2 id="current-day-title"></h2>
+            <div id="hours-container"></div>
+        </div>
         </div>
 
         <input type="submit" value="Reservar">
     </form>
-    <script src="./js/reservas_movil.js"></script> <!--script para manipular las horas de reserva-->
+    <!-- <script src="./js/formulario_reserva.js"></script> script para manipular las horas de reserva -->
+    <script src="./js/pruebas.js"></script>
+
+
     <!-- <script src="./js/scroll-estudio.js"></script>  -->
 
     <input type="hidden" name="hora" value="">
