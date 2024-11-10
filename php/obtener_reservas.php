@@ -1,5 +1,4 @@
 <?php
-// Configuración de la base de datos
 $servername = "localhost";
 $username = "root";
 $password = "root1234_";
@@ -14,7 +13,7 @@ if ($conn->connect_error) {
 }
 
 // Consulta para obtener todos los datos de la tabla reservas
-$sql = "SELECT id, nombre, apellido, correo, fecha, hora_inicio, hora_fin FROM reservas";
+$sql = "SELECT fecha, hora_inicio, hora_fin FROM reservas";
 $result = $conn->query($sql);
 
 // Verificar si hay resultados
@@ -23,10 +22,7 @@ if ($result->num_rows > 0) {
     // Recorrer los resultados y añadir cada registro al array
     while ($row = $result->fetch_assoc()) {
         $reservas[] = [
-            "id" => $row["id"],
-            "nombre" => $row["nombre"],
-            "apellido" => $row["apellido"],
-            "correo" => $row["correo"],
+          
             "fecha" => $row["fecha"],
             "hora_inicio" => $row["hora_inicio"],
             "hora_fin" => $row["hora_fin"]
