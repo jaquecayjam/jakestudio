@@ -13,7 +13,7 @@ let añoSeleccionado = new Date().getFullYear(); // Inicializa con el año actua
 let fechaSeleccionadaGlobal = null;
 let filaAnterior = null;
 let filaSemanaActual = null;
-
+let horasGeneradas = {}; // ********
 // Cuando hacemos clic en Elegir fecha botón
 elegirFechaBtn.addEventListener("click", () => {
     modal.style.display = "block"; // Muestra el modal
@@ -59,61 +59,35 @@ function añadirAños() {
         slccionAño.appendChild(option);
     }
 }
-// OBTENGO RESERVAS DE LA BASE DE DATOS , me devulve un array-----------------------/////////////////////////
-// async function obtenerReservas(mes, año) {
-//     try {
-//         const response = await fetch(`./php/obtener_reservas.php?mes=${mes + 1}&año=${año}`);
-//         if (!response.ok) throw new Error("Error al cargar las reservas");
-//         const reservas = await response.json(); // [{fecha: "YYYY-MM-DD", hora_inicio: "HH:MM:SS", hora_fin: "HH:MM:SS"}]
 
-//         // Llama a la función para marcar las horas en rojo en el calendario
-//         marcarHorasReservadas(reservas);
-//     } catch (error) {
-//         console.error("Error al obtener reservas:", error);
-//     }
-// }
+//OBTENGO LAS FECHAS Y HORAS DE MI BASE DE DATOS-------------------------//////////////////////////////////////////////
 async function obtenerReservas() {
     console.log("Iniciando la obtención de datos...");
     try {
         const response = await fetch('./php/obtener_reservas.php'); // Cambia la ruta si es necesario
         if (!response.ok) throw new Error("Error al cargar las reservas");
         const reservas = await response.json(); // [{ fecha: "YYYY-MM-DD", hora_inicio: "HH:MM:SS", hora_fin: "HH:MM:SS" }]
-        console.log("Reservas obtenidasss:", reservas); // Agrega esto para verificar los datos
-        return reservas || []; // Asegura que siempre devuelve un array
+        
+        console.log("Reservas obtenidas:", reservas); // Agrega esto para verificar los datos
+
+        // Crear un nuevo formato con hora_inicio - hora_fin
+        const reservasFormateadas = reservas.map(reserva => {
+            return {
+                fecha: reserva.fecha,
+                horas: `${reserva.hora_inicio.substring(0, 5)} - ${reserva.hora_fin.substring(0, 5)}`
+            };
+        });
+
+        console.log("Reservas formateadas:", reservasFormateadas); // Verifica el formato
+
+        return reservasFormateadas || []; // Asegura que siempre devuelve un array con el formato esperado
     } catch (error) {
         console.error("Error al obtener reservas:", error);
         return []; // Devuelve un array vacío en caso de error
     }
 }
 
-// MARCAR HORAS RESERVADAS----------------------------------------------/////////////////////////
-function marcarHorasReservadas(reservas) {
-    reservas.forEach(reserva => {
-        // Convierte la fecha de la reserva para buscarla en el calendario
-        const fechaReserva = reserva.fecha;
-        const horaInicioReserva = reserva.hora_inicio.substring(0, 5); // "13:00" (quitamos los segundos)
-        const horaFinReserva = reserva.hora_fin.substring(0, 5); // "17:00"
-
-        // Selecciona todas las celdas de horas en el calendario para esa fecha
-        const celdasHoras = document.querySelectorAll(`[data-fecha="${fechaReserva}"] .hora`);
-
-        celdasHoras.forEach(celda => {
-            // Obtiene el rango de la hora en el formato "HH:MM - HH:MM"
-            const [horaInicio, horaFin] = celda.textContent.split(" - ");
-
-            // Compara si el rango del calendario está dentro del rango de la reserva
-            if ((horaInicioReserva <= horaInicio && horaFinReserva > horaInicio) ||
-                (horaInicioReserva < horaFin && horaFinReserva >= horaFin)) {
-
-                // Marca en rojo la celda si coincide
-                celda.classList.add("reservado");
-            }
-        });
-    });
-}
-
-
-
+//GENERO EL CALENDARIO-------------------------------------------////////////////////////////////
 function generarCalendario(selectMes, selectAño) {
     calendarioFull.innerHTML = ''; // Limpia el calendario previo
     const nombreMes = new Date(selectAño, selectMes).toLocaleString('es-ES', { month: 'long', year: 'numeric' });
@@ -124,15 +98,14 @@ function generarCalendario(selectMes, selectAño) {
     const initialOffset = (primerDiaMes + 6) % 7;
 
     let currentDate = 1;
-    const fechaActual = new Date(); // Obtiene la fecha actual IMPORTANTE
+    const fechaActual = new Date();
     const diaActual = fechaActual.getDate();
     const mesActual = fechaActual.getMonth();
     const añoActual = fechaActual.getFullYear();
     const diaDeLaSemanaActual = fechaActual.getDay(); // 0 = Domingo, 1 = Lunes, ..., 6 = Sábado
-    // Calcular el índice de la semana actual en el mes
     const semanaActual = Math.floor((diaActual + primerDiaMes - 1) / 7); // Semana actual (0-5)
 
-    // AQUI EMPIEZA LO DUROZ
+    // Generación de filas para el calendario
     for (let weekIndex = 0; weekIndex < 6; weekIndex++) {
         const weekRow = document.createElement('tr');
 
@@ -149,42 +122,37 @@ function generarCalendario(selectMes, selectAño) {
                 // Asignar un data-attribute con la fecha completa
                 celdaDia.dataset.fecha = `${selectAño}-${String(selectMes + 1).padStart(2, '0')}-${String(currentDate).padStart(2, '0')}`;
 
-                if (dayIndex >= 0 && dayIndex <= 4) {
+                // Añadir evento de clic solo para días válidos
+                if (dayIndex >= 0 && dayIndex <= 4) { // Lunes a Viernes
                     celdaDia.addEventListener('click', () => {
-                        if (diaElemento.textContent.trim() !== '') {
-                            // Limpia las horas en la fila anterior si existe
-                            if (filaSemanaActual && filaSemanaActual !== weekRow) {
-                                limpiarHorasEnFila(filaSemanaActual);
-                                filaSemanaActual.dataset.horasGeneradas = ''; // Resetear el flag
-                            }
-                            if (filaAnterior && filaAnterior !== weekRow && filaAnterior !== filaSemanaActual) {
-                                limpiarHorasEnFila(filaAnterior);
-                                filaAnterior.dataset.horasGeneradas = '';
-                            }
-
-                            // si ya hay .hora en mi semana actual evita que se vuelva a generar
-                            if (celdaDia.querySelector('.hora')) {
-                                // Si ya hay horas, no generamos más
-                                return; // Salimos de la función para evitar crear más horas
-                            }
-
-                            // Verifica si ya se han generado horas en esta fila
-                            if (!weekRow.dataset.horasGeneradas) {
-                                // Genera las horas en las celdas de lunes a viernes de esta fila
-                                Array.from(weekRow.children).forEach((celda, index) => {
-                                    if (index >= 0 && index <= 4 && celda.textContent.trim() !== '') {
-                                        crearRangoHoras(currentDate, selectMes, selectAño, celda);
-                                    }
-                                });
-
-                                // Marca que las horas han sido generadas para esta fila
-                                weekRow.dataset.horasGeneradas = 'true';
-                                filaAnterior = weekRow; // Actualiza la filaAnterior a la fila actual
-                            }
+                        // Verifica si ya hay horas generadas
+                        if (celdaDia.querySelector('.hora')) {
+                            return; // Si ya hay horas, no generamos más
                         }
+
+                        // Limpia las horas de la fila anterior si es necesario
+                        if (filaSemanaActual && filaSemanaActual !== weekRow) {
+                            limpiarHorasEnFila(filaSemanaActual);
+                            filaSemanaActual.dataset.horasGeneradas = ''; // Resetear el flag
+                        }
+
+                        // Genera las horas si no se generaron previamente
+                        if (!weekRow.dataset.horasGeneradas) {
+                            Array.from(weekRow.children).forEach((celda, index) => {
+                                if (index >= 0 && index <= 4 && celda.textContent.trim() !== '') {
+                                    crearRangoHoras(currentDate, selectMes, selectAño, celda);
+                                }
+                            });
+                            weekRow.dataset.horasGeneradas = 'true'; // Marca que las horas han sido generadas
+                            filaSemanaActual = weekRow; // Actualiza la filaSemanaActual
+                        }
+                        compararReservasConCalendario(weekRow); // Esto mostrará las coincidencias en la consola
+                        // Extraer las fechas y las horas de la fila
+                        const diasYHoras = extraerDiaYHoras(weekRow);
+                        console.log(diasYHoras); // Ver en la consola las fechas y horas extraídas
+                        marcarHorasOcupadas(weekRow);
                     });
                 }
-
 
                 currentDate++;
             } else {
@@ -195,12 +163,111 @@ function generarCalendario(selectMes, selectAño) {
         }
 
         calendarioFull.appendChild(weekRow);
+        
     }
-    // con esto evito que se generen en los meses que no corresponde
+
+    // Solo generar horas si estamos en el mes y año actuales
     if (selectMes === mesActual && selectAño === añoActual) {
         generarHorasSemanaActual(selectMes, selectAño, semanaActual);
     }
-    obtenerReservas(selectMes, selectAño);
+}
+
+// FUNCION PARA EXTRAER DIAS Y HORAS DE LA FILA EN LA QUE SE ENCUENTRA------------------///////////////////////////////
+function extraerDiaYHoras(semanaFila) {
+    let diasYHoras = {};
+
+    // Recorremos las celdas de la fila (de la celda 0 a la 4, es decir, de lunes a viernes)
+    Array.from(semanaFila.children).forEach((celda, index) => {
+        if (index >= 0 && index <= 4) {  // Solo lunes a viernes
+            const fechaCelda = celda.dataset.fecha;  // Extraemos la fecha desde el data-attribute
+            if (fechaCelda && celda.querySelector('.hora')) {
+                let horas = [];
+                // Recorremos todas las horas generadas dentro de la celda
+                celda.querySelectorAll('.hora').forEach(horaElemento => {
+                    horas.push(horaElemento.textContent);  // Extraemos las horas
+                });
+
+                // Almacenamos la fecha y sus horas en el objeto
+                diasYHoras[fechaCelda] = horas;
+            }
+        }
+    });
+
+    return diasYHoras;
+}
+
+// FUNCION PRA COMPARAR HORAS BASE DE DATOS Y HORAS FILA EN LA QUE SE ECNUENTRA- GUARDO LOS DIAS QUE COINCIDEN: LOS DIAS OCUPADO----------////////
+async function compararReservasConCalendario(semanaFila) {
+    // 1. Obtener las reservas formateadas
+    const reservas = await obtenerReservas();
+    
+    // 2. Extraer las fechas y horas de la fila del calendario
+    const diasYHoras = extraerDiaYHoras(semanaFila);
+    
+    // 3. Almacenaremos las horas ocupadas para mostrarlas más tarde
+    let horasOcupadas = {};
+
+    // 4. Comparar las fechas y horas
+    for (const fecha in diasYHoras) {  // Si existe la fecha en las reservas, comparamos las horas
+        const reservasDelDia = reservas.filter(reserva => reserva.fecha === fecha);
+        const horasDelCalendario = diasYHoras[fecha];
+
+        reservasDelDia.forEach(reserva => {
+            // Comparamos las horas de la reserva con las horas del calendario
+            horasDelCalendario.forEach(horaCalendario => {
+                // Si la hora de la reserva está dentro del rango del calendario
+                if (reserva.horas.includes(horaCalendario)) {
+                    console.log(`La reserva para ${fecha} a las ${horaCalendario} ya está ocupada.`);
+
+                    // Almacenamos solo las horas ocupadas
+                    if (!horasOcupadas[fecha]) {
+                        horasOcupadas[fecha] = [];
+                    }
+                    horasOcupadas[fecha].push(horaCalendario); // Agrega la hora ocupada
+                }
+            });
+        });
+    }
+
+    // 5. Mostrar las horas ocupadas
+    console.log("Horas ocupadas:", horasOcupadas);
+    return horasOcupadas;  // Devuelve el objeto con las horas ocupadas
+}
+
+
+// FUNCION PARA MARCAR LOS DIAS QUE COINCIDEN EN ROJO Y BLOQUEAR LA PULSAR--------------------//////////////////////////
+
+async function marcarHorasOcupadas(semanaFila) {
+    // 1. Llamamos a la función que compara las reservas con el calendario
+    const horasOcupadas = await compararReservasConCalendario(semanaFila);
+
+    // 2. Recorremos las celdas de la semana (solo las celdas de lunes a viernes)
+    Array.from(semanaFila.children).forEach((celda, index) => {
+        if (index >= 0 && index <= 4) {  // Solo lunes a viernes
+            const fechaCelda = celda.dataset.fecha;  // Extraemos la fecha desde el data-attribute
+            if (fechaCelda && horasOcupadas[fechaCelda]) {
+                // Si la fecha de la celda está en las horas ocupadas, procedemos a marcarla
+                const horasDelCalendario = horasOcupadas[fechaCelda];
+
+                // Recorremos las horas de la celda
+                Array.from(celda.querySelectorAll('.hora')).forEach(horaElemento => {
+                    const horaCalendario = horaElemento.textContent;
+
+                    // Si la hora de la celda está ocupada, cambiamos el estilo o el contenido
+                    if (horasDelCalendario.includes(horaCalendario)) {
+                        // Por ejemplo, podemos cambiar el color de la celda a rojo
+                        horaElemento.style.backgroundColor = 'red';
+                        horaElemento.style.color = 'white'; // Opcional, para que se vea mejor
+
+                        // O puedes agregar un texto para indicar que está ocupada
+                        horaElemento.textContent = `${horaCalendario} (Ocupada)`;
+                        horaElemento.style.pointerEvents = 'none'; // Hace que no se pueda hacer clic en el elemento
+
+                    }
+                });
+            }
+        }
+    });
 }
 
 // FUNCION PARA CREAR LAS HORAS EN LA SEMANA ACTUAL --------------------------------/////////////////////////
@@ -214,68 +281,19 @@ function generarHorasSemanaActual(selectMes, selectAño, semanaActual) {
 
             Array.from(row.children).forEach((cell, cellIndex) => {
                 const diaCalendario = currentDay.getDate();
-                if (cellIndex >= 0 && cellIndex <= 4) {
+                if (cellIndex >= 0 && cellIndex <= 4) { // Lunes a Viernes
                     crearRangoHoras(diaCalendario, selectMes, selectAño, cell);
                 }
                 currentDay.setDate(diaCalendario + 1);
             });
+
+            // Marcar las horas ocupadas después de generarlas en la semana actual
+            compararReservasConCalendario(row);
+            marcarHorasOcupadas(row); // Llama a la función para marcar en rojo las horas ocupadas
         }
     });
 }
-
-// Modificación de la función crearRangoHoras para que acepte un contenedor
-// async function crearRangoHoras(dia, mes, año, celda) {
-//     const horas = [
-//         "09:00 - 10:00",
-//         "10:00 - 11:00",
-//         "11:00 - 12:00",
-//         "12:00 - 13:00",
-//         "13:00 - 14:00",
-//         "14:00 - 15:00",
-//         "15:00 - 16:00",
-//         "16:00 - 17:00",
-//         "17:00 - 18:00"
-//     ];
-
-//     // Obtén las reservas del servidor
-//     const reservas = await obtenerReservas();
-//     const reservasPorFecha = reservas.filter(reserva => reserva.fecha === `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`);
-
-//     horas.forEach(hora => {
-//         const horaElement = document.createElement('p');
-//         horaElement.textContent = hora;
-//         horaElement.classList.add('hora');
-
-//         // Verifica si la hora está ocupada
-//         const horaOcupada = reservasPorFecha.some(reserva => {
-//             const [horaInicio, horaFin] = [reserva.hora.split(' - ')[0], reserva.hora.split(' - ')[1]];
-//             return (horaInicio <= hora && horaFin > hora);
-//         });
-
-//         if (horaOcupada) {
-//             horaElement.style.color = 'red'; // Cambia el color a rojo si está ocupada
-//         }
-
-//         // Agregar evento de clic a cada hora
-//         horaElement.addEventListener('click', () => {
-//             // Cambia el color de fondo a azul al hacer clic
-//             if (horaElement.style.backgroundColor === 'blue') {
-//                 horaElement.style.backgroundColor = ''; // Restaura el color original
-//             } else {
-//                 horaElement.style.backgroundColor = 'blue'; // Cambia a azul
-//             }
-//             // Aquí puedes añadir la lógica para guardar la fecha y hora seleccionadas
-//             const diaCelda = celda.dataset.fecha.split('-');
-//             const diaSeleccionado = parseInt(diaCelda[2], 10);
-//             const mesSeleccionado = parseInt(diaCelda[1], 10) - 1; // Ajusta porque meses son 0-index
-//             const añoSeleccionado = parseInt(diaCelda[0], 10);
-//             guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, hora);
-//         });
-
-//         celda.appendChild(horaElement); // Agrega el elemento directamente a la celda
-//     });
-// }
-// FUNCION CREAR RANGOS HORAS-------------------------------/////////////////////////
+// FUNCION PARA CREAR RANGO DE HORAS-----------------------------//////////////////////////////////////////////////
 async function crearRangoHoras(dia, mes, año, celda) {
     const horas = [
         "09:00 - 10:00",
@@ -289,39 +307,18 @@ async function crearRangoHoras(dia, mes, año, celda) {
         "17:00 - 18:00"
     ];
 
-    // Obtén las reservas del servidor
-    const reservas = await obtenerReservas();
-    if (!Array.isArray(reservas)) {
-        console.error("Reservas no es un array:", reservas);
-        return; // Sal de la función si reservas no es un array
-    }
+    // Aquí ya no obtenemos las reservas desde el servidor
+    // const reservas = await obtenerReservas(); 
+
     // Formatear la fecha para la comparación
     const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
     console.log("fecha formateado" + fechaSeleccionada);
 
-    // Filtrar las reservas para la fecha actual
-    const reservasPorFecha = reservas.filter(reserva => reserva.fecha === fechaSeleccionada);
+    // Crear las horas en el rango, sin necesidad de verificar si están ocupadas
     horas.forEach(hora => {
         const horaElement = document.createElement('p');
         horaElement.textContent = hora;
         horaElement.classList.add('hora');
-
-        // Extraer la hora de inicio y fin del rango actual
-        const [horaInicio, horaFin] = hora.split(' - ');
-
-        // Verifica si la hora está ocupada
-        const horaOcupada = reservasPorFecha.some(reserva => {
-            // Convertir las horas de reserva a formato HH:MM para comparación
-            const reservaInicio = reserva.hora_inicio.substring(0, 5); // Tomar HH:MM
-            const reservaFin = reserva.hora_fin.substring(0, 5); // Tomar HH:MM
-
-            // Compara si la hora de inicio o la hora de fin de la reserva colisionan con la hora actual
-            return (reservaInicio < horaFin && reservaFin > horaInicio);
-        });
-
-        if (horaOcupada) {
-            horaElement.style.color = 'yellow'; // Cambia el color a rojo si está ocupada
-        }
 
         // Agregar evento de clic a cada hora
         horaElement.addEventListener('click', () => {
@@ -342,6 +339,7 @@ async function crearRangoHoras(dia, mes, año, celda) {
         celda.appendChild(horaElement);
     });
 }
+
 
 
 

@@ -66,17 +66,47 @@ async function obtenerReservas() {
     try {
         const response = await fetch('./php/obtener_reservas.php'); // Cambia la ruta si es necesario
         if (!response.ok) throw new Error("Error al cargar las reservas");
+        
         const reservas = await response.json(); // [{ fecha: "YYYY-MM-DD", hora_inicio: "HH:MM:SS", hora_fin: "HH:MM:SS" }]
         
+        // Verifica que las reservas tengan el formato esperado
+        if (!Array.isArray(reservas)) {
+            throw new Error("El formato de las reservas no es válido");
+        }
+
         console.log("Reservas obtenidas:", reservas); // Agrega esto para verificar los datos
+
+        // Función para generar los intervalos de una hora entre dos horas
+        const generarIntervalos = (horaInicio, horaFin) => {
+            const intervalos = [];
+            let currentHour = new Date(`1970-01-01T${horaInicio}:00`);
+            const endHour = new Date(`1970-01-01T${horaFin}:00`);
+
+            while (currentHour < endHour) {
+                const start = currentHour.toTimeString().substring(0, 5); // Hora de inicio
+                currentHour.setHours(currentHour.getHours() + 1); // Incrementamos una hora
+                const end = currentHour.toTimeString().substring(0, 5); // Hora de fin
+                intervalos.push(`${start} - ${end}`);
+            }
+
+            return intervalos;
+        };
 
         // Crear un nuevo formato con hora_inicio - hora_fin
         const reservasFormateadas = reservas.map(reserva => {
+            if (!reserva.fecha || !reserva.hora_inicio || !reserva.hora_fin) {
+                console.warn("Reserva incompleta, omitiendo:", reserva);
+                return null; // Ignora esta reserva si falta alguna propiedad
+            }
+
+            // Si la hora de inicio y fin son diferentes, generamos los intervalos de una hora
+            const intervalos = generarIntervalos(reserva.hora_inicio.substring(0, 5), reserva.hora_fin.substring(0, 5));
+
             return {
                 fecha: reserva.fecha,
-                horas: `${reserva.hora_inicio.substring(0, 5)} - ${reserva.hora_fin.substring(0, 5)}`
+                horas: intervalos
             };
-        });
+        }).filter(reserva => reserva !== null); // Filtra las reservas nulas (por datos incompletos)
 
         console.log("Reservas formateadas:", reservasFormateadas); // Verifica el formato
 
@@ -307,14 +337,13 @@ async function crearRangoHoras(dia, mes, año, celda) {
         "17:00 - 18:00"
     ];
 
-    // Aquí ya no obtenemos las reservas desde el servidor
-    // const reservas = await obtenerReservas(); 
-
-    // Formatear la fecha para la comparación
     const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
-    console.log("fecha formateado" + fechaSeleccionada);
+    console.log("Fecha formateada: " + fechaSeleccionada);
 
-    // Crear las horas en el rango, sin necesidad de verificar si están ocupadas
+    // Array para almacenar las horas seleccionadas
+    const horasSeleccionadas = [];
+
+    // Crear las horas en el rango
     horas.forEach(hora => {
         const horaElement = document.createElement('p');
         horaElement.textContent = hora;
@@ -322,18 +351,44 @@ async function crearRangoHoras(dia, mes, año, celda) {
 
         // Agregar evento de clic a cada hora
         horaElement.addEventListener('click', () => {
-            // Cambia el color de fondo a azul al hacer clic
+            // Si la hora ya está seleccionada, la removemos del array y restauramos el color
             if (horaElement.style.backgroundColor === 'blue') {
-                horaElement.style.backgroundColor = ''; // Restaura el color original
+                horaElement.style.backgroundColor = ''; // Color original
+                const index = horasSeleccionadas.indexOf(hora);
+                if (index > -1) {
+                    horasSeleccionadas.splice(index, 1); // Elimina la hora del array
+                }
             } else {
-                horaElement.style.backgroundColor = 'blue'; // Cambia a azul
+                // Si no está seleccionada, la agregamos al array y cambiamos el color a azul
+                horaElement.style.backgroundColor = 'blue';
+                horasSeleccionadas.push(hora);
             }
-            // Aquí puedes añadir la lógica para guardar la fecha y hora seleccionadas
+
+            //  para guardar la fecha y hora seleccionadas
             const diaCelda = celda.dataset.fecha.split('-');
             const diaSeleccionado = parseInt(diaCelda[2], 10);
-            const mesSeleccionado = parseInt(diaCelda[1], 10) - 1; // Ajusta porque meses son 0-index
+            const mesSeleccionado = parseInt(diaCelda[1], 10) - 1;
             const añoSeleccionado = parseInt(diaCelda[0], 10);
             guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, hora);
+
+            // Verificar si hay más de dos horas seleccionadas
+            if (horasSeleccionadas.length >= 2) {
+                console.log("Más de dos horas seleccionadas:", horasSeleccionadas);
+
+                // Extraer las horas de inicio y fin de cada intervalo
+                const horasInicio = horasSeleccionadas.map(hora => hora.split(' - ')[0]); // ["13:00", "14:00", "12:00"]
+                const horasFin = horasSeleccionadas.map(hora => hora.split(' - ')[1]); // ["14:00", "15:00", "13:00"]
+
+                // Ordenar las horas de inicio y fin alfabéticamente para encontrar las más tempranas y más tardías
+                const horaInicio = horasInicio.sort()[0]; // La más temprana
+                const horaFin = horasFin.sort().slice(-1)[0]; // La más tardía
+
+                console.log("Hora de inicio más temprana:", horaInicio);
+                console.log("Hora de fin más tardía:", horaFin);
+
+                // Llamada a la función para guardar las horas seleccionadas con la más temprana y más tardía
+                guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, `${horaInicio} - ${horaFin}`);
+            }
         });
 
         celda.appendChild(horaElement);
@@ -363,7 +418,7 @@ function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
     const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
     fechaInput.value = fechaSeleccionada;
 
-    // Verifica que el formato de hora sea correcto
+    // Aquí 'hora' ya es el rango completo como "HH:MM - HH:MM"
     if (!hora.includes(' - ')) {
         console.error("El formato de hora no es válido:", hora);
         return;
@@ -371,6 +426,8 @@ function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
 
     // Divide el rango de horas en inicio y fin
     const [horaInicio, horaFin] = hora.split(' - ');
+
+    // Establece los valores de los inputs con la hora de inicio y fin
     horaInicioInput.value = horaInicio;
     horaFinInput.value = horaFin;
 
