@@ -1,9 +1,10 @@
 <?php
+// Configuración de la base de datos
 $servername = "localhost";
 $username = "root";
 $password = "root1234_";
 $dbname = "jakestudio_v2";
-
+// Conexión a la base de datos diferente:CAMBIAR
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
 
