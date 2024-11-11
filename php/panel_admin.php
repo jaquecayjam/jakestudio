@@ -50,7 +50,7 @@
             </tr>
         </thead>
         <tbody id="calendario-full">
-            <!-- El calendario se generará aquí dinámicamente -->
+            <!-- El calendario se crea/muestra aqui -->
         </tbody>
     </table>
 </div>

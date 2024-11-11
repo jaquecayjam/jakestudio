@@ -8,7 +8,7 @@ if (isset($_SESSION['usuario'])) {
     exit();
 }
 
-// Conexión a la base de datos
+// Conexión a la base de datos diferente:CAMBIAR
 $servername = "localhost";
 $username = "root"; // Tu usuario de la base de datos
 $password = "root1234_"; // Tu contraseña de la base de datos
@@ -24,14 +24,14 @@ if ($conn->connect_error) {
 
 // Verificar si el formulario fue enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Recupera el correo y la contraseña del formulario
+    // Extraogo el correo y la contraseña del formulario
     $email = $_POST['email'];
     $clave = $_POST['clave'];
 
     // Consulta para obtener el usuario
     $sql = "SELECT * FROM usuarios WHERE email = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $email); // 's' para indicar que el parámetro es una cadena
+    $stmt->bind_param("s", $email); // 's' para indicar que el parámetro es una cadena/string
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($result->num_rows > 0) {
         // El usuario existe, obtener los datos
         $row = $result->fetch_assoc();
-
         // Verificar si la contraseña es correcta
         if (password_verify($clave, $row['password'])) { // Compara la contraseña con la hash
             // Si la contraseña es correcta, inicia sesión

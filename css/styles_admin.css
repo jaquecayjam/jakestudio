@@ -1,7 +1,7 @@
 body{
     color: white;
 }
-/* Estilos generales del calendario */
+/* Estilos general donde modifico calendario */
 #calendario-container {
     max-width: 900px;
     margin: 20px auto;
@@ -38,12 +38,12 @@ select {
     font-size: 18px;
 }
 
-/* Estilo para los días del fin de semana (sábado y domingo) */
+/* Estilo fin de semana (sábado y domingo) */
 .fin-de-semana {
     background-color: #f8d7da;
 }
 
-/* Estilos para las celdas del calendario */
+/* Estilos celdas del calendario */
 #calendario-full td {
     cursor: pointer;
     background-color: #dddfdd;
@@ -62,11 +62,4 @@ select {
 #calendario-full td.vacío {
     background-color: #d4edda;
     color: #155724;
-}
-
-/* Agregar una clase activa si el día es el día actual */
-#calendario-full td.hoy {
-    background-color: #007bff;
-    color: #fff;
-    font-weight: bold;
 }

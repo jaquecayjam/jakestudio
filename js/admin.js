@@ -6,6 +6,7 @@ const tituloMesAño = document.getElementById('tituloMesAño'); // Suponiendo qu
 
 let mesSeleccionado = new Date().getMonth(); // Inicializa con el mes actual
 let añoSeleccionado = new Date().getFullYear(); // Inicializa con el año actual
+let filaSemanaActual = null;
 
 // Inicializa los selectores de mes y año
 function initializeSelectors() {
@@ -79,9 +80,9 @@ async function obtenerReservas() {
     try {
         const response = await fetch('../php/obtener_reservas.php'); // Cambia la ruta si es necesario
         if (!response.ok) throw new Error("Error al cargar las reservas");
-        
+
         const reservas = await response.json(); // [{ fecha: "YYYY-MM-DD", hora_inicio: "HH:MM:SS", hora_fin: "HH:MM:SS" }]
-        
+
         // Verifica que las reservas tengan el formato esperado
         if (!Array.isArray(reservas)) {
             throw new Error("El formato de las reservas no es válido");
@@ -218,7 +219,7 @@ function generarCalendario(selectMes, selectAño) {
 function extraerDiaYHoras(semanaFila) {
     let diasYHoras = {};
 
-    // Recorremos las celdas de la fila (de la celda 0 a la 4, es decir, de lunes a viernes)
+    // Recorremos las celdas de la fila (de la celda 0 a la 4, es decir, de lunes a viernes
     Array.from(semanaFila.children).forEach((celda, index) => {
         if (index >= 0 && index <= 4) {  // Solo lunes a viernes
             const fechaCelda = celda.dataset.fecha;  // Extraemos la fecha desde el data-attribute
@@ -228,7 +229,6 @@ function extraerDiaYHoras(semanaFila) {
                 celda.querySelectorAll('.hora').forEach(horaElemento => {
                     horas.push(horaElemento.textContent);  // Extraemos las horas
                 });
-
                 // Almacenamos la fecha y sus horas en el objeto
                 diasYHoras[fechaCelda] = horas;
             }
@@ -240,12 +240,12 @@ function extraerDiaYHoras(semanaFila) {
 
 // FUNCION PRA COMPARAR HORAS BASE DE DATOS Y HORAS FILA EN LA QUE SE ECNUENTRA- GUARDO LOS DIAS QUE COINCIDEN: LOS DIAS OCUPADO----------////////
 async function compararReservasConCalendario(semanaFila) {
-    // 1. Obtener las reservas formateadas
+    // reservas formateadas
     const reservas = await obtenerReservas();
-    
+
     // 2. Extraer las fechas y horas de la fila del calendario
     const diasYHoras = extraerDiaYHoras(semanaFila);
-    
+
     // 3. Almacenaremos las horas ocupadas para mostrarlas más tarde
     let horasOcupadas = {};
 
@@ -280,30 +280,24 @@ async function compararReservasConCalendario(semanaFila) {
 // FUNCION PARA MARCAR LOS DIAS QUE COINCIDEN EN ROJO Y BLOQUEAR LA PULSAR--------------------//////////////////////////
 
 async function marcarHorasOcupadas(semanaFila) {
-    // 1. Llamamos a la función que compara las reservas con el calendario
+    // Espera la promise de la funcion compararReservasConCalendario
     const horasOcupadas = await compararReservasConCalendario(semanaFila);
 
-    // 2. Recorremos las celdas de la semana (solo las celdas de lunes a viernes)
     Array.from(semanaFila.children).forEach((celda, index) => {
         if (index >= 0 && index <= 4) {  // Solo lunes a viernes
             const fechaCelda = celda.dataset.fecha;  // Extraemos la fecha desde el data-attribute
             if (fechaCelda && horasOcupadas[fechaCelda]) {
                 // Si la fecha de la celda está en las horas ocupadas, procedemos a marcarla
                 const horasDelCalendario = horasOcupadas[fechaCelda];
-
                 // Recorremos las horas de la celda
                 Array.from(celda.querySelectorAll('.hora')).forEach(horaElemento => {
                     const horaCalendario = horaElemento.textContent;
-
                     // Si la hora de la celda está ocupada, cambiamos el estilo o el contenido
                     if (horasDelCalendario.includes(horaCalendario)) {
-                        // Por ejemplo, podemos cambiar el color de la celda a rojo
                         horaElemento.style.backgroundColor = 'red';
-                        horaElemento.style.color = 'white'; // Opcional, para que se vea mejor
-
-                        // O puedes agregar un texto para indicar que está ocupada
+                        horaElemento.style.color = 'white';
                         horaElemento.textContent = `${horaCalendario} (Ocupada)`;
-                        horaElemento.style.pointerEvents = 'none'; // Hace que no se pueda hacer clic en el elemento
+                        horaElemento.style.pointerEvents = 'none';
 
                     }
                 });
@@ -328,8 +322,6 @@ function generarHorasSemanaActual(selectMes, selectAño, semanaActual) {
                 }
                 currentDay.setDate(diaCalendario + 1);
             });
-
-            // Marcar las horas ocupadas después de generarlas en la semana actual
             compararReservasConCalendario(row);
             marcarHorasOcupadas(row); // Llama a la función para marcar en rojo las horas ocupadas
         }
@@ -351,16 +343,13 @@ async function crearRangoHoras(dia, mes, año, celda) {
 
     const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
     console.log("Fecha formateada: " + fechaSeleccionada);
-
     // Array para almacenar las horas seleccionadas
     const horasSeleccionadas = [];
-
     // Crear las horas en el rango
     horas.forEach(hora => {
         const horaElement = document.createElement('p');
         horaElement.textContent = hora;
         horaElement.classList.add('hora');
-
         // Agregar evento de clic a cada hora
         horaElement.addEventListener('click', () => {
             // Si la hora ya está seleccionada, la removemos del array y restauramos el color
@@ -375,26 +364,23 @@ async function crearRangoHoras(dia, mes, año, celda) {
                 horaElement.style.backgroundColor = 'blue';
                 horasSeleccionadas.push(hora);
             }
-
-            //  para guardar la fecha y hora seleccionadas
+            //  Para guardar la fecha y hora seleccionadas
             const diaCelda = celda.dataset.fecha.split('-');
             const diaSeleccionado = parseInt(diaCelda[2], 10);
             const mesSeleccionado = parseInt(diaCelda[1], 10) - 1;
             const añoSeleccionado = parseInt(diaCelda[0], 10);
             guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, hora);
-
             // Verificar si hay más de dos horas seleccionadas
             if (horasSeleccionadas.length >= 2) {
                 console.log("Más de dos horas seleccionadas:", horasSeleccionadas);
-
                 // Extraer las horas de inicio y fin de cada intervalo
-                const horasInicio = horasSeleccionadas.map(hora => hora.split(' - ')[0]); // ["13:00", "14:00", "12:00"]
-                const horasFin = horasSeleccionadas.map(hora => hora.split(' - ')[1]); // ["14:00", "15:00", "13:00"]
+                const horasInicio = horasSeleccionadas.map(hora => hora.split(' - ')[0]); // ejemplo: ["13:00", "14:00", "12:00"]
+                const horasFin = horasSeleccionadas.map(hora => hora.split(' - ')[1]); // ejemplo: ["14:00", "15:00", "13:00"]
 
                 // Ordenar las horas de inicio y fin alfabéticamente para encontrar las más tempranas y más tardías
                 const horaInicio = horasInicio.sort()[0]; // La más temprana
-                const horaFin = horasFin.sort().slice(-1)[0]; // La más tardía
-
+                const horaFin = horasFin.sort().slice(-1)[0]; // La más tarde
+                // esto hay quitarlo mas adelante:
                 console.log("Hora de inicio más temprana:", horaInicio);
                 console.log("Hora de fin más tardía:", horaFin);
 
@@ -425,24 +411,19 @@ function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
     const fechaInput = document.getElementById('fecha');
     const horaInicioInput = document.getElementById('hora_inicio');
     const horaFinInput = document.getElementById('hora_fin');
-
     // Formatea la fecha seleccionada como YYYY-MM-DD
     const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
     fechaInput.value = fechaSeleccionada;
-
     // Aquí 'hora' ya es el rango completo como "HH:MM - HH:MM"
     if (!hora.includes(' - ')) {
         console.error("El formato de hora no es válido:", hora);
         return;
     }
-
     // Divide el rango de horas en inicio y fin
     const [horaInicio, horaFin] = hora.split(' - ');
-
     // Establece los valores de los inputs con la hora de inicio y fin
     horaInicioInput.value = horaInicio;
     horaFinInput.value = horaFin;
-
     // Consola para verificar que se guardaron los datos
     console.log("Fecha seleccionada:", fechaSeleccionada);
     console.log("Hora de inicio seleccionada:", horaInicio);
@@ -453,7 +434,6 @@ function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
 // Utilizo API FETCH para enviar los datos al servidor sin recargar la página----------------
 formReserva.addEventListener('submit', function (event) {
     event.preventDefault(); // Evita el envío normal del formulario
-
     // Datos de mi formulario
     const nombre = document.getElementById('nombre').value;
     const apellido = document.getElementById('apellido').value;
@@ -483,16 +463,17 @@ formReserva.addEventListener('submit', function (event) {
             throw new Error('Error al enviar datos'); // Si no está bien, lanza un error
         })
         .then(data => {
-            console.log(data); // Aquí puedes ver el mensaje de éxito o error
-            alert(data); // Mostrar un mensaje al usuario
+            console.log(data); // Recibo ensaje de éxito o error
+            alert(data); // Muestra un mensaje al usuario
         })
         .catch(error => {
-            console.error('Error:', error); // Manejar errores
+            console.error('Error:', error); // Saber/ me informa de los errores
             alert('Error al enviar la solicitud');
         });
 });
 
 // FUNCION PARA MOSTRAR SOLO LA CELDA DEL DIA ACTUAL EN DISPOSITIVOS MOVIL-----------------------/////////////////////////
+// NO FUNCIONA
 function mostrarSoloDiaActualMovil() {
     if (!esDispositivoMovil()) return; // Solo aplicamos para móviles
 
@@ -500,7 +481,7 @@ function mostrarSoloDiaActualMovil() {
     const diaActual = fechaActual.getDate();
     const mesActual = fechaActual.getMonth();
     const añoActual = fechaActual.getFullYear();
-    
+
     let celdaDiaActual = null;
 
     // Busca la celda del día actual en el calendario
