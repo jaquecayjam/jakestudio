@@ -1,4 +1,4 @@
- <?php 
+<?php 
 // session_start(); // Iniciar la sesión
 
 // Verificar si el usuario ha iniciado sesión
@@ -29,6 +29,8 @@
     </nav>
 
 <div id="calendario-container">
+    <!-- boton eliminar -->
+<button id="eliminarReserva">Eliminar</button>
     <!-- Titulo del mes y año -->
     <div id="tituloMesAño"></div>
     
@@ -50,13 +52,14 @@
             </tr>
         </thead>
         <tbody id="calendario-full">
-            <!-- El calendario se crea/muestra aqui -->
+            <!-- El calendario se generará aquí dinámicamente -->
         </tbody>
     </table>
 </div>
 
      
     <script src="../js/admin.js"></script>
+
 
     <a href="logout.php">Cerrar sesión</a>
     <!-- <script src="./js/scroll-estudio.js"></script>  -->
