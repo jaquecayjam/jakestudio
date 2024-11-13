@@ -29,6 +29,8 @@
     </nav>
 
 <div id="calendario-container">
+    <!-- BOTON PARA ELIMINAR JUNTO ID -->
+<button id="eliminarReserva">Eliminar</button>
     <!-- Titulo del mes y año -->
     <div id="tituloMesAño"></div>
     
@@ -50,7 +52,7 @@
             </tr>
         </thead>
         <tbody id="calendario-full">
-            <!-- El calendario se crea/muestra aqui -->
+            <!-- El calendario se crea/muestra  -->
         </tbody>
     </table>
 </div>
