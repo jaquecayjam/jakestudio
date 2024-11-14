@@ -1,10 +1,13 @@
 
 <?php
+// Habilitar errores para depuración
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 // Configuración de la base de datos
-$servername = "localhost"; // 
-$username = "root"; // usuario de MySQL
-$password = "root1234_"; // contraseña de MySQL
-$dbname = "jakestudio_v2"; // Nombre de la base de datos
+$servername = "sql210.infinityfree.com";
+$username = "if0_37677093";
+$password = "Z8GBOE8Sn4IFCR";
+$dbname = "if0_37677093_jakestudio";
 
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
