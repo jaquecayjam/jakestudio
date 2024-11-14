@@ -31,12 +31,28 @@
 <div id="calendario-container">
     <!-- BOTON PARA ELIMINAR JUNTO ID -->
 <button id="eliminarReserva">Eliminar</button>
+ <!-- BOTON PARA AÑADIR RESERVA -->
+ <button id="añadirReserva">Añadir reserva</button>
+
+<!-- Formulario de reserva ESTA OCULTO HASTA QUE CLICK EN AÑADIR RESERVA -->
+<form id="formularioReserva" action="../php/reserva.php" method="POST" style="display: none;">
+    <h3>Introduce tus datos</h3>
+    <input type="text" id="nombre" placeholder="Nombre">
+    <input type="text" id="apellido" placeholder="Apellido">
+    <input type="email" id="correo" placeholder="Correo electrónico">
+        <!-- Campos ocultos para alamacenr fecha, hora_inicio , hora_fin -->
+         <input type="hidden" id="fecha" name="fecha">
+        <input type="hidden" id="hora_inicio" name="hora_inicio">
+        <input type="hidden" id="hora_fin" name="hora_fin">
+    <input type="submit" value= "Reserva">
+</form>
     <!-- Titulo del mes y año -->
     <div id="tituloMesAño"></div>
     
     <!-- Selectores para mes y año -->
     <select id="elegir-mes"></select>
     <select id="elegir-año"></select>
+
 
     <!-- Calendario -->
     <table id="calendarioFull">
@@ -58,7 +74,7 @@
 </div>
 
      
-    <script src="../js/admin.js"></script>
+    <script src="../js/admin2.js"></script>
 
     <a href="logout.php">Cerrar sesión</a>
     <!-- <script src="./js/scroll-estudio.js"></script>  -->

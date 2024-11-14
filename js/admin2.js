@@ -3,6 +3,8 @@ const slccionMes = document.getElementById('elegir-mes');
 const slccionAño = document.getElementById('elegir-año');
 const calendarioFull = document.getElementById('calendario-full');
 const tituloMesAño = document.getElementById('tituloMesAño'); // Suponiendo que este elemento existe para el título del mes y año
+// const para el formularioReserva
+const formReserva = document.getElementById("formularioReserva");
 
 let mesSeleccionado = new Date().getMonth(); // Inicializa con el mes actual
 let añoSeleccionado = new Date().getFullYear(); // Inicializa con el año actual
@@ -360,7 +362,7 @@ function generarHorasSemanaActual(selectMes, selectAño, semanaActual) {
 }
 // FUNCION PARA CREAR RANGO DE HORAS-----------------------------//////////////////////////////////////////////////
 // aqui he eliminado codigo y he modificado tambien, en este caso me guardo selecciones para podder usarlo mas adelante
-
+// FUNCION PARA CREAR RANGO DE HORAS-----------------------------//////////////////////////////////////////////////
 async function crearRangoHoras(dia, mes, año, celda) {
     const horas = [
         "09:00 - 10:00",
@@ -374,38 +376,58 @@ async function crearRangoHoras(dia, mes, año, celda) {
         "17:00 - 18:00"
     ];
 
-    // Formatear la fecha seleccionada
     const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
-    console.log("Fecha seleccionada: " + fechaSeleccionada);
-
+    console.log("Fecha formateada: " + fechaSeleccionada);
+    // Array para almacenar las horas seleccionadas
+    const horasSeleccionadas = [];
+    // Crear las horas en el rango
     horas.forEach(hora => {
         const horaElement = document.createElement('p');
         horaElement.textContent = hora;
         horaElement.classList.add('hora');
-        // descativo esto para admin2
-        // // Agregar evento de clic a cada hora
-        // // Agregar evento de clic a cada hora
-        // horaElement.addEventListener('click', () => {
-        //     // Obtener la fecha y hora seleccionadas
-        //     extraerClick(horaElement);  // Llamamos a la función para extraer la fecha y la hora
+        // Agregar evento de clic a cada hora
+        horaElement.addEventListener('click', () => {
+            // Si la hora ya está seleccionada, la removemos del array y restauramos el color
+            if (horaElement.style.backgroundColor === 'blue') {
+                horaElement.style.backgroundColor = ''; // Color original
+                const index = horasSeleccionadas.indexOf(hora);
+                if (index > -1) {
+                    horasSeleccionadas.splice(index, 1); // Elimina la hora del array
+                }
+            } else {
+                // Si no está seleccionada, la agregamos al array y cambiamos el color a azul
+                horaElement.style.backgroundColor = 'blue';
+                horasSeleccionadas.push(hora);
+            }
+            //  Para guardar la fecha y hora seleccionadas
+            const diaCelda = celda.dataset.fecha.split('-');
+            const diaSeleccionado = parseInt(diaCelda[2], 10);
+            const mesSeleccionado = parseInt(diaCelda[1], 10) - 1;
+            const añoSeleccionado = parseInt(diaCelda[0], 10);
+            guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, hora);
+            // Verificar si hay más de dos horas seleccionadas
+            if (horasSeleccionadas.length >= 2) {
+                console.log("Más de dos horas seleccionadas:", horasSeleccionadas);
+                // Extraer las horas de inicio y fin de cada intervalo
+                const horasInicio = horasSeleccionadas.map(hora => hora.split(' - ')[0]); // ejemplo: ["13:00", "14:00", "12:00"]
+                const horasFin = horasSeleccionadas.map(hora => hora.split(' - ')[1]); // ejemplo: ["14:00", "15:00", "13:00"]
 
-        //     // Si la hora ya está seleccionada, la removemos y restauramos el color
-        //     if (horaElement.style.backgroundColor === 'blue') {
-        //         horaElement.style.backgroundColor = ''; // Restauramos el color original
-        //         // estas fechas estan mal:
-        //         // console.log("Hora deseleccionada:", { fecha: fechaSeleccionada, hora });
-        //     } else {
-        //         // Si no está seleccionada, la agregamos y cambiamos el color a azul
-        //         horaElement.style.backgroundColor = 'blue';
-        //         // estas fechas estan mal, creo m propia funcion EXTRAERCLICK() porque al hacer clcick en la hora me da una fecha que no es la correcta
-        //         // console.log("Hora seleccionada:", { fecha: fechaSeleccionada, hora });
-        //     }
-        // });
-        
+                // Ordenar las horas de inicio y fin alfabéticamente para encontrar las más tempranas y más tardías
+                const horaInicio = horasInicio.sort()[0]; // La más temprana
+                const horaFin = horasFin.sort().slice(-1)[0]; // La más tarde
+                // esto hay quitarlo mas adelante:
+                console.log("Hora de inicio más temprana:", horaInicio);
+                console.log("Hora de fin más tardía:", horaFin);
+
+                // Llamada a la función para guardar las horas seleccionadas con la más temprana y más tardía
+                guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, `${horaInicio} - ${horaFin}`);
+            }
+        });
 
         celda.appendChild(horaElement);
     });
 }
+
 // EXTRAER CON ESTA FUNCION AL HACER CLICK EN UN RANGO DE HORA PARA PANEL ADMIN
 // esta funcion me da el resultado por consola
 function extraerClick(horaElement) {
@@ -477,9 +499,48 @@ function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
     console.log("Hora de inicio seleccionada:", horaInicio);
     console.log("Hora de fin seleccionada:", horaFin);
 }
-
 // ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO A LA BASE DE DATOS------------------------------------------/////////////////////////
+// Utilizo API FETCH para enviar los datos al servidor sin recargar la página----------------ME QUEDO AQUIIIIIII REVISAR
+formReserva.addEventListener('submit', function (event) {
+    event.preventDefault(); // Evita el envío normal del formulario
 
+    // Datos de mi formulario
+    const nombre = document.getElementById('nombre').value;
+    const apellido = document.getElementById('apellido').value;
+    const correo = document.getElementById('correo').value;
+    const fecha = document.getElementById('fecha').value; // La fecha que has guardado
+    const horaInicio = document.getElementById('hora_inicio').value; // Hora de inicio
+    const horaFin = document.getElementById('hora_fin').value; // Hora de fin
+
+    // Creamos un objeto FormData para enviar los datos
+    const formData = new FormData();
+    formData.append('nombre', nombre);
+    formData.append('apellido', apellido);
+    formData.append('correo', correo);
+    formData.append('fecha', fecha);
+    formData.append('hora_inicio', horaInicio);
+    formData.append('hora_fin', horaFin);
+
+    // Envío de los datos al servidor
+    fetch('../php/reservas.php', {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.text(); // Obtener respuesta como texto
+            }
+            throw new Error('Error al enviar datos'); // Si no está bien, lanza un error
+        })
+        .then(data => {
+            console.log(data); // Aquí puedes ver el mensaje de éxito o error
+            alert(data); // Mostrar un mensaje al usuario
+        })
+        .catch(error => {
+            console.error('Error:', error); // Manejar errores
+            alert('Error al enviar la solicitud');
+        });
+});
 
 // POSIBLE ELIMINACION PERO SOLO EN ADMIN2------
 slccionMes.addEventListener('change', (event) => {
@@ -527,3 +588,8 @@ document.getElementById('eliminarReserva').addEventListener('click', async funct
         alert("Error al intentar eliminar la reserva.");
     }
 });
+// FUNCION PARA AÑADIR CON BOTON RESERVAD EN LA BASDE DE DATOS
+       //AÑADIRRESERVA AL HACER CLICK, MUESTRA EL FORMULARIO:
+       document.getElementById('añadirReserva').addEventListener('click', function() {
+        document.getElementById('formularioReserva').style.display = 'block';
+    });

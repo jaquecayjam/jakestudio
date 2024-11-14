@@ -112,30 +112,72 @@
 // anterio codigo  con conf de base de datos mysql y nube solo obtiene fehca, hora, hora fin nombre, para js de admin^
 
 // Crear conexión
+// $conn = new mysqli($servername, $username, $password, $dbname);
+
+// // Comprobar la conexión
+// if ($conn->connect_error) {
+//     die("Conexión fallida: " . $conn->connect_error);
+// }
+
+// // Consulta para obtener todos los datos, incluyendo el id
+// $sql = "SELECT id, fecha, hora_inicio, hora_fin, nombre FROM reservas";
+// $result = $conn->query($sql);
+
+// // Verificar si hay resultados
+// $reservas = [];
+// if ($result->num_rows > 0) {
+//     // Recorrer los resultados y añadir cada registro al array
+//     while ($row = $result->fetch_assoc()) {
+//         $reservas[] = [
+//             "id" => $row["id"],                // Agregamos el id a cada reserva
+//             "fecha" => $row["fecha"],
+//             "hora_inicio" => $row["hora_inicio"],
+//             "hora_fin" => $row["hora_fin"],
+//             "nombre" => $row["nombre"]
+//         ];
+//     }
+// }
+
+// // Retornar todos los datos de reservas como JSON
+// header('Content-Type: application/json');
+// echo json_encode($reservas);
+
+// // Cerrar conexión
+// $conn->close();
+// nueva actualizacion por problema json
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Comprobar la conexión
 if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
+    // Establecemos el tipo de contenido JSON
+    header('Content-Type: application/json');
+    // Enviar un JSON de error en lugar de un mensaje HTML
+    echo json_encode(["error" => "Conexión fallida: " . $conn->connect_error]);
+    exit;  // Salimos para no ejecutar el resto del código
 }
 
 // Consulta para obtener todos los datos, incluyendo el id
 $sql = "SELECT id, fecha, hora_inicio, hora_fin, nombre FROM reservas";
 $result = $conn->query($sql);
 
-// Verificar si hay resultados
 $reservas = [];
-if ($result->num_rows > 0) {
+
+if ($result && $result->num_rows > 0) {
     // Recorrer los resultados y añadir cada registro al array
     while ($row = $result->fetch_assoc()) {
         $reservas[] = [
-            "id" => $row["id"],                // Agregamos el id a cada reserva
+            "id" => $row["id"],
             "fecha" => $row["fecha"],
             "hora_inicio" => $row["hora_inicio"],
             "hora_fin" => $row["hora_fin"],
             "nombre" => $row["nombre"]
         ];
     }
+} elseif (!$result) {
+    // Si la consulta falla, enviar un mensaje de error en JSON
+    header('Content-Type: application/json');
+    echo json_encode(["error" => "Error en la consulta SQL: " . $conn->error]);
+    exit;
 }
 
 // Retornar todos los datos de reservas como JSON
@@ -144,5 +186,4 @@ echo json_encode($reservas);
 
 // Cerrar conexión
 $conn->close();
-
 ?>
