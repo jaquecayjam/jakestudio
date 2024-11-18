@@ -395,6 +395,53 @@ async function crearRangoHoras(dia, mes, año, celda) {
     });
 }
 
+// TO FIX--------:
+// horaElement.addEventListener('click', () => {
+//     // Si la hora ya está seleccionada, la removemos del array y restauramos el color
+//     if (horaElement.style.backgroundColor === 'blue') {
+//         horaElement.style.backgroundColor = ''; // Color original
+//         horaElement.style.color = 'black';
+//         const index = horasSeleccionadas.indexOf(hora);
+//         if (index > -1) {
+//             horasSeleccionadas.splice(index, 1); // Elimina la hora del array
+//         }
+//     } else {
+//         // Si no está seleccionada, la agregamos al array y cambiamos el color a azul
+//         horaElement.style.backgroundColor = 'blue';
+//         horaElement.style.color = 'white'; // Para mejorar visibilidad
+//         horasSeleccionadas.push(hora);
+//     }
+
+//     console.log("Horas seleccionadas actualmente:", horasSeleccionadas);
+
+//     // Verificar si hay al menos una hora seleccionada
+//     if (horasSeleccionadas.length > 0) {
+//         // Extraer las horas de inicio y fin de las horas seleccionadas
+//         const horasInicio = horasSeleccionadas.map(h => h.split(' - ')[0]); // ejemplo: ["13:00", "14:00"]
+//         const horasFin = horasSeleccionadas.map(h => h.split(' - ')[1]);   // ejemplo: ["14:00", "15:00"]
+
+//         // Encontrar la hora más temprana y la más tardía
+//         const horaInicio = horasInicio.sort()[0]; // La más temprana
+//         const horaFin = horasFin.sort().slice(-1)[0]; // La más tarde
+
+//         console.log("Hora de inicio más temprana:", horaInicio);
+//         console.log("Hora de fin más tardía:", horaFin);
+
+//         // Llamada a la función para guardar las horas seleccionadas como intervalo
+//         // const diaSeleccionado = parseInt(dia, 10);
+//         // const mesSeleccionado = parseInt(mes, 10);
+//         // const añoSeleccionado = parseInt(año, 10);
+//         // añado esto por que no funciona bien, esto hace que pille el dia que tiene asignado la celda en la que se encuetra:
+//         const diaCelda = celda.dataset.fecha.split('-');
+//         const diaSeleccionado = parseInt(diaCelda[2], 10);
+//        const mesSeleccionado = parseInt(diaCelda[1], 10) - 1;
+//       const añoSeleccionado = parseInt(diaCelda[0], 10);
+
+//         guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, `${horaInicio} - ${horaFin}`);
+//     } else {
+//         console.log("No hay horas seleccionadas.");
+//     }
+// });
 
 
 
