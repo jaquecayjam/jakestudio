@@ -387,47 +387,50 @@ async function crearRangoHoras(dia, mes, año, celda) {
         horaElement.textContent = hora;
         horaElement.classList.add('hora');
         // Agregar evento de clic a cada hora
-        // TO FIX : horaElement click: esto guarda la hora mal, al seleccionar mas de una hora y despues quitar de esas horas
-        horaElement.addEventListener('click', () => {
-            // Si la hora ya está seleccionada, la removemos del array y restauramos el color
-            if (horaElement.style.backgroundColor === 'blue') {
-                horaElement.style.backgroundColor = ''; // Color original
-                horaElement.style.color = 'black';
-                const index = horasSeleccionadas.indexOf(hora);
-                if (index > -1) {
-                    horasSeleccionadas.splice(index, 1); // Elimina la hora del array
-                }
-            } else {
-                // Si no está seleccionada, la agregamos al array y cambiamos el color a azul
-                horaElement.style.backgroundColor = 'blue';
-                horasSeleccionadas.push(hora);
+
+// FIXED funciona:
+    // Agregar evento de clic a cada hora
+    horaElement.addEventListener('click', () => {
+        // Si la hora ya está seleccionada, la removemos del array y restauramos el color
+        if (horaElement.style.backgroundColor === 'blue') {
+            horaElement.style.backgroundColor = ''; // Color original
+            horaElement.style.color = 'black';
+            const index = horasSeleccionadas.indexOf(hora);
+            if (index > -1) {
+                horasSeleccionadas.splice(index, 1); // Elimina la hora del array
             }
-            
-            //  Para guardar la fecha y hora seleccionadas
+        } else {
+            // Si no está seleccionada, la agregamos al array y cambiamos el color a azul
+            horaElement.style.backgroundColor = 'blue';
+            horaElement.style.color = 'white'; // Para mejorar visibilidad
+            horasSeleccionadas.push(hora);
+        }
+
+        console.log("Horas seleccionadas actualmente:", horasSeleccionadas);
+
+        // Verificar si hay al menos una hora seleccionada
+        if (horasSeleccionadas.length > 0) {
+            // Extraer las horas de inicio y fin de las horas seleccionadas
+            const horasInicio = horasSeleccionadas.map(h => h.split(' - ')[0]); // ejemplo: ["13:00", "14:00"]
+            const horasFin = horasSeleccionadas.map(h => h.split(' - ')[1]);   // ejemplo: ["14:00", "15:00"]
+
+            // Encontrar la hora más temprana y la más tardía
+            const horaInicio = horasInicio.sort()[0]; // La más temprana
+            const horaFin = horasFin.sort().slice(-1)[0]; // La más tarde
+
+            console.log("Hora de inicio más temprana:", horaInicio);
+            console.log("Hora de fin más tardía:", horaFin);
+
             const diaCelda = celda.dataset.fecha.split('-');
             const diaSeleccionado = parseInt(diaCelda[2], 10);
-            const mesSeleccionado = parseInt(diaCelda[1], 10) - 1;
-            const añoSeleccionado = parseInt(diaCelda[0], 10);
-            guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, hora);
-            // Verificar si hay más de dos horas seleccionadas
-            if (horasSeleccionadas.length >= 2) {
-                console.log("Más de dos horas seleccionadas:", horasSeleccionadas);
-                // Extraer las horas de inicio y fin de cada intervalo
-                const horasInicio = horasSeleccionadas.map(hora => hora.split(' - ')[0]); // ejemplo: ["13:00", "14:00", "12:00"]
-                const horasFin = horasSeleccionadas.map(hora => hora.split(' - ')[1]); // ejemplo: ["14:00", "15:00", "13:00"]
+           const mesSeleccionado = parseInt(diaCelda[1], 10) - 1;
+          const añoSeleccionado = parseInt(diaCelda[0], 10);
 
-                // Ordenar las horas de inicio y fin alfabéticamente para encontrar las más tempranas y más tardías
-                const horaInicio = horasInicio.sort()[0]; // La más temprana
-                const horaFin = horasFin.sort().slice(-1)[0]; // La más tarde
-                // esto hay quitarlo mas adelante:
-                console.log("Hora de inicio más temprana:", horaInicio);
-                console.log("Hora de fin más tardía:", horaFin);
-
-                // Llamada a la función para guardar las horas seleccionadas con la más temprana y más tardía
-                guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, `${horaInicio} - ${horaFin}`);
-            }
-        });
-
+            guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, `${horaInicio} - ${horaFin}`);
+        } else {
+            console.log("No hay horas seleccionadas.");
+        }
+    });
         celda.appendChild(horaElement);
     });
 }
@@ -512,7 +515,7 @@ function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
     console.log("Hora de fin seleccionada:", horaFin);
 
 }
-// ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO A LA BASE DE DATOS------------------------------------------/////////////////////////
+// ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO AÑADIR RESERVA A LA BASE DE DATOS------------------------------------------/////////////////////////
 // Utilizo API FETCH para enviar los datos al servidor sin recargar la página----------------ME QUEDO AQUIIIIIII REVISAR
 formReserva.addEventListener('submit', function (event) {
     event.preventDefault(); // Evita el envío normal del formulario
@@ -566,10 +569,11 @@ slccionAño.addEventListener('change', (event) => {
     generarCalendario(mesSeleccionado, añoSeleccionado); // Genera el calendario con el año seleccionado
 });
 
-// Inicializa la aplicación
+// Inicializa la aplicacióN TO FIX: HACE QUE LOS SELECTORES SE DUPLIQUEN ASI QUE HAY QUE DESCATIVARLO
 initializeSelectors(); // Llama a la función para inicializar los select
 
-// FUNCION PARA ELIMINAR CON BOTON RESERVAD ELA BASDE DE DATOS
+
+// FUNCION PARA ELIMINAR CON BOTON RESERVAD ELA BASDE DE DATOS------------/////////////
 document.getElementById('eliminarReserva').addEventListener('click', async function() {
     if (!idReservaSeleccionada) {
         alert("Por favor, selecciona una reserva marcada en rojo para eliminar.");
@@ -601,12 +605,13 @@ document.getElementById('eliminarReserva').addEventListener('click', async funct
         alert("Error al intentar eliminar la reserva.");
     }
 });
-// FUNCION PARA AÑADIR CON BOTON RESERVAD EN LA BASDE DE DATOS
+// FUNCION PARA AÑADIR CON BOTON RESERVAD EN LA BASDE DE DATOS------------///////////
        //AÑADIRRESERVA AL HACER CLICK, MUESTRA EL FORMULARIO:
        document.getElementById('añadirReserva').addEventListener('click', function() {
+        
         document.getElementById('formularioReserva').style.display = 'block';
     });
-// FUNCION PARA MODIFICAR RESERVA---------------------
+// FUNCION PARA MODIFICAR RESERVA---------------------////////////
     document.getElementById('modificarReserva').addEventListener('click', function() {
         // ESTE IF SALTA SI HACEN CLICK ANTES DE SELECCIONAR UNA RESERVA
         if (!idReservaSeleccionada) {
@@ -614,6 +619,7 @@ document.getElementById('eliminarReserva').addEventListener('click', async funct
             return;
         }
         if (idReservaSeleccionada) {  // Verifica que haya una reserva seleccionada
+          
             // Muestra el formulario
             document.getElementById('formularioModificarReserva').style.display = 'block';
     
@@ -628,7 +634,7 @@ document.getElementById('eliminarReserva').addEventListener('click', async funct
     }
 });
 
-// FUNCION PARA ENVIAR LOS DATOS MODIFICADOS---------------------NO IBA POR EL ID DE PANEL ADMIN, 
+// FUNCION PARA ENVIAR LOS DATOS MODIFICADOS DE MODIFICAR RESERVA---------------------NO IBA POR EL ID DE PANEL ADMIN----///////
 document.getElementById('formularioModificarReserva').addEventListener('submit', function(event) {
     event.preventDefault();  // Evita el envío normal del formulario
 
@@ -669,3 +675,4 @@ document.getElementById('formularioModificarReserva').addEventListener('submit',
         alert('Error al enviar la solicitud');
     });
     });
+
