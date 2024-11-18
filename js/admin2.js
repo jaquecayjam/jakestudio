@@ -387,6 +387,7 @@ async function crearRangoHoras(dia, mes, año, celda) {
         horaElement.textContent = hora;
         horaElement.classList.add('hora');
         // Agregar evento de clic a cada hora
+        // TO FIX : horaElement click: esto guarda la hora mal, al seleccionar mas de una hora y despues quitar de esas horas
         horaElement.addEventListener('click', () => {
             // Si la hora ya está seleccionada, la removemos del array y restauramos el color
             if (horaElement.style.backgroundColor === 'blue') {
