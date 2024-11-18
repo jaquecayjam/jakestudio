@@ -421,6 +421,11 @@ async function crearRangoHoras(dia, mes, año, celda) {
             console.log("Hora de inicio más temprana:", horaInicio);
             console.log("Hora de fin más tardía:", horaFin);
 
+            // Llamada a la función para guardar las horas seleccionadas como intervalo
+            // const diaSeleccionado = parseInt(dia, 10);
+            // const mesSeleccionado = parseInt(mes, 10);
+            // const añoSeleccionado = parseInt(año, 10);
+            // añado esto por que no funciona bien, esto hace que pille el dia que tiene asignado la celda en la que se encuetra:
             const diaCelda = celda.dataset.fecha.split('-');
             const diaSeleccionado = parseInt(diaCelda[2], 10);
            const mesSeleccionado = parseInt(diaCelda[1], 10) - 1;
@@ -570,8 +575,12 @@ slccionAño.addEventListener('change', (event) => {
 });
 
 // Inicializa la aplicacióN TO FIX: HACE QUE LOS SELECTORES SE DUPLIQUEN ASI QUE HAY QUE DESCATIVARLO
-initializeSelectors(); // Llama a la función para inicializar los select
-
+//initializeSelectors(); // Llama a la función para inicializar los select
+// FUNCION PARA OCULTAR LOS FORMULARIOS DE AÑADIR O MODIFICAR--------------------------//////////
+function ocultarFormulario() {
+    document.getElementById('formularioReserva').style.display = 'none';
+    document.getElementById('formularioModificarReserva').style.display = 'none';
+}
 
 // FUNCION PARA ELIMINAR CON BOTON RESERVAD ELA BASDE DE DATOS------------/////////////
 document.getElementById('eliminarReserva').addEventListener('click', async function() {
@@ -608,7 +617,8 @@ document.getElementById('eliminarReserva').addEventListener('click', async funct
 // FUNCION PARA AÑADIR CON BOTON RESERVAD EN LA BASDE DE DATOS------------///////////
        //AÑADIRRESERVA AL HACER CLICK, MUESTRA EL FORMULARIO:
        document.getElementById('añadirReserva').addEventListener('click', function() {
-        
+        // ocultar formulario añadir
+        ocultarFormulario(); 
         document.getElementById('formularioReserva').style.display = 'block';
     });
 // FUNCION PARA MODIFICAR RESERVA---------------------////////////
@@ -619,7 +629,7 @@ document.getElementById('eliminarReserva').addEventListener('click', async funct
             return;
         }
         if (idReservaSeleccionada) {  // Verifica que haya una reserva seleccionada
-          
+            ocultarFormulario(); 
             // Muestra el formulario
             document.getElementById('formularioModificarReserva').style.display = 'block';
     
@@ -675,4 +685,3 @@ document.getElementById('formularioModificarReserva').addEventListener('submit',
         alert('Error al enviar la solicitud');
     });
     });
-
