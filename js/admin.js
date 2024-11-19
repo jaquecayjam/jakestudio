@@ -1,8 +1,12 @@
+
 // Variables para los selectores
 const slccionMes = document.getElementById('elegir-mes');
 const slccionAño = document.getElementById('elegir-año');
 const calendarioFull = document.getElementById('calendario-full');
 const tituloMesAño = document.getElementById('tituloMesAño'); // Suponiendo que este elemento existe para el título del mes y año
+// const para el formularioReserva
+const formReserva = document.getElementById("formularioReserva");
+const formModiReserva = document.getElementById ("formularioModificarReserva");
 
 let mesSeleccionado = new Date().getMonth(); // Inicializa con el mes actual
 let añoSeleccionado = new Date().getFullYear(); // Inicializa con el año actual
@@ -11,6 +15,14 @@ let filaSemanaActual = null;
 // Variables globales
 let selecciones = [];
 let idReservaSeleccionada = null; // para eliminar ID
+let nombreReservaSeleccionada = null;
+
+let horaInicioSeleccionada = null;
+let  horaFinSeleccionada = null;
+// para modificar no reciben nada aun
+let apellidoReservaSeleccionada = null;
+let correoReservaSeleccionada = null;
+let fechaReservaSeleccionada = null;
 
 // Inicializa los selectores de mes y año
 function initializeSelectors() {
@@ -110,30 +122,6 @@ async function obtenerReservas() {
             return intervalos;
         };
 
-// Crear un nuevo formato con hora_inicio - hora_fin y nombre
-// const reservasFormateadas = reservas.map(reserva => {
-//     if (!reserva.fecha || !reserva.hora_inicio || !reserva.hora_fin || !reserva.nombre) {
-//         console.warn("Reserva incompleta, omitiendo:", reserva);
-//         return null; // Ignora esta reserva si falta alguna propiedad
-//     }
-
-//     // Si la hora de inicio y fin son diferentes, generamos los intervalos de una hora
-//     const intervalos = generarIntervalos(reserva.hora_inicio.substring(0, 5), reserva.hora_fin.substring(0, 5));
-
-//     return {
-//         fecha: reserva.fecha,
-//         nombre: reserva.nombre, // Ahora incluye el nombre en el formato de la reserva
-//         horas: intervalos
-//     };
-// }).filter(reserva => reserva !== null); // Filtra las reservas nulas (por datos incompletos)
-
-// console.log("Reservas formateadas:", reservasFormateadas); // Verifica el formato
-
-// return reservasFormateadas || []; // Asegura que siempre devuelve un array con el formato esperado
-// } catch (error) {
-// console.error("Error al obtener reservas:", error);
-// return []; // Devuelve un array vacío en caso de error
-// }
 // agregamos para que guarde tambien la id
 const reservasFormateadas = reservas.map(reserva => {
     if (!reserva.id || !reserva.fecha || !reserva.hora_inicio || !reserva.hora_fin || !reserva.nombre) {
@@ -148,7 +136,9 @@ const reservasFormateadas = reservas.map(reserva => {
         id: reserva.id,           // Incluimos el id en el objeto formateado
         fecha: reserva.fecha,
         nombre: reserva.nombre,    // Ahora incluye el nombre
-        horas: intervalos          // Intervalos de horas ocupadas
+        horas: intervalos,          // Intervalos de horas ocupadas
+        hora_inicio: reserva.hora_inicio, // Incluimos la hora de inicio
+        hora_fin: reserva.hora_fin       // Incluimos la hora de fin
     };
 }).filter(reserva => reserva !== null); // Filtra las reservas nulas (por datos incompletos)
 
@@ -292,7 +282,9 @@ async function compararReservasConCalendario(semanaFila) {
                     horasOcupadas[fecha].push({
                         id: reserva.id,  // Asegúrate de incluir el id aquí PARA CONSEGUIR ID
                         hora: horaCalendario,
-                        nombre: reserva.nombre  // Incluimos el nombre aquí
+                        nombre: reserva.nombre,  // Incluimos el nombre aquí
+                        hora_inicio: reserva.hora_inicio, // Incluimos la hora de inicio
+                        hora_fin: reserva.hora_fin       // Incluimos la hora de fin
                     });
                 }
             });
@@ -303,7 +295,7 @@ async function compararReservasConCalendario(semanaFila) {
 }
 
 
-// FUNCION PARA MARCAR LOS DIAS QUE COINCIDEN EN ROJO Y BLOQUEAR LA PULSAR Y AÑADIRLE LA ID, YA QUE NO LA TIENE, Y ASI ELIMINARLA CON POR ID--------------------//////////////////////////
+// FUNCION PARA MARCAR LOS DIAS QUE COINCIDEN EN ROJO Y  AL PULSAR Y AÑADIRLE LA ID, YA QUE NO LA TIENE, Y ASI ELIMINARLA CON POR ID--------------------//////////////////////////
 async function marcarHorasOcupadas(semanaFila) {
     const horasOcupadas = await compararReservasConCalendario(semanaFila);
 
@@ -323,11 +315,24 @@ async function marcarHorasOcupadas(semanaFila) {
                         horaElemento.style.color = 'white';
                         horaElemento.textContent = `${horaCalendario} (Ocupada por ${horaOcupada.nombre})`;  // Mostrar el nombre
                         horaElemento.dataset.id = horaOcupada.id;  // Guarda el id en data-id para ID-----
+                        horaElemento.dataset.nombre = horaOcupada.nombre; //GUARDA NOMBRE??---------------
+                        horaElemento.dataset.hora_inicio = horaOcupada.hora_inicio; //GUARDA HORA INICIO??---------------
+                        horaElemento.dataset.hora_fin = horaOcupada.hora_fin; //GUARDA HORA FIN??---------------
                         // horaElemento.style.pointerEvents = 'none'; en admin lo quito para poder obtener
-                          // Guardar el id en una variable al hacer clic 
+                          // Guardar el id en una variable al hacer clic ----------------
                           horaElemento.addEventListener('click', function() {
-                            idReservaSeleccionada = horaElemento.dataset.id;  // Guarda el id seleccionado
-                            console.log(`Reserva seleccionada ID: ${idReservaSeleccionada}`);
+                            idReservaSeleccionada = horaElemento.dataset.id;  // Guarda el id seleccionado---R
+                             console.log(`NOMBRE ID seleccionada : ${idReservaSeleccionada}`);
+                            // INTENTO GUARDAR NOMBRE----------------
+                           nombreReservaSeleccionada = horaElemento.dataset.nombre;  // Guarda el NOMBRE seleccionado-------------R
+                            console.log(`NOMBRE Reserva seleccionada : ${nombreReservaSeleccionada}`);
+                            // INTENTO GUARDA HORA INICIO------------------ NO FUNCIONA
+                           horaInicioSeleccionada = horaElemento.dataset.hora_inicio;  // Guarda HORA INICIO seleccionado-------------R
+                            console.log(`HORA INICIO Reserva seleccionada : ${horaInicioSeleccionada}`);
+                            // INTENTO GUARDAR HORA FIN---------------------
+                           horaFinSeleccionada = horaElemento.dataset.hora_fin;  // Guarda HORA FIN seleccionado-------------R
+                            console.log(`HORA FIN Reserva seleccionada : ${horaFinSeleccionada}`);
+                            console.log('-------------------------');
                         });
                     }
                 });
@@ -335,7 +340,6 @@ async function marcarHorasOcupadas(semanaFila) {
         }
     });
 }
-
 
 // FUNCION PARA CREAR LAS HORAS EN LA SEMANA ACTUAL --------------------------------/////////////////////////
 function generarHorasSemanaActual(selectMes, selectAño, semanaActual) {
@@ -360,7 +364,7 @@ function generarHorasSemanaActual(selectMes, selectAño, semanaActual) {
 }
 // FUNCION PARA CREAR RANGO DE HORAS-----------------------------//////////////////////////////////////////////////
 // aqui he eliminado codigo y he modificado tambien, en este caso me guardo selecciones para podder usarlo mas adelante
-
+// FUNCION PARA CREAR RANGO DE HORAS-----------------------------//////////////////////////////////////////////////
 async function crearRangoHoras(dia, mes, año, celda) {
     const horas = [
         "09:00 - 10:00",
@@ -374,38 +378,65 @@ async function crearRangoHoras(dia, mes, año, celda) {
         "17:00 - 18:00"
     ];
 
-    // Formatear la fecha seleccionada
     const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
-    console.log("Fecha seleccionada: " + fechaSeleccionada);
-
+    console.log("Fecha formateada: " + fechaSeleccionada);
+    // Array para almacenar las horas seleccionadas
+    const horasSeleccionadas = [];
+    // Crear las horas en el rango
     horas.forEach(hora => {
         const horaElement = document.createElement('p');
         horaElement.textContent = hora;
         horaElement.classList.add('hora');
-        // descativo esto para admin2
-        // // Agregar evento de clic a cada hora
-        // // Agregar evento de clic a cada hora
-        // horaElement.addEventListener('click', () => {
-        //     // Obtener la fecha y hora seleccionadas
-        //     extraerClick(horaElement);  // Llamamos a la función para extraer la fecha y la hora
+        // Agregar evento de clic a cada hora
+// TO FIXED: AL SELECCIONAR MAS DE 1 HORA, Y DESELECCIONAR , LA HORA QUE SE ENVIA COMO RESERVA NO ES LA CORRECTA
+// EJ: SI SELECCIONO UN RANGO DE HORA DE 9:00 A 12:00 , Y DESELECCIONO DE 09:00-10:00,10:00-11:00, DEBERIA GUARDARSE EN LA BD LAS HORAS 11:00-12:00 
+// FIXED funciona:
+    // Agregar evento de clic a cada hora
+    horaElement.addEventListener('click', () => {
+        // Si la hora ya está seleccionada, la removemos del array y restauramos el color
+        if (horaElement.style.backgroundColor === 'blue') {
+            horaElement.style.backgroundColor = ''; // Color original
+            horaElement.style.color = 'black';
+            const index = horasSeleccionadas.indexOf(hora);
+            if (index > -1) {
+                horasSeleccionadas.splice(index, 1); // Elimina la hora del array
+            }
+        } else {
+            // Si no está seleccionada, la agregamos al array y cambiamos el color a azul
+            horaElement.style.backgroundColor = 'blue';
+            horaElement.style.color = 'white'; // Para mejorar visibilidad
+            horasSeleccionadas.push(hora);
+        }
 
-        //     // Si la hora ya está seleccionada, la removemos y restauramos el color
-        //     if (horaElement.style.backgroundColor === 'blue') {
-        //         horaElement.style.backgroundColor = ''; // Restauramos el color original
-        //         // estas fechas estan mal:
-        //         // console.log("Hora deseleccionada:", { fecha: fechaSeleccionada, hora });
-        //     } else {
-        //         // Si no está seleccionada, la agregamos y cambiamos el color a azul
-        //         horaElement.style.backgroundColor = 'blue';
-        //         // estas fechas estan mal, creo m propia funcion EXTRAERCLICK() porque al hacer clcick en la hora me da una fecha que no es la correcta
-        //         // console.log("Hora seleccionada:", { fecha: fechaSeleccionada, hora });
-        //     }
-        // });
-        
+        console.log("Horas seleccionadas actualmente:", horasSeleccionadas);
 
+        // Verificar si hay al menos una hora seleccionada
+        if (horasSeleccionadas.length > 0) {
+            // Extraer las horas de inicio y fin de las horas seleccionadas
+            const horasInicio = horasSeleccionadas.map(h => h.split(' - ')[0]); // ejemplo: ["13:00", "14:00"]
+            const horasFin = horasSeleccionadas.map(h => h.split(' - ')[1]);   // ejemplo: ["14:00", "15:00"]
+
+            // Encontrar la hora más temprana y la más tardía
+            const horaInicio = horasInicio.sort()[0]; // La más temprana
+            const horaFin = horasFin.sort().slice(-1)[0]; // La más tarde
+
+            console.log("Hora de inicio más temprana:", horaInicio);
+            console.log("Hora de fin más tardía:", horaFin);
+
+            const diaCelda = celda.dataset.fecha.split('-');
+            const diaSeleccionado = parseInt(diaCelda[2], 10);
+           const mesSeleccionado = parseInt(diaCelda[1], 10) - 1;
+          const añoSeleccionado = parseInt(diaCelda[0], 10);
+
+            guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, `${horaInicio} - ${horaFin}`);
+        } else {
+            console.log("No hay horas seleccionadas.");
+        }
+    });
         celda.appendChild(horaElement);
     });
 }
+
 // EXTRAER CON ESTA FUNCION AL HACER CLICK EN UN RANGO DE HORA PARA PANEL ADMIN
 // esta funcion me da el resultado por consola
 function extraerClick(horaElement) {
@@ -454,14 +485,19 @@ function limpiarHorasEnFila(fila) {
 
 // FIN Creación del calendario-------------------
 
-// GUARDA FECHA, HORAS RESERVADAS, EN LOS CAMPOS OCULTOS----------------------------/////////////////////////
+// GUARDA FECHA, HORAS RESERVADAS, EN LOS CAMPOS OCULTOS AÑADIR RESERVA----------------------------/////////////////////////
 function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
     const fechaInput = document.getElementById('fecha');
     const horaInicioInput = document.getElementById('hora_inicio');
     const horaFinInput = document.getElementById('hora_fin');
+    // Campos visibles para mostrar en el formulario MODIFICAR:------------------
+    const fechaInputVisible = document.getElementById('fechaModificar');
+    const horaInicioInputVisible = document.getElementById('hora_inicioModificar');
+    const horaFinInputVisible = document.getElementById('hora_finModificar');
     // Formatea la fecha seleccionada como YYYY-MM-DD
     const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
     fechaInput.value = fechaSeleccionada;
+    fechaInputVisible.value = fechaSeleccionada;
     // Aquí 'hora' ya es el rango completo como "HH:MM - HH:MM"
     if (!hora.includes(' - ')) {
         console.error("El formato de hora no es válido:", hora);
@@ -472,14 +508,57 @@ function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
     // Establece los valores de los inputs con la hora de inicio y fin
     horaInicioInput.value = horaInicio;
     horaFinInput.value = horaFin;
+    // Establece los valores de los campos visibles formulario MODIFICAR:------------------
+    horaInicioInputVisible.value = horaInicio;
+    horaFinInputVisible.value = horaFin;
     // Consola para verificar que se guardaron los datos
     console.log("Fecha seleccionada:", fechaSeleccionada);
     console.log("Hora de inicio seleccionada:", horaInicio);
     console.log("Hora de fin seleccionada:", horaFin);
+
 }
+// ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO AÑADIR RESERVA A LA BASE DE DATOS------------------------------------------/////////////////////////
+// Utilizo API FETCH para enviar los datos al servidor sin recargar la página----------------ME QUEDO AQUIIIIIII REVISAR
+formReserva.addEventListener('submit', function (event) {
+    event.preventDefault(); // Evita el envío normal del formulario
 
-// ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO A LA BASE DE DATOS------------------------------------------/////////////////////////
+    // Datos de mi formulario
+    const nombre = document.getElementById('nombre').value;
+    const apellido = document.getElementById('apellido').value;
+    const correo = document.getElementById('correo').value;
+    const fecha = document.getElementById('fecha').value; // La fecha que has guardado
+    const horaInicio = document.getElementById('hora_inicio').value; // Hora de inicio
+    const horaFin = document.getElementById('hora_fin').value; // Hora de fin
 
+    // Creamos un objeto FormData para enviar los datos
+    const formData = new FormData();
+    formData.append('nombre', nombre);
+    formData.append('apellido', apellido);
+    formData.append('correo', correo);
+    formData.append('fecha', fecha);
+    formData.append('hora_inicio', horaInicio);
+    formData.append('hora_fin', horaFin);
+
+    // Envío de los datos al servidor
+    fetch('../php/reservas.php', {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.text(); // Obtener respuesta como texto
+            }
+            throw new Error('Error al enviar datos'); // Si no está bien, lanza un error
+        })
+        .then(data => {
+            console.log(data); // Aquí puedes ver el mensaje de éxito o error
+            alert(data); // Mostrar un mensaje al usuario
+        })
+        .catch(error => {
+            console.error('Error:', error); // Manejar errores
+            alert('Error al enviar la solicitud');
+        });
+});
 
 // POSIBLE ELIMINACION PERO SOLO EN ADMIN2------
 slccionMes.addEventListener('change', (event) => {
@@ -492,10 +571,16 @@ slccionAño.addEventListener('change', (event) => {
     generarCalendario(mesSeleccionado, añoSeleccionado); // Genera el calendario con el año seleccionado
 });
 
-// Inicializa la aplicación
-initializeSelectors(); // Llama a la función para inicializar los select
+// Inicializa la aplicacióN TO FIX: HACE QUE LOS SELECTORES SE DUPLIQUEN ASI QUE HAY QUE DESCATIVARLO
+// FIXED: COMENTAR LA LLAMADA A LA FUNCION
+    //initializeSelectors(); // Llama a la función para inicializar los select
+// FUNCION PARA OCULTAR LOS FORMULARIOS DE AÑADIR O MODIFICAR--------------------------//////////
+function ocultarFormulario() {
+    document.getElementById('formularioReserva').style.display = 'none';
+    document.getElementById('formularioModificarReserva').style.display = 'none';
+}
 
-// FUNCION PARA ELIMINAR CON BOTON RESERVAD ELA BASDE DE DATOS
+// FUNCION PARA ELIMINAR CON BOTON RESERVAD ELA BASDE DE DATOS------------/////////////
 document.getElementById('eliminarReserva').addEventListener('click', async function() {
     if (!idReservaSeleccionada) {
         alert("Por favor, selecciona una reserva marcada en rojo para eliminar.");
@@ -527,3 +612,74 @@ document.getElementById('eliminarReserva').addEventListener('click', async funct
         alert("Error al intentar eliminar la reserva.");
     }
 });
+// FUNCION PARA AÑADIR CON BOTON RESERVAD EN LA BASDE DE DATOS------------///////////
+       //AÑADIRRESERVA AL HACER CLICK, MUESTRA EL FORMULARIO:
+       document.getElementById('añadirReserva').addEventListener('click', function() {
+        // ocultar formulario añadir
+        ocultarFormulario(); 
+        document.getElementById('formularioReserva').style.display = 'block';
+    });
+// FUNCION PARA MODIFICAR RESERVA---------------------////////////
+    document.getElementById('modificarReserva').addEventListener('click', function() {
+        // ESTE IF SALTA SI HACEN CLICK ANTES DE SELECCIONAR UNA RESERVA
+        if (!idReservaSeleccionada) {
+            alert("Por favor, selecciona una reserva marcada en rojo para modificar.");
+            return;
+        }
+        if (idReservaSeleccionada) {  // Verifica que haya una reserva seleccionada
+            ocultarFormulario(); 
+            // Muestra el formulario
+            document.getElementById('formularioModificarReserva').style.display = 'block';
+    
+            // Muestra la información de la reserva en el contenedor
+            const infoReserva = document.getElementById('infoReservaSeleccionada');
+            infoReserva.style.display = 'block';
+            infoReserva.textContent = `Reserva Actual : ${nombreReservaSeleccionada} ${horaInicioSeleccionada} ${horaFinSeleccionada}`
+            
+            document.getElementById('idReservaInput').value = idReservaSeleccionada;
+            console.log("ID de reserva seleccionada:", idReservaSeleccionada);  // Verificar si el valor se asigna correctamente OK
+
+    }
+});
+
+// FUNCION PARA ENVIAR LOS DATOS MODIFICADOS DE MODIFICAR RESERVA---------------------NO IBA POR EL ID DE PANEL ADMIN----///////
+document.getElementById('formularioModificarReserva').addEventListener('submit', function(event) {
+    event.preventDefault();  // Evita el envío normal del formulario
+
+    // Preparamos los datos a enviar
+    const formData = new FormData();
+
+    // Recogemos los datos del formulario solo si han sido modificados, LAS ID TIENEN QUE SER IGUALES A LAS DEL FORMULARIO PANEL ADMIN:
+    const nombre = document.getElementById('nombreModificar').value;
+    const apellido = document.getElementById('apellidoModificar').value;
+    const correo = document.getElementById('correoModificar').value;
+    const fecha = document.getElementById('fechaModificar').value;
+    const horaInicio = document.getElementById('hora_inicioModificar').value;
+    const horaFin = document.getElementById('hora_finModificar').value;
+
+    // Añadimos a FormData solo los campos modificados
+    if (nombre !== "") formData.append('nombre', nombre);
+    if (apellido !== "") formData.append('apellido', apellido);
+    if (correo !== "") formData.append('correo', correo);
+    if (fecha !== "") formData.append('fecha', fecha);
+    if (horaInicio !== "") formData.append('hora_inicio', horaInicio);
+    if (horaFin !== "") formData.append('hora_fin', horaFin);
+
+    // Siempre se enviará el ID de la reserva
+    formData.append('id', document.getElementById('idReservaInput').value);
+
+    // Enviar los datos al servidor
+    fetch('../php/modificar_reserva.php', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log(data);  // Puedes ver la respuesta del servidor
+        alert(data);  // Mostrar mensaje de éxito o error
+    })
+    .catch(error => {
+        console.error('Error:', error);  // Manejar errores
+        alert('Error al enviar la solicitud');
+    });
+    });
