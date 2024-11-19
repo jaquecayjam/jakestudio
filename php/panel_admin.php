@@ -33,6 +33,8 @@
 <button id="eliminarReserva">Eliminar</button>
  <!-- BOTON PARA AÑADIR RESERVA -->
  <button id="añadirReserva">Añadir reserva</button>
+ <!-- BOTON MODIFICAR RESERVA -->
+ <button id="modificarReserva">Modificar reserva</button>
 
 <!-- Formulario de reserva ESTA OCULTO HASTA QUE CLICK EN AÑADIR RESERVA -->
 <form id="formularioReserva" action="../php/reserva.php" method="POST" style="display: none;">
@@ -44,8 +46,34 @@
          <input type="hidden" id="fecha" name="fecha">
         <input type="hidden" id="hora_inicio" name="hora_inicio">
         <input type="hidden" id="hora_fin" name="hora_fin">
-    <input type="submit" value= "Reserva">
+    <input type="submit" value= "Reserva"> <!-- este submit equivale l de ENVIAR DAROS DOMRULARIO BD-->
 </form>
+
+<!-- FORMULARIO MODIFICAR RESERVA -->
+<form id="formularioModificarReserva" action="../php/modificar_reserva.php" method="POST" style="display: none;">
+    <h3>Modificar Reserva</h3>
+
+    <!-- Mostrar información de la reserva seleccionada -->
+    <div id="infoReservaSeleccionada" style="display: none; font-weight: bold; margin-bottom: 10px;">
+        <!-- Aquí se mostrará el nombre y la hora de la reserva seleccionada -->
+    </div>
+
+    <!-- Campo oculto para enviar el ID de la reserva seleccionada -->
+    <input type="hidden" name="id" id="idReservaInput">
+
+    <!-- Campos para modificar los datos -->
+    <input type="text" name="nombre" id="nombreModificar" placeholder="Nombre" />
+    <input type="text" name="apellido" id="apellidoModificar" placeholder="Apellido" />
+    <input type="email" name="correo" id="correoModificar" placeholder="Correo" />
+    <!-- Mostrar fecha y horas seleccionadas -->
+    <input type="text" name="fechaModificar" id="fechaModificar" placeholder="Fecha seleccionada" readonly />
+    <input type="text" name="hora_inicioModificar" id="hora_inicioModificar" placeholder="Hora inicio seleccionada" readonly />
+    <input type="text" name="hora_finModificar" id="hora_finModificar" placeholder="Hora fin seleccionada" readonly />
+
+    <!-- Botón para guardar cambios -->
+    <input type="submit" value="Guardar cambios">
+</form>
+<!-- FIN FORMULARIO MODIFICAR RESERVA -->
     <!-- Titulo del mes y año -->
     <div id="tituloMesAño"></div>
     
