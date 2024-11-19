@@ -99,47 +99,49 @@
         <input type="hidden" id="fecha" name="fecha">
         <input type="hidden" id="hora_inicio" name="hora_inicio">
         <input type="hidden" id="hora_fin" name="hora_fin">
+        
 
 
-        <!-- Modal para el calendario -->
-        <div id="calendario-modal" class="modal" style="display:none;">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <p>aqui aparece el calendario</p>
-                <!-- titulo mes y alo -->
-                <div id="tituloMesAño"></div>
-                <select id="elegir-mes"></select>
-                <select id="elegir-año"></select>
-                <!-- Contenedor del título del mes y año -->
 
-                <!-- Contenedor del calendario -->
-                <table id="calendarioFull"></table>
+<!-- Donde se crea -->
+<section id="calendario-seccion">
+    <div id="tituloMesAño"></div>
+    <div>
+        <select id="elegir-mes"></select>
+        <select id="elegir-año"></select>
+    </div>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Lunes</th>
-                            <th>Martes</th>
-                            <th>Miércoles</th>
-                            <th>Juevesss</th>
-                            <th>Viernes</th>
-                            <th class="fin-de-semana">Sábado</th>
-                            <th class="fin-de-semana">Domingo</th>
-                        </tr>
-                    </thead>
-                    <tbody id="calendario-full">
-                        <!-- El calendario se generará aquí dinámicamente -->
-                    </tbody>
-                </table>
+    <table>
+        <thead>
+            <tr>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+                <th class="fin-de-semana">Sábado</th>
+                <th class="fin-de-semana">Domingo</th>
+            </tr>
+        </thead>
+        <tbody id="calendario-full">
+            <!-- El calendario se crea aquí -->
+        </tbody>
+    </table>
+</section>
+<input type="submit" value="Reservar">
+    </form>
 
-                </tbody>
-                </table>
-            </div>
+             <!-- Esta sección solo se mostrará en móviles  NOVA-->
+        <div id="mobile-calendar" style="display:none;">
+            <h2 id="current-day-title"></h2>
+            <div id="hours-container"></div>
+        </div>
         </div>
 
-        <input type="submit" value="Reservar">
-    </form>
-    <script src="./js/formulario_reserva.js"></script> <!--script para manipular las horas de reserva-->
+    <!-- <script src="./js/formulario_reserva.js"></script> -->
+    <script src="./js/pruebas.js"></script>
+
+
     <!-- <script src="./js/scroll-estudio.js"></script>  -->
 
     <input type="hidden" name="hora" value="">
