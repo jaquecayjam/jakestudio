@@ -150,43 +150,90 @@ margin-bottom: 0px;
 }
 /* Estilo formulario---------------*/
 /* estilos modal */
-/* Estilos para el Modal */
-.modal {
-    display: none; /* Oculto por defecto */
-    /* position: fixed; */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente */
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background-color: #fff;
+/* Estilos para calendari nuevos */
+#calendario-seccion {
+    width: 80%;
+    margin: 20px auto;
     padding: 20px;
+    background-color: #f9f9f9;
     border-radius: 8px;
-    width: 90%;
-    /* max-width: 500px; */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    /* position: relative; */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Botón de cierre del modal */
-.modal-content .close {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 20px;
+#tituloMesAño {
+    font-size: 24px;
     font-weight: bold;
-    color: #aaa;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+select {
+    font-size: 16px;
+    padding: 8px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    outline: none;
     cursor: pointer;
 }
 
-.modal-content .close:hover {
-    color: #000;
+select:focus {
+    border-color: #008cba;
 }
+
+/* Estilo para la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #008cba;
+    color: white;
+}
+
+table td {
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+table td:hover {
+    background-color: #f0f0f0;
+}
+
+/* Resaltar los días del fin de semana */
+.fin-de-semana {
+    background-color: #f0f8ff;
+}
+
+/* Estilo para el botón de "Reservar" */
+input[type="submit"] {
+    background-color: #008cba;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+input[type="submit"]:hover {
+    background-color: #005f74;
+}
+/* estilos fin calendario nuevo */
+
 
 /* Estilos del Calendario */
 table {

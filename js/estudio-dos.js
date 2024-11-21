@@ -1,3 +1,4 @@
+// Creación del modal-------------
 // Elementos del DOM
 // Inicializa las variables necesarias
 let mesSeleccionado = new Date().getMonth(); // Inicializa con el mes actual
@@ -8,7 +9,7 @@ let filaSemanaActual = null;
 let horasGeneradas = {}; // ********
 const formReserva = document.getElementById("form-reserva");
 
-// el calendario se creacuando se carga la página
+// Inicializa el calendario cuando se carga la página
 document.addEventListener('DOMContentLoaded', () => {
     slccionMes.value = mesSeleccionado; // Actualiza el mes seleccionado
     slccionAño.value = añoSeleccionado; // Actualiza el año seleccionado
@@ -53,7 +54,7 @@ async function obtenerReservas() {
         const response = await fetch('./php/obtener_reservas.php'); // Cambia la ruta si es necesario
         if (!response.ok) throw new Error("Error al cargar las reservas");
         const reservas = await response.json(); // [{ fecha: "YYYY-MM-DD", hora_inicio: "HH:MM:SS", hora_fin: "HH:MM:SS" }]
-        
+
         console.log("Reservas obtenidas:", reservas); // Agrega esto para verificar los datos
 
         // Crear un nuevo formato con hora_inicio - hora_fin
@@ -79,8 +80,12 @@ function generarCalendario(selectMes, selectAño) {
     calendarioFull.innerHTML = ''; // Limpia el calendario previo
     const nombreMes = new Date(selectAño, selectMes).toLocaleString('es-ES', { month: 'long', year: 'numeric' });
     tituloMesAño.textContent = nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
-
+     // nos dice en que dia de la semana cae el dia 1, lunes 1, martes 1, miercoles 2, jueves 3, viernes 4, sabado 5,domingo 0:
     const primerDiaMes = new Date(selectAño, selectMes, 1).getDay();
+    // Una fumada:
+    // select +1 es el mes que seleciona el usuario+1,
+    // select +1, 0: al pasarle 0 como prametro de DIA, retrocede un dia desde el primer dia del mes siguiente para saber cuatos dias tienen el mes seleccionado  
+
     const diasTotalMes = new Date(selectAño, selectMes + 1, 0).getDate();
     const initialOffset = (primerDiaMes + 6) % 7;
 
@@ -108,6 +113,28 @@ function generarCalendario(selectMes, selectAño) {
 
                 // Asignar un data-attribute con la fecha completa
                 celdaDia.dataset.fecha = `${selectAño}-${String(selectMes + 1).padStart(2, '0')}-${String(currentDate).padStart(2, '0')}`;
+                // Comparar si la celda corresponde a un día anterior al día actual y los tacha----
+                // // Comparar si la celda corresponde a un día anterior al día actual y los tacha
+                // const diaComparado = new Date(selectAño, selectMes, currentDate);
+                // if (diaComparado < fechaActual) {
+                //     const fechaNormalizada = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
+                //     const diaNormalizado = new Date(diaComparado.getFullYear(), diaComparado.getMonth(), diaComparado.getDate());
+
+                //     // Excluye el día actual
+                //     if (diaNormalizado < fechaNormalizada && !(diaNormalizado.getTime() === fechaNormalizada.getTime())) {
+                //         celdaDia.querySelector('span').style.textDecoration = 'line-through';
+                //         celdaDia.querySelector('span').style.color = 'gray'; // Opcional: cambia el color a gris
+                //         celdaDia.style.pointerEvents = 'none'; // Desactiva los clics en estos días
+                //     }
+                // } el anterio REVISAR
+                // Comparar si la celda corresponde a un día anterior al día actual y los tacha-------
+                const diaComparado = new Date(selectAño, selectMes, currentDate);
+                const fechaNormalizada = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
+                if (diaComparado < fechaNormalizada) {
+                    celdaDia.querySelector('span').style.textDecoration = 'line-through';
+                    celdaDia.querySelector('span').style.color = 'gray'; // Opcional: cambia el color a gris
+                    celdaDia.style.pointerEvents = 'none'; // Desactiva los clics en estos días
+                }
 
                 // Añadir evento de clic solo para días válidos
                 if (dayIndex >= 0 && dayIndex <= 4) { // Lunes a Viernes
@@ -127,6 +154,7 @@ function generarCalendario(selectMes, selectAño) {
                         if (!weekRow.dataset.horasGeneradas) {
                             Array.from(weekRow.children).forEach((celda, index) => {
                                 if (index >= 0 && index <= 4 && celda.textContent.trim() !== '') {
+                                    
                                     crearRangoHoras(currentDate, selectMes, selectAño, celda);
                                 }
                             });
@@ -150,7 +178,7 @@ function generarCalendario(selectMes, selectAño) {
         }
 
         calendarioFull.appendChild(weekRow);
-        
+
     }
 
     // Solo generar horas si estamos en el mes y año actuales
@@ -185,16 +213,15 @@ function extraerDiaYHoras(semanaFila) {
 
 // FUNCION PRA COMPARAR HORAS BASE DE DATOS Y HORAS FILA EN LA QUE SE ECNUENTRA- GUARDO LOS DIAS QUE COINCIDEN: LOS DIAS OCUPADO----------////////
 async function compararReservasConCalendario(semanaFila) {
-    // 1. Obtener las reservas formateadas
+    //reservas formateadas
     const reservas = await obtenerReservas();
-    
-    // 2. Extraer las fechas y horas de la fila del calendario
+    //extrae fechas y horas de la fila del calendario
     const diasYHoras = extraerDiaYHoras(semanaFila);
-    
-    // 3. Almacenaremos las horas ocupadas para mostrarlas más tarde
+
+    //  se alamcenan las horas ocupadas para mostrarlas despues
     let horasOcupadas = {};
 
-    // 4. Comparar las fechas y horas
+    // Cmparar las fechas y horas
     for (const fecha in diasYHoras) {  // Si existe la fecha en las reservas, comparamos las horas
         const reservasDelDia = reservas.filter(reserva => reserva.fecha === fecha);
         const horasDelCalendario = diasYHoras[fecha];
@@ -216,7 +243,7 @@ async function compararReservasConCalendario(semanaFila) {
         });
     }
 
-    // 5. Mostrar las horas ocupadas
+    // Se muestran las horas ocupadas
     console.log("Horas ocupadas:", horasOcupadas);
     return horasOcupadas;  // Devuelve el objeto con las horas ocupadas
 }
@@ -225,10 +252,10 @@ async function compararReservasConCalendario(semanaFila) {
 // FUNCION PARA MARCAR LOS DIAS QUE COINCIDEN EN ROJO Y BLOQUEAR LA PULSAR--------------------//////////////////////////
 
 async function marcarHorasOcupadas(semanaFila) {
-    // 1. Llamamos a la función que compara las reservas con el calendario
+    // Llamamos a la función que compara las reservas con el calendario
     const horasOcupadas = await compararReservasConCalendario(semanaFila);
 
-    // 2. Recorremos las celdas de la semana (solo las celdas de lunes a viernes)
+    // Recorremos las celdas de la semana (solo las celdas de lunes a viernes)
     Array.from(semanaFila.children).forEach((celda, index) => {
         if (index >= 0 && index <= 4) {  // Solo lunes a viernes
             const fechaCelda = celda.dataset.fecha;  // Extraemos la fecha desde el data-attribute
@@ -246,7 +273,7 @@ async function marcarHorasOcupadas(semanaFila) {
                         horaElemento.style.backgroundColor = 'red';
                         horaElemento.style.color = 'white'; // Opcional, para que se vea mejor
 
-                        // O puedes agregar un texto para indicar que está ocupada
+                        // agrega texto para indicar que está ocupada
                         horaElemento.textContent = `${horaCalendario} (Ocupada)`;
                         horaElemento.style.pointerEvents = 'none'; // Hace que no se pueda hacer clic en el elemento
 
@@ -260,18 +287,27 @@ async function marcarHorasOcupadas(semanaFila) {
 // FUNCION PARA CREAR LAS HORAS EN LA SEMANA ACTUAL --------------------------------/////////////////////////
 function generarHorasSemanaActual(selectMes, selectAño, semanaActual) {
     const rows = calendarioFull.querySelectorAll('tr');
-    let currentDay = new Date(selectAño, selectMes, 1);
+    const fechaActual = new Date(); // Fecha actual
+    const fechaNormalizada = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
 
     rows.forEach((row, rowIndex) => {
         if (rowIndex === semanaActual) {
             filaSemanaActual = row; // Guarda la referencia de la semana actual
 
             Array.from(row.children).forEach((cell, cellIndex) => {
-                const diaCalendario = currentDay.getDate();
-                if (cellIndex >= 0 && cellIndex <= 4) { // Lunes a Viernes
-                    crearRangoHoras(diaCalendario, selectMes, selectAño, cell);
+                if (cellIndex >= 0 && cellIndex <= 4) { // Solo Lunes a Viernes
+                    // Obtener la fecha de la celda
+                    const diaCalendario = parseInt(cell.textContent.trim(), 10);
+                    const fechaCelda = new Date(selectAño, selectMes, diaCalendario);
+            // REVISAR ESTO----
+                    if (fechaCelda < fechaNormalizada) {
+                        // Si la fecha es anterior al día actual, elimina las horas si existen
+                        limpiarHorasEnCelda(cell);
+                    } else {
+                        // Genera las horas solo para los días actuales o futuros
+                        crearRangoHoras(diaCalendario, selectMes, selectAño, cell);
+                    }
                 }
-                currentDay.setDate(diaCalendario + 1);
             });
 
             // Marcar las horas ocupadas después de generarlas en la semana actual
@@ -279,6 +315,12 @@ function generarHorasSemanaActual(selectMes, selectAño, semanaActual) {
             marcarHorasOcupadas(row); // Llama a la función para marcar en rojo las horas ocupadas
         }
     });
+}
+
+// Función  para vaciar las horas de la celda
+function limpiarHorasEnCelda(cell) {
+    const horas = cell.querySelectorAll('.hora');
+    horas.forEach(hora => hora.remove()); // Elimina todas las horas generadas en la celda
 }
 // FUNCION PARA CREAR RANGO DE HORAS-----------------------------//////////////////////////////////////////////////
 async function crearRangoHoras(dia, mes, año, celda) {
@@ -390,7 +432,7 @@ formReserva.addEventListener('submit', function (event) {
     formData.append('hora_fin', horaFin);
 
     // Envío de los datos al servidor
-    fetch('./php/reservas.php', {
+    fetch('./php/enviar_correo.php', {
         method: 'POST',
         body: formData,
     })
