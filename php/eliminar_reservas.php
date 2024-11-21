@@ -2,10 +2,11 @@
 // Habilitar errores para depuración CONEXION CON BD NUBE
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-$servername = "sql210.infinityfree.com";
-$username = "if0_37677093";
-$password = "Z8GBOE8Sn4IFCR";
-$dbname = "if0_37677093_jakestudio";
+// Configuración de la base de datos
+$servername = "ww";
+$username = "ww";
+$password = "ww";
+$dbname = "ww";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

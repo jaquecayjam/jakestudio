@@ -4,10 +4,10 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 // Configuración de la base de datos
-$servername = "sql210.infinityfree.com";
-$username = "if0_37677093";
-$password = "Z8GBOE8Sn4IFCR";
-$dbname = "if0_37677093_jakestudio";
+$servername = "ww";
+$username = "ww";
+$password = "ww";
+$dbname = "ww";
 
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);

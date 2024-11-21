@@ -9,10 +9,11 @@ if (isset($_SESSION['usuario'])) {
 }
 
 // Conexión a la base de datos diferente:CAMBIAR
-$servername = "localhost";
-$username = "root"; // Tu usuario de la base de datos
-$password = "root1234_"; // Tu contraseña de la base de datos
-$dbname = "jakestudio_v2"; // El nombre de tu base de datos
+// Configuración de la base de datos
+$servername = "ww";
+$username = "ww";
+$password = "ww";
+$dbname = "ww";
 
 // Crear la conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
