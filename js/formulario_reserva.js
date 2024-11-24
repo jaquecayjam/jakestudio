@@ -79,7 +79,7 @@ function generarCalendario(selectMes, selectAño) {
     calendarioFull.innerHTML = ''; // Limpia el calendario previo
     const nombreMes = new Date(selectAño, selectMes).toLocaleString('es-ES', { month: 'long', year: 'numeric' });
     tituloMesAño.textContent = nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
-     // nos dice en que dia de la semana cae el dia 1, lunes 1, martes 1, miercoles 2, jueves 3, viernes 4, sabado 5,domingo 0:
+    // nos dice en que dia de la semana cae el dia 1, lunes 1, martes 1, miercoles 2, jueves 3, viernes 4, sabado 5,domingo 0:
     const primerDiaMes = new Date(selectAño, selectMes, 1).getDay();
     // Una fumada:
     // select +1 es el mes que seleciona el usuario+1,
@@ -87,10 +87,10 @@ function generarCalendario(selectMes, selectAño) {
 
     const diasTotalMes = new Date(selectAño, selectMes + 1, 0).getDate();
     const initialOffset = (primerDiaMes + 6) % 7;
-   
+
     // nuevas variables para crear solo filas necesariasMODIFICACION PARA CREAR SOLO FILAS NECESARIAS
     const diasTotales = initialOffset + diasTotalMes;
-const semanasNecesarias = Math.ceil(diasTotales / 7);  // Calcula cuántas semanas son necesarias
+    const semanasNecesarias = Math.ceil(diasTotales / 7);  // Calcula cuántas semanas son necesarias
 
     let currentDate = 1;
     const fechaActual = new Date();
@@ -98,8 +98,9 @@ const semanasNecesarias = Math.ceil(diasTotales / 7);  // Calcula cuántas seman
     const mesActual = fechaActual.getMonth();
     const añoActual = fechaActual.getFullYear();
     const diaDeLaSemanaActual = fechaActual.getDay(); // 0 = Domingo, 1 = Lunes, ..., 6 = Sábado
-    const semanaActual = Math.floor((diaActual + primerDiaMes - 1) / 7); // Semana actual (0-5)
-
+    // const semanaActual = Math.floor((diaActual + primerDiaMes - 1) / 7); // Semana actual (0-5)
+    // cambios para buena asignacion de semana sugun su dia: CALCULAR LA SEMANA ACTUAL 
+    let semanaActual = -1;
 
 
 
@@ -140,6 +141,16 @@ const semanasNecesarias = Math.ceil(diasTotales / 7);  // Calcula cuántas seman
                     celdaDia.querySelector('span').style.textDecoration = 'line-through';
                     celdaDia.querySelector('span').style.color = 'gray'; // Opcional: cambia el color a gris
                     celdaDia.style.pointerEvents = 'none'; // Desactiva los clics en estos días
+                    celdaDia.style.backgroundColor = '#D5D0CF';
+                }
+                // Cambiar el fondo a rojo para sábados y domingos
+                if (dayIndex === 6 || dayIndex === 5) { // Domingo (6) o Sábado (5)
+                    celdaDia.style.backgroundColor = '#ffa5a3';
+                }
+                // CALCULAR LA SEMANA ACTUAL 
+                // Si el día actual es igual al día de la celda, asignamos esa fila como semana actual
+                if (currentDate === diaActual && selectMes === mesActual && selectAño === añoActual) {
+                    semanaActual = weekIndex;  // Establecer la semana actual según la fila
                 }
 
                 // Añadir evento de clic solo para días válidos
@@ -160,7 +171,7 @@ const semanasNecesarias = Math.ceil(diasTotales / 7);  // Calcula cuántas seman
                         if (!weekRow.dataset.horasGeneradas) {
                             Array.from(weekRow.children).forEach((celda, index) => {
                                 if (index >= 0 && index <= 4 && celda.textContent.trim() !== '') {
-                                    
+
                                     crearRangoHoras(currentDate, selectMes, selectAño, celda);
                                 }
                             });
@@ -184,19 +195,19 @@ const semanasNecesarias = Math.ceil(diasTotales / 7);  // Calcula cuántas seman
         }
 
         // Solo agregamos la fila si contiene al menos un día válidoMODIFICACION PARA CREAR SOLO FILAS NECESARIAS
-    if (weekRow.querySelector('td:not(:empty)')) {
-        calendarioFull.appendChild(weekRow);
-    }
+        if (weekRow.querySelector('td:not(:empty)')) {
+            calendarioFull.appendChild(weekRow);
+        }
         // Si hemos llegado al último día del mes, detenemos la creación de nuevas filas MODIFICACION PARA CREAR SOLO FILAS NECESARIAS
         if (currentDate > diasTotalMes) {
             break;
         }
 
     }
-
-    // Solo generar horas si estamos en el mes y año actuales
-    if (selectMes === mesActual && selectAño === añoActual) {
-        generarHorasSemanaActual(selectMes, selectAño, semanaActual);
+    // CALCULAR LA SEMANA ACTUAL 
+    // 
+    if (semanaActual !== -1) {
+        generarHorasSemanaActual(selectMes, selectAño, semanaActual);  // Pasamos la semana correcta
     }
 }
 
@@ -312,7 +323,7 @@ function generarHorasSemanaActual(selectMes, selectAño, semanaActual) {
                     // Obtener la fecha de la celda
                     const diaCalendario = parseInt(cell.textContent.trim(), 10);
                     const fechaCelda = new Date(selectAño, selectMes, diaCalendario);
-            // REVISAR ESTO----
+                    // REVISAR ESTO----
                     if (fechaCelda < fechaNormalizada) {
                         // Si la fecha es anterior al día actual, elimina las horas si existen
                         limpiarHorasEnCelda(cell);
@@ -443,7 +454,7 @@ formReserva.addEventListener('submit', function (event) {
     formData.append('fecha', fecha);
     formData.append('hora_inicio', horaInicio);
     formData.append('hora_fin', horaFin);
-// ahora uso el documento enviar_correo para alamcenar y hacer la llamada a mi php email_config
+    // ahora uso el documento enviar_correo para alamcenar y hacer la llamada a mi php email_config
     // Envío de los datos al servidor
     fetch('./php/enviar_correo.php', {
         method: 'POST',
