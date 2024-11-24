@@ -75,7 +75,6 @@ async function obtenerReservas() {
 }
 
 //GENERO EL CALENDARIO-------------------------------------------////////////////////////////////
-// Función para generar el calendario
 function generarCalendario(selectMes, selectAño) {
     calendarioFull.innerHTML = ''; // Limpia el calendario previo
     const nombreMes = new Date(selectAño, selectMes).toLocaleString('es-ES', { month: 'long', year: 'numeric' });
@@ -88,6 +87,10 @@ function generarCalendario(selectMes, selectAño) {
 
     const diasTotalMes = new Date(selectAño, selectMes + 1, 0).getDate();
     const initialOffset = (primerDiaMes + 6) % 7;
+   
+    // nuevas variables para crear solo filas necesariasMODIFICACION PARA CREAR SOLO FILAS NECESARIAS
+    const diasTotales = initialOffset + diasTotalMes;
+const semanasNecesarias = Math.ceil(diasTotales / 7);  // Calcula cuántas semanas son necesarias
 
     let currentDate = 1;
     const fechaActual = new Date();
@@ -97,13 +100,16 @@ function generarCalendario(selectMes, selectAño) {
     const diaDeLaSemanaActual = fechaActual.getDay(); // 0 = Domingo, 1 = Lunes, ..., 6 = Sábado
     const semanaActual = Math.floor((diaActual + primerDiaMes - 1) / 7); // Semana actual (0-5)
 
-    // Generación de filas para el calendario
-    for (let weekIndex = 0; weekIndex < 6; weekIndex++) {
+
+
+
+    // Generación de filas para el calendario MODIFICACION PARA CREAR SOLO FILAS NECESARIAS
+    for (let weekIndex = 0; weekIndex < semanasNecesarias; weekIndex++) {
         const weekRow = document.createElement('tr');
 
         for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
             const celdaDia = document.createElement('td');
-
+            // MODIFICACION PARA CREAR SOLO FILAS NECESARIAS
             if (weekIndex === 0 && dayIndex < initialOffset) {
                 celdaDia.textContent = '';
             } else if (currentDate <= diasTotalMes) {
@@ -177,7 +183,14 @@ function generarCalendario(selectMes, selectAño) {
             weekRow.appendChild(celdaDia);
         }
 
+        // Solo agregamos la fila si contiene al menos un día válidoMODIFICACION PARA CREAR SOLO FILAS NECESARIAS
+    if (weekRow.querySelector('td:not(:empty)')) {
         calendarioFull.appendChild(weekRow);
+    }
+        // Si hemos llegado al último día del mes, detenemos la creación de nuevas filas MODIFICACION PARA CREAR SOLO FILAS NECESARIAS
+        if (currentDate > diasTotalMes) {
+            break;
+        }
 
     }
 
@@ -409,7 +422,7 @@ function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
     console.log("Hora de fin seleccionada:", horaFin);
 }
 
-// ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO A LA BASE DE DATOS------------------------------------------/////////////////////////
+// ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO A LA BASE DE DATOS-----------------a-------------------------/////////////////////////
 // Utilizo API FETCH para enviar los datos al servidor sin recargar la página----------------
 formReserva.addEventListener('submit', function (event) {
     event.preventDefault(); // Evita el envío normal del formulario
