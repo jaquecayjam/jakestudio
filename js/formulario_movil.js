@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     allCeldas.forEach(cell => {
                         // Oculta las celdas que no son del día actual o las celdas vacías
                         if (cell !== diasCeldas && cell.textContent.trim() === '') {
-                            cell.style.display = 'none'; 
+                            cell.style.display = 'none';
                         } else if (cell !== diasCeldas) {
                             cell.style.display = 'none';
                         }
@@ -57,6 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Marcar sábado y domingo con fondo rojo
             marcarFinDeSemana();
+            // Verificar si es el último día del mes o primer dia del mes
+            verificarUltimoDiaMes();
+            verificarPrimerDiaMes();
+
         }
 
         // Función para marcar el fin de semana (sábado y domingo) con fondo rojo REVISAR
@@ -74,31 +78,98 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!cell.querySelector('.no-disponible')) {
                         const noDisponibleText = document.createElement('p');
                         noDisponibleText.textContent = 'NO DISPONIBLE';
-                        noDisponibleText.classList.add('no-disponible'); // Añadir clase para controlar el estilo si es necesario
+                        noDisponibleText.classList.add('no-disponible'); // Añadir clase para controlar el estilo si es necesario REVISAR
                         cell.appendChild(noDisponibleText);
                     }
                 }
             });
         }
 
-        // Función para avanzar un día BOTON DIA SIGUIENTE:-------------------
+
+        // FUNCION VERIFICAR ULTIMO DIA DEL MES---------------
+        function verificarUltimoDiaMes() {
+            const mesActual = fechaActual.getMonth();
+            const ultimoDiaMes = new Date(fechaActual.getFullYear(), mesActual + 1, 0).getDate(); // Obtiene el último día del mes
+            const botonSiguiente = document.getElementById('bsiguiente');
+            // Si es el último día del mes, deshabilita el botón SIGUIENTE DIA
+            if (fechaActual.getDate() === ultimoDiaMes) {
+                botonSiguiente.disabled = true; // Deshabilitams botón Siguiente
+                mostrarNotificacion("¡Has llegado al último día del mes! No puedes avanzar más.");
+            } else {
+                botonSiguiente.disabled = false; // Habilitar botón Siguiente
+            }
+        }
+        // FUNCION VERIFICAR PRIMER DIA DEL MES---------------
+        function verificarPrimerDiaMes() {
+            const primerDiaMes = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1); // Obtiene el primer día del mes
+            const botonAnterior = document.getElementById('banterior');
+
+            // Si es el primer día del mes, deshabilita el botón ANTERIOR DIA
+            if (fechaActual.getDate() === primerDiaMes.getDate()) {
+                botonAnterior.disabled = true; // Deshabilitar botón Anterior
+                mostrarNotificacion("¡Estás en el primer día del mes! No puedes retroceder más.");
+            } else {
+                botonAnterior.disabled = false; // Habilitar botón Anterior
+            }
+        }
+        // FUNCION PARA AVANZAR DIAS CON EL BOTON----------
         function avanzarDia() {
+            const mesActual = fechaActual.getMonth();
             // Aumentar el día en 1
             fechaActual.setDate(fechaActual.getDate() + 1);
-            // Llamar a la función ACTULIZARCALENDARIO que actualiza el calendario para el siguiente día
+            // Verificar si hemos llegado al siguiente mes
+            verificarUltimoDiaMes();
+            // Actualizar el calendario para el siguiente día
             actualizarCalendario(fechaActual);
             // Mostrar el botón "Anterior día" después de hacer clic en "Siguiente día"
-            botonAnterior.style.display = 'inline-block'; // Muestra el botón "Anterior día"
+            const botonAnterior = document.getElementById('banterior');
+            botonAnterior.style.display = 'inline-block'; // Mostrar el botón "Anterior día"
         }
-        // ----------------
-        // Función para retroceder un día BOTON DIA ANTERIOR----------
+
+        // FUNCION PARA RETROCEDER DIAS CON EL BOTON----------
         function retrocederDia() {
-            // Restar 1 al día
+            // Verificar si estamos en el primer día del mes
+            verificarPrimerDiaMes();
+            // Restar 1 al día (retroceder un día)
             fechaActual.setDate(fechaActual.getDate() - 1);
-            // Llamar a la función  ACTULIZARCALENDARIO para actualizar el calendario para el día anterior
+            // Reactivar el botón "Anterior día" si no estamos en el primer día
+            const botonAnterior = document.getElementById('banterior');
+            botonAnterior.disabled = false;
+            // Actualizar el calendario para el día anterior
             actualizarCalendario(fechaActual);
         }
 
+        // FUNCION PARA MOSTRAR MENSAJE SEGUN PRIMER O ULTIMO DIA DE MES-------------------
+        function mostrarNotificacion(mensaje) {
+            const modalNotificacion = document.getElementById("modal-notificacion");
+            const mensajeNotificacion = document.getElementById("modal-notificacion-mensaje");
+            mensajeNotificacion.textContent = mensaje; 
+            modalNotificacion.style.display = "block"; // Muestra la notificación
+            modalNotificacion.classList.add("mostrar");
+            // Ocultar automáticamente después de 3 segundos
+            setTimeout(() => {
+                modalNotificacion.style.display = "none";
+                modalNotificacion.classList.remove("mostrar");
+            }, 3000);
+        }
+
+        // IMPORTANTE PARA QUE SE CREEN LAS CELDAS AL CAMBIAR DE MES O AÑO ----------------
+        // elegir mes
+        document.getElementById('elegir-mes').addEventListener('change', (event) => {
+            const mesSeleccionado = parseInt(event.target.value, 10); // Obtener el mes seleccionado
+            fechaActual.setMonth(mesSeleccionado);
+            fechaActual.setDate(1); // Asegurarse de que sea el primer día del mes
+            actualizarCalendario(fechaActual); // Actualizar el calendario al mes seleccionado
+        });
+
+        // elegir año
+        document.getElementById('elegir-año').addEventListener('change', (event) => {
+            const añoSeleccionado = parseInt(event.target.value, 10); // Obtener el año seleccionado
+            fechaActual.setFullYear(añoSeleccionado);
+            fechaActual.setDate(1); // Asegurarse de que sea el primer día del mes
+            actualizarCalendario(fechaActual); // Actualizar el calendario al año seleccionado
+        });
+        // ----------------////////////////////
         // Llamar la función ACTULIZARCALENDARIO para actualizar el calendario al cargar la página (con la fecha actual)
         actualizarCalendario(fechaActual);
 
@@ -108,4 +179,3 @@ document.addEventListener('DOMContentLoaded', () => {
         botonAnterior.addEventListener('click', retrocederDia);
     }
 });
-

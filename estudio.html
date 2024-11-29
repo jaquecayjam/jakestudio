@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estudio</title>
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/styles_estudio.css">
 </head>
 
 <body>
@@ -93,55 +93,65 @@
         <label for="correo">Correo Electrónico:</label><br>
         <input type="email" id="correo" name="correo" required><br><br>
         <!-- Campo fecha, para abrir modal con calendario----------------------------- -->
-        <p>Selecciona fecha:</p>
-        <button type="button" id="elegir-fecha">calendario</button><br><br>
+        <!-- <p>Selecciona fecha:</p>
+        <button type="button" id="elegir-fecha">calendario</button><br><br> -->
         <!-- Campos ocultos para alamacenr fecha, hora_inicio , hora_fin -->
         <input type="hidden" id="fecha" name="fecha">
         <input type="hidden" id="hora_inicio" name="hora_inicio">
         <input type="hidden" id="hora_fin" name="hora_fin">
-        
 
 
 
-<!-- Contenedor del calendario visible permanentemente -->
-<section id="calendario-seccion">
-    <div id="tituloMesAño"></div>
-    <div>
-        <select id="elegir-mes"></select>
-        <select id="elegir-año"></select>
-    </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Lunes</th>
-                <th>Martes</th>
-                <th>Miércoles</th>
-                <th>Jueves</th>
-                <th>Viernes</th>
-                <th class="fin-de-semana">Sábado</th>
-                <th class="fin-de-semana">Domingo</th>
-            </tr>
-        </thead>
-        <tbody id="calendario-full">
-            <!-- El calendario se generará aquí dinámicamente -->
-        </tbody>
-    </table>
-</section>
-<input type="submit" value="Reservar">
+        <!-- Contenedor del calendario visible permanentemente -->
+        <section id="calendario-seccion">
+            <div id="tituloMesAño"></div>
+            <div>
+                <select id="elegir-mes"></select>
+                <select id="elegir-año"></select>
+            </div>
+            
+             <!-- Botón que solo aparecerá en dispositivos móviles -->
+             <button type="button" id="bsiguiente" class="btn-movil-siguiente">Siguiente dia</button>
+             <!-- Botón ANTERIOR DIA que solo aparecerá en dispositivos móviles -->
+      <button type="button" id="banterior" class="btn-movil-anterior">Anterior dia</button>
+     <!-- MODAL PARA MOSTRAR MENSAJE SEGÚN PRIMER DIA DE MES O ULTIMO DIA DEL MES -->
+     <div id="modal-notificacion" style="display: none;">
+         <p id="modal-notificacion-mensaje"></p>
+     </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Lunes</th>
+                        <th>Martes</th>
+                        <th>Miércoles</th>
+                        <th>Jueves</th>
+                        <th>Viernes</th>
+                        <th class="fin-de-semana">Sábado</th>
+                        <th class="fin-de-semana">Domingo</th>
+                    </tr>
+                </thead>
+                <tbody id="calendario-full">
+                    <!-- El calendario se generará aquí dinámicamente -->
+                </tbody>
+            </table>
+        </section>
+
+         <input type="submit" value="Reservar">
     </form>
 
-             <!-- Esta sección solo se mostrará en móviles -->
-        <div id="mobile-calendar" style="display:none;">
+    <!-- Esta sección solo se mostrará en móviles -->
+    <!-- <div id="mobile-calendar" style="display:none;">
             <h2 id="current-day-title"></h2>
             <div id="hours-container"></div>
         </div>
-        </div>
+        </div> -->
 
     <!-- <script src="./js/formulario_reserva.js"></script> -->
     <script src="./js/formulario_reserva.js"></script>
 
-
+    <!-- js para verison movil---------------------------- -->
+    <script src="./js/formulario_movil.js"></script>
     <!-- <script src="./js/scroll-estudio.js"></script>  -->
 
     <input type="hidden" name="hora" value="">
