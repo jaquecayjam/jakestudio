@@ -53,9 +53,9 @@ async function obtenerReservas() {
     try {
         const response = await fetch('../php/obtener_reservas.php'); // Cambia la ruta si es necesario
         if (!response.ok) throw new Error("Error al cargar las reservas");
-        
+
         const reservas = await response.json(); // [{ fecha: "YYYY-MM-DD", hora_inicio: "HH:MM:SS", hora_fin: "HH:MM:SS" }]
-        
+
         // Verifica que las reservas tengan el formato esperado
         if (!Array.isArray(reservas)) {
             throw new Error("El formato de las reservas no es válido");
@@ -401,51 +401,51 @@ async function crearRangoHoras(dia, mes, año, celda) {
         horaElement.textContent = hora;
         horaElement.classList.add('hora');
         // Agregar evento de clic a cada hora
-// TO FIXED: AL SELECCIONAR MAS DE 1 HORA, Y DESELECCIONAR , LA HORA QUE SE ENVIA COMO RESERVA NO ES LA CORRECTA
-// EJ: SI SELECCIONO UN RANGO DE HORA DE 9:00 A 12:00 , Y DESELECCIONO DE 09:00-10:00,10:00-11:00, DEBERIA GUARDARSE EN LA BD LAS HORAS 11:00-12:00 
-// FIXED funciona:
-    // Agregar evento de clic a cada hora
-    horaElement.addEventListener('click', () => {
-        // Si la hora ya está seleccionada, la removemos del array y restauramos el color
-        if (horaElement.style.backgroundColor === 'blue') {
-            horaElement.style.backgroundColor = ''; // Color original
-            horaElement.style.color = 'black';
-            const index = horasSeleccionadas.indexOf(hora);
-            if (index > -1) {
-                horasSeleccionadas.splice(index, 1); // Elimina la hora del array
+        // TO FIXED: AL SELECCIONAR MAS DE 1 HORA, Y DESELECCIONAR , LA HORA QUE SE ENVIA COMO RESERVA NO ES LA CORRECTA
+        // EJ: SI SELECCIONO UN RANGO DE HORA DE 9:00 A 12:00 , Y DESELECCIONO DE 09:00-10:00,10:00-11:00, DEBERIA GUARDARSE EN LA BD LAS HORAS 11:00-12:00 
+        // FIXED funciona:
+        // Agregar evento de clic a cada hora
+        horaElement.addEventListener('click', () => {
+            // Si la hora ya está seleccionada, la removemos del array y restauramos el color
+            if (horaElement.style.backgroundColor === 'blue') {
+                horaElement.style.backgroundColor = ''; // Color original
+                horaElement.style.color = 'black';
+                const index = horasSeleccionadas.indexOf(hora);
+                if (index > -1) {
+                    horasSeleccionadas.splice(index, 1); // Elimina la hora del array
+                }
+            } else {
+                // Si no está seleccionada, la agregamos al array y cambiamos el color a azul
+                horaElement.style.backgroundColor = 'blue';
+                horaElement.style.color = 'white'; // Para mejorar visibilidad
+                horasSeleccionadas.push(hora);
             }
-        } else {
-            // Si no está seleccionada, la agregamos al array y cambiamos el color a azul
-            horaElement.style.backgroundColor = 'blue';
-            horaElement.style.color = 'white'; // Para mejorar visibilidad
-            horasSeleccionadas.push(hora);
-        }
 
-        console.log("Horas seleccionadas actualmente:", horasSeleccionadas);
+            console.log("Horas seleccionadas actualmente:", horasSeleccionadas);
 
-        // Verificar si hay al menos una hora seleccionada
-        if (horasSeleccionadas.length > 0) {
-            // Extraer las horas de inicio y fin de las horas seleccionadas
-            const horasInicio = horasSeleccionadas.map(h => h.split(' - ')[0]); // ejemplo: ["13:00", "14:00"]
-            const horasFin = horasSeleccionadas.map(h => h.split(' - ')[1]);   // ejemplo: ["14:00", "15:00"]
+            // Verificar si hay al menos una hora seleccionada
+            if (horasSeleccionadas.length > 0) {
+                // Extraer las horas de inicio y fin de las horas seleccionadas
+                const horasInicio = horasSeleccionadas.map(h => h.split(' - ')[0]); // ejemplo: ["13:00", "14:00"]
+                const horasFin = horasSeleccionadas.map(h => h.split(' - ')[1]);   // ejemplo: ["14:00", "15:00"]
 
-            // Encontrar la hora más temprana y la más tardía
-            const horaInicio = horasInicio.sort()[0]; // La más temprana
-            const horaFin = horasFin.sort().slice(-1)[0]; // La más tarde
+                // Encontrar la hora más temprana y la más tardía
+                const horaInicio = horasInicio.sort()[0]; // La más temprana
+                const horaFin = horasFin.sort().slice(-1)[0]; // La más tarde
 
-            console.log("Hora de inicio más temprana:", horaInicio);
-            console.log("Hora de fin más tardía:", horaFin);
+                console.log("Hora de inicio más temprana:", horaInicio);
+                console.log("Hora de fin más tardía:", horaFin);
 
-            const diaCelda = celda.dataset.fecha.split('-');
-            const diaSeleccionado = parseInt(diaCelda[2], 10);
-           const mesSeleccionado = parseInt(diaCelda[1], 10) - 1;
-          const añoSeleccionado = parseInt(diaCelda[0], 10);
+                const diaCelda = celda.dataset.fecha.split('-');
+                const diaSeleccionado = parseInt(diaCelda[2], 10);
+                const mesSeleccionado = parseInt(diaCelda[1], 10) - 1;
+                const añoSeleccionado = parseInt(diaCelda[0], 10);
 
-            guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, `${horaInicio} - ${horaFin}`);
-        } else {
-            console.log("No hay horas seleccionadas.");
-        }
-    });
+                guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, `${horaInicio} - ${horaFin}`);
+            } else {
+                console.log("No hay horas seleccionadas.");
+            }
+        });
         celda.appendChild(horaElement);
     });
 }
@@ -488,6 +488,8 @@ function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
     console.log("Fecha seleccionada:", fechaSeleccionada);
     console.log("Hora de inicio seleccionada:", horaInicio);
     console.log("Hora de fin seleccionada:", horaFin);
+    // mostrar fecha y horas seleccionada:
+    infoSeleccionada.textContent = `Fecha seleccionada: ${fechaSeleccionada} | Hora de inicio: ${horaInicio} | Hora de fin: ${horaFin}`;
 }
 
 // ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO A LA BASE DE DATOS-----------------a-------------------------/////////////////////////

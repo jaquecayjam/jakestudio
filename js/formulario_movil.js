@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+    let indiceFila = 0;
     if (window.innerWidth <= 768) { //  Para pantalla pequeña
         let fechaActual = new Date(); // Mantener la variable de la fecha actual
         // Ocultar el botón "Anterior día" al principio
-        const botonAnterior = document.getElementById('banterior');
-        botonAnterior.style.display = 'none'; // Ocultar   BOTON DIA ANTERIOR
+    // BOTONNNNNNNN----------ANTERIOR
+         const botonAnterior = document.getElementById('banterior');
+        // botonAnterior.style.display = 'none'; // Ocultar   BOTON DIA ANTERIOR
         // Función para mostrar el día y ocultar las celdas no deseadas
         function actualizarCalendario(dia) {
             // Obtener el formato YYYY-MM-DD del día actual
@@ -94,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Si es el último día del mes, deshabilita el botón SIGUIENTE DIA
             if (fechaActual.getDate() === ultimoDiaMes) {
                 botonSiguiente.disabled = true; // Deshabilitams botón Siguiente
-                mostrarNotificacion("¡Has llegado al último día del mes! No puedes avanzar más.");
+                mostrarNotificacion("¡Has llegado al último día del mes! Cambie de mes.");
             } else {
                 botonSiguiente.disabled = false; // Habilitar botón Siguiente
             }
@@ -121,23 +123,113 @@ document.addEventListener('DOMContentLoaded', () => {
             verificarUltimoDiaMes();
             // Actualizar el calendario para el siguiente día
             actualizarCalendario(fechaActual);
+                // BOTONNNNNNNN----------ANTERIOR
+
             // Mostrar el botón "Anterior día" después de hacer clic en "Siguiente día"
-            const botonAnterior = document.getElementById('banterior');
-            botonAnterior.style.display = 'inline-block'; // Mostrar el botón "Anterior día"
+            // const botonAnterior = document.getElementById('banterior');
+            // botonAnterior.style.display = 'inline-block'; // Mostrar el botón "Anterior día"
         }
 
         // FUNCION PARA RETROCEDER DIAS CON EL BOTON----------
         function retrocederDia() {
+            
             // Verificar si estamos en el primer día del mes
             verificarPrimerDiaMes();
             // Restar 1 al día (retroceder un día)
             fechaActual.setDate(fechaActual.getDate() - 1);
             // Reactivar el botón "Anterior día" si no estamos en el primer día
-            const botonAnterior = document.getElementById('banterior');
-            botonAnterior.disabled = false;
+                // BOTONNNNNNNN----------ANTERIOR
+
+            // const botonAnterior = document.getElementById('banterior');
+            // botonAnterior.disabled = false;
             // Actualizar el calendario para el día anterior
             actualizarCalendario(fechaActual);
         }
+
+// FUNCION AVANZAR UNA SEMANA--------------------------------------:
+// ESTA FUNCIO TODO OK:
+function avanzarSemana() {
+    // Obtener todos los `tr` del calendario
+    const filas = document.querySelectorAll('#calendario-full tr');
+    // Buscar el `td` actual con la clase `current-day`
+    let tdActual = document.querySelector('td.current-day');
+    if (!tdActual) {
+        alert("No se encontró un día marcado como 'current-day'.");
+        return;
+    }
+    // Obtener la fila (`tr`) en la que está el `td` actual
+    let filaActual = tdActual.closest('tr');
+    // Buscar el siguiente `tr`
+    const siguienteFila = filaActual.nextElementSibling;
+    if (!siguienteFila) {
+        alert("¡Ya estás en la última semana!");
+        return;
+    }
+    // Buscar el primer día válido (celda con contenido) en la fila siguiente
+    const primerDiaValido = Array.from(siguienteFila.children).find(celda => celda.textContent.trim() !== '');
+    if (!primerDiaValido) {
+        alert("No hay días válidos en la siguiente semana.");
+        return;
+    }
+    // Mover la clase `current-day` al nuevo `td`
+    tdActual.classList.remove('current-day');
+    primerDiaValido.classList.add('current-day');
+    // Actualizar la fecha actual usando el atributo `data-fecha` del nuevo `td`
+    const nuevaFecha = new Date(primerDiaValido.getAttribute('data-fecha'));
+    if (!isNaN(nuevaFecha)) {
+        fechaActual = nuevaFecha; // Actualizar la fecha actual
+    }
+    // Opcional: Actualizar el calendario si es necesario
+    actualizarCalendario(fechaActual);
+}
+
+// FUNCION RETROCEDER SEMANA-----------------------:
+function retrocederSemana() {
+    // Obtener todos los `tr` del calendario
+    const filas = document.querySelectorAll('#calendario-full tr');
+
+    // Buscar el `td` actual con la clase `current-day`
+    let tdActual = document.querySelector('td.current-day');
+    if (!tdActual) {
+        alert("No se encontró un día marcado como 'current-day'.");
+        return;
+    }
+
+    // Obtener la fila (`tr`) en la que está el `td` actual
+    let filaActual = tdActual.closest('tr');
+
+    // Buscar el `tr` anterior
+    const filaAnterior = filaActual.previousElementSibling;
+    if (!filaAnterior) {
+        alert("¡Ya estás en la primera semana!");
+        return;
+    }
+    // Buscar el primer día válido (celda con contenido) en la fila anterior
+    const primerDiaValido = Array.from(filaAnterior.children).find(celda => celda.textContent.trim() !== '');
+    if (!primerDiaValido) {
+        alert("No hay días válidos en la semana anterior.");
+        return;
+    }
+
+    // Mover la clase `current-day` al nuevo `td`
+    tdActual.classList.remove('current-day');
+    primerDiaValido.classList.add('current-day');
+
+    // Actualizar la fecha actual usando el atributo `data-fecha` del nuevo `td`
+    const nuevaFecha = new Date(primerDiaValido.getAttribute('data-fecha'));
+    if (!isNaN(nuevaFecha)) {
+        fechaActual = nuevaFecha; // Actualizar la fecha actual
+    }
+
+    // Opcional: Actualizar el calendario si es necesario
+    actualizarCalendario(fechaActual);
+}
+
+
+// Función para mostrar una notificación (esto es opcional)
+function mostrarNotificacion(mensaje) {
+    alert(mensaje); // Este es un ejemplo, puedes usar un modal o una notificación más estilizada.
+}
 
         // FUNCION PARA MOSTRAR MENSAJE SEGUN PRIMER O ULTIMO DIA DE MES-------------------
         function mostrarNotificacion(mensaje) {
@@ -177,5 +269,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('bsiguiente').addEventListener('click', avanzarDia);
         // Asignar el evento al botón de BOTON DIA ANTERIOR---------------
         botonAnterior.addEventListener('click', retrocederDia);
+        //Assiganar evento al boton de AVANZAR SEMANA------
+        document.getElementById('btnextsemana').addEventListener('click', avanzarSemana);
+         //Assiganar evento al boton de RETROCEDER SEMANA------
+        document.getElementById('btlastsemana').addEventListener('click', retrocederSemana);
+
+
     }
 });

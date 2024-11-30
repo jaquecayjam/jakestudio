@@ -205,7 +205,7 @@ input[type="submit"]:hover {
     background-color: #005f74;
 }
 
-/* ESTILOS MOVIL---------------cargar dias sin las horas----------------/// */
+/* ESTILOS MOVIL-------------------------------/// */
 /* Estilo normal: mostrar todas las celdas */
 /* esto hace que si la pantalla es mas pequeña pues muestra la celda del dia actual */
 
@@ -223,20 +223,32 @@ input[type="submit"]:hover {
 #btnextsemana{
     display: none;
 }
+#btlastsemana{
+        display: none;
+
+}
 
 @media (max-width: 768px) 
-{
+{ 
+    #bsiguiente {
+        display: block;
+        margin-top: 20px;  /* Espacio encima del botón */
+        padding: 10px;
+    }
     #banterior {
         display: block;
         margin-top: 10px;  /* Espacio encima del botón */
+        padding: 10px;
     }
- #bsiguiente {
-        display: block;
-        margin-top: 10px;  /* Espacio encima del botón */
-    }
+
    #btnextsemana{
     display: block;
     margin-top: 10px;  /* Espacio encima del botón */
+}
+#btlastsemana{
+       display: block;
+    margin-top: 10px;  /* Espacio encima del botón */
+
 }
     thead {
     display: none;  /*Oculta el encabezado*/
@@ -276,9 +288,7 @@ input[type="submit"]:hover {
     opacity: 1;
 }
 
-/* fin ESTILOS MOVIL---------------cargar dias sin las horas----------------/// */
 /* Estilo para el calendario en dispositivos móviles */
-
 
 
 /* -------------------------*/

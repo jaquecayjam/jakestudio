@@ -110,15 +110,19 @@
                 <select id="elegir-mes"></select>
                 <select id="elegir-año"></select>
             </div>
-            
-             <!-- Botón que solo aparecerá en dispositivos móviles -->
-             <button type="button" id="bsiguiente" class="btn-movil-siguiente">Siguiente dia</button>
-             <!-- Botón ANTERIOR DIA que solo aparecerá en dispositivos móviles -->
-      <button type="button" id="banterior" class="btn-movil-anterior">Anterior dia</button>
-     <!-- MODAL PARA MOSTRAR MENSAJE SEGÚN PRIMER DIA DE MES O ULTIMO DIA DEL MES -->
-     <div id="modal-notificacion" style="display: none;">
-         <p id="modal-notificacion-mensaje"></p>
-     </div>
+
+            <!-- Botón que solo aparecerá en dispositivos móviles -->
+            <button type="button" id="bsiguiente" class="btn-movil-siguiente">Siguiente dia</button>
+            <!-- Botón ANTERIOR DIA que solo aparecerá en dispositivos móviles -->
+            <button type="button" id="banterior" class="btn-movil-anterior">Anterior dia</button>
+            <!-- Botón SEMANA SIGUIENTE que solo aparecerá en dispositivos móviles -->
+            <button type="button" id="btnextsemana" class="btn-movil-mesiguente">Semana Siguiente</button>
+            <!-- Botón RETROCEDER EN LAS SEMANAS que solo aparecerá en dispositivos móviles -->
+            <button type="button" id="btlastsemana" class="btn-movil-mesiguente">Semana Anterior</button>
+            <!-- MODAL PARA MOSTRAR MENSAJE SEGÚN PRIMER DIA DE MES O ULTIMO DIA DEL MES -->
+            <div id="modal-notificacion" style="display: none;">
+                <p id="modal-notificacion-mensaje"></p>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -134,10 +138,12 @@
                 <tbody id="calendario-full">
                     <!-- El calendario se generará aquí dinámicamente -->
                 </tbody>
+                <!-- para que aparezca texto con sus horas seleccionadas: -->
+                <p id="infoSeleccionada"></p>
             </table>
         </section>
 
-         <input type="submit" value="Reservar">
+        <input type="submit" value="Reservar">
     </form>
 
     <!-- Esta sección solo se mostrará en móviles -->
