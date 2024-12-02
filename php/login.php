@@ -8,31 +8,25 @@ if (isset($_SESSION['usuario'])) {
     exit();
 }
 
-// Conexión a la base de datos diferente:CAMBIAR
-// Configuración de la base de datos
-$servername = "ww";
-$username = "ww";
-$password = "ww";
-$dbname = "ww";
 
-// Crear la conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
+// LLAMADA SOLO AL ARCHIVO PHP_CONENCTION:
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// Verificar si hay errores en la conexión
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
-}
+// Incluir archivo de conexión
+require 'db_connection.php';
+
 
 // Verificar si el formulario fue enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Extraogo el correo y la contraseña del formulario
+    // Recupera el correo y la contraseña del formulario
     $email = $_POST['email'];
     $clave = $_POST['clave'];
 
     // Consulta para obtener el usuario
     $sql = "SELECT * FROM usuarios WHERE email = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $email); // 's' para indicar que el parámetro es una cadena/string
+    $stmt->bind_param("s", $email); // 's' para indicar que el parámetro es una cadena
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -40,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($result->num_rows > 0) {
         // El usuario existe, obtener los datos
         $row = $result->fetch_assoc();
+
         // Verificar si la contraseña es correcta
         if (password_verify($clave, $row['password'])) { // Compara la contraseña con la hash
             // Si la contraseña es correcta, inicia sesión

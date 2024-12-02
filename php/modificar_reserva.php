@@ -1,20 +1,27 @@
 <?php
 // pendiente cambiar 
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// // Configuración de la base de datos
+// $servername = "ww";
+// $username = "ww";
+// $password = "ww";
+// $dbname = "ww";
+
+// // Crear conexión
+// $conn = new mysqli($servername, $username, $password, $dbname);
+
+// // comprobar si la conexion funciona
+// if ($conn->connect_error) {
+//     die("Conexión fallida: " . $conn->connect_error);
+// }
+// LLAMADA SOLO AL ARCHIVO PHP_CONENCTION:
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-// Configuración de la base de datos
-$servername = "ww";
-$username = "ww";
-$password = "ww";
-$dbname = "ww";
 
-// Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Incluir archivo de conexión
+require 'db_connection.php';
 
-// comprobar si la conexion funciona
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
-}
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'];
 

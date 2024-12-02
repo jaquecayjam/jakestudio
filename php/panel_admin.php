@@ -1,12 +1,15 @@
 <?php 
-// session_start(); // Iniciar la sesión
+
+//  ACCESO CON LOGIN---------
+ session_start(); // Iniciar la sesión
 
 // Verificar si el usuario ha iniciado sesión
-// if (!isset($_SESSION['usuario'])) {
-//     // Si no está logueado, redirigir al login
-//     header("Location: login.php");
-//     exit();
-// }
+ if (!isset($_SESSION['usuario'])) {
+    // Si no está logueado, redirigir al login
+     header("Location: login.php");
+     exit();
+ }
+ //  ACCESO CON LOGIN---------
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +40,8 @@
  <button id="modificarReserva">Modificar reserva</button>
 
 <!-- Formulario de reserva ESTA OCULTO HASTA QUE CLICK EN AÑADIR RESERVA -->
-<form id="formularioReserva" action="../php/reserva.php" method="POST" style="display: none;">
+<!-- ELIMIANOMOS action="../php/reserva.php" method="POST" PORQUE PUEDE CAUSAR CONFLICTO YA QUE UTLIZAMOS FETCH EN NUESTRO JS -->
+<form id="formularioReserva" style="display: none;">
     <h3>Introduce tus datos</h3>
     <input type="text" id="nombre" placeholder="Nombre">
     <input type="text" id="apellido" placeholder="Apellido">
@@ -46,9 +50,10 @@
          <input type="hidden" id="fecha" name="fecha">
         <input type="hidden" id="hora_inicio" name="hora_inicio">
         <input type="hidden" id="hora_fin" name="hora_fin">
-    <input type="submit" value= "Reserva"> <!-- este submit equivale l de ENVIAR DAROS DOMRULARIO BD-->
+    <input type="submit" value= "Reserva">
 </form>
 
+<!-- FORMULARIO MODIFICAR RESERVA -->
 <!-- FORMULARIO MODIFICAR RESERVA -->
 <form id="formularioModificarReserva" action="../php/modificar_reserva.php" method="POST" style="display: none;">
     <h3>Modificar Reserva</h3>
@@ -65,7 +70,7 @@
     <input type="text" name="nombre" id="nombreModificar" placeholder="Nombre" />
     <input type="text" name="apellido" id="apellidoModificar" placeholder="Apellido" />
     <input type="email" name="correo" id="correoModificar" placeholder="Correo" />
-    <!-- Mostrar fecha y horas seleccionadas -->
+  <!-- Mostrar fecha y horas seleccionadas -->
     <input type="text" name="fechaModificar" id="fechaModificar" placeholder="Fecha seleccionada" readonly />
     <input type="text" name="hora_inicioModificar" id="hora_inicioModificar" placeholder="Hora inicio seleccionada" readonly />
     <input type="text" name="hora_finModificar" id="hora_finModificar" placeholder="Hora fin seleccionada" readonly />
