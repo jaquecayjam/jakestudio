@@ -21,6 +21,10 @@ const slccionMes = document.getElementById('elegir-mes');
 const slccionAño = document.getElementById('elegir-año');
 const calendarioFull = document.getElementById('calendario-full');
 
+
+// HAGO ESTA VARIBALE GLOBAL-----------------------
+const horasSeleccionadas = [];
+
 // Inicializa los selectores de mes y año
 function initializeSelectors() {
     añadirMeses(); // Llenar el selector de meses
@@ -51,19 +55,49 @@ function añadirAños() {
 async function obtenerReservas() {
     console.log("Iniciando la obtención de datos...");
     try {
-        const response = await fetch('./php/obtener_reservas.php'); // Cambia la ruta si es necesario
+        const response = await fetch('../php/obtener_reservas.php'); // Cambia la ruta si es necesario
         if (!response.ok) throw new Error("Error al cargar las reservas");
+
         const reservas = await response.json(); // [{ fecha: "YYYY-MM-DD", hora_inicio: "HH:MM:SS", hora_fin: "HH:MM:SS" }]
+
+        // Verifica que las reservas tengan el formato esperado
+        if (!Array.isArray(reservas)) {
+            throw new Error("El formato de las reservas no es válido");
+        }
 
         console.log("Reservas obtenidas:", reservas); // Agrega esto para verificar los datos
 
+        // Función para generar los intervalos de una hora entre dos horas
+        const generarIntervalos = (horaInicio, horaFin) => {
+            const intervalos = [];
+            let currentHour = new Date(`1970-01-01T${horaInicio}:00`);
+            const endHour = new Date(`1970-01-01T${horaFin}:00`);
+
+            while (currentHour < endHour) {
+                const start = currentHour.toTimeString().substring(0, 5); // Hora de inicio
+                currentHour.setHours(currentHour.getHours() + 1); // Incrementamos una hora
+                const end = currentHour.toTimeString().substring(0, 5); // Hora de fin
+                intervalos.push(`${start} - ${end}`);
+            }
+
+            return intervalos;
+        };
+
         // Crear un nuevo formato con hora_inicio - hora_fin
         const reservasFormateadas = reservas.map(reserva => {
+            if (!reserva.fecha || !reserva.hora_inicio || !reserva.hora_fin) {
+                console.warn("Reserva incompleta, omitiendo:", reserva);
+                return null; // Ignora esta reserva si falta alguna propiedad
+            }
+
+            // Si la hora de inicio y fin son diferentes, generamos los intervalos de una hora
+            const intervalos = generarIntervalos(reserva.hora_inicio.substring(0, 5), reserva.hora_fin.substring(0, 5));
+
             return {
                 fecha: reserva.fecha,
-                horas: `${reserva.hora_inicio.substring(0, 5)} - ${reserva.hora_fin.substring(0, 5)}`
+                horas: intervalos
             };
-        });
+        }).filter(reserva => reserva !== null); // Filtra las reservas nulas (por datos incompletos)
 
         console.log("Reservas formateadas:", reservasFormateadas); // Verifica el formato
 
@@ -75,12 +109,11 @@ async function obtenerReservas() {
 }
 
 //GENERO EL CALENDARIO-------------------------------------------////////////////////////////////
-// Función para generar el calendario
 function generarCalendario(selectMes, selectAño) {
     calendarioFull.innerHTML = ''; // Limpia el calendario previo
     const nombreMes = new Date(selectAño, selectMes).toLocaleString('es-ES', { month: 'long', year: 'numeric' });
     tituloMesAño.textContent = nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
-     // nos dice en que dia de la semana cae el dia 1, lunes 1, martes 1, miercoles 2, jueves 3, viernes 4, sabado 5,domingo 0:
+    // nos dice en que dia de la semana cae el dia 1, lunes 1, martes 1, miercoles 2, jueves 3, viernes 4, sabado 5,domingo 0:
     const primerDiaMes = new Date(selectAño, selectMes, 1).getDay();
     // Una fumada:
     // select +1 es el mes que seleciona el usuario+1,
@@ -89,21 +122,29 @@ function generarCalendario(selectMes, selectAño) {
     const diasTotalMes = new Date(selectAño, selectMes + 1, 0).getDate();
     const initialOffset = (primerDiaMes + 6) % 7;
 
+    // nuevas variables para crear solo filas necesariasMODIFICACION PARA CREAR SOLO FILAS NECESARIAS
+    const diasTotales = initialOffset + diasTotalMes;
+    const semanasNecesarias = Math.ceil(diasTotales / 7);  // Calcula cuántas semanas son necesarias
+
     let currentDate = 1;
     const fechaActual = new Date();
     const diaActual = fechaActual.getDate();
     const mesActual = fechaActual.getMonth();
     const añoActual = fechaActual.getFullYear();
     const diaDeLaSemanaActual = fechaActual.getDay(); // 0 = Domingo, 1 = Lunes, ..., 6 = Sábado
-    const semanaActual = Math.floor((diaActual + primerDiaMes - 1) / 7); // Semana actual (0-5)
+    // const semanaActual = Math.floor((diaActual + primerDiaMes - 1) / 7); // Semana actual (0-5)
+    // cambios para buena asignacion de semana sugun su dia: CALCULAR LA SEMANA ACTUAL 
+    let semanaActual = -1;
 
-    // Generación de filas para el calendario
-    for (let weekIndex = 0; weekIndex < 6; weekIndex++) {
+
+
+    // Generación de filas para el calendario MODIFICACION PARA CREAR SOLO FILAS NECESARIAS
+    for (let weekIndex = 0; weekIndex < semanasNecesarias; weekIndex++) {
         const weekRow = document.createElement('tr');
 
         for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
             const celdaDia = document.createElement('td');
-
+            // MODIFICACION PARA CREAR SOLO FILAS NECESARIAS
             if (weekIndex === 0 && dayIndex < initialOffset) {
                 celdaDia.textContent = '';
             } else if (currentDate <= diasTotalMes) {
@@ -134,6 +175,16 @@ function generarCalendario(selectMes, selectAño) {
                     celdaDia.querySelector('span').style.textDecoration = 'line-through';
                     celdaDia.querySelector('span').style.color = 'gray'; // Opcional: cambia el color a gris
                     celdaDia.style.pointerEvents = 'none'; // Desactiva los clics en estos días
+                    celdaDia.style.backgroundColor = '#D5D0CF';
+                }
+                // Cambiar el fondo a rojo para sábados y domingos
+                if (dayIndex === 6 || dayIndex === 5) { // Domingo (6) o Sábado (5)
+                    celdaDia.style.backgroundColor = '#ffa5a3';
+                }
+                // CALCULAR LA SEMANA ACTUAL 
+                // Si el día actual es igual al día de la celda, asignamos esa fila como semana actual
+                if (currentDate === diaActual && selectMes === mesActual && selectAño === añoActual) {
+                    semanaActual = weekIndex;  // Establecer la semana actual según la fila
                 }
 
                 // Añadir evento de clic solo para días válidos
@@ -151,11 +202,18 @@ function generarCalendario(selectMes, selectAño) {
                         }
 
                         // Genera las horas si no se generaron previamente
+                        // ACTUALIZACION DE CODIGO PARA QUE SE CREEN LAS HORAS SOLO EN EL DIA ACTUAL Y POSTERIORES
                         if (!weekRow.dataset.horasGeneradas) {
                             Array.from(weekRow.children).forEach((celda, index) => {
                                 if (index >= 0 && index <= 4 && celda.textContent.trim() !== '') {
-                                    
-                                    crearRangoHoras(currentDate, selectMes, selectAño, celda);
+                                    // Obtener la fecha de la celda
+                                    const fechaCelda = new Date(selectAño, selectMes, parseInt(celda.textContent, 10));
+                                    const fechaNormalizada = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
+
+                                    // Generar horas solo si la fecha de la celda es igual o posterior a la fecha actual
+                                    if (fechaCelda >= fechaNormalizada) {
+                                        crearRangoHoras(parseInt(celda.textContent, 10), selectMes, selectAño, celda);
+                                    }
                                 }
                             });
                             weekRow.dataset.horasGeneradas = 'true'; // Marca que las horas han sido generadas
@@ -177,13 +235,20 @@ function generarCalendario(selectMes, selectAño) {
             weekRow.appendChild(celdaDia);
         }
 
-        calendarioFull.appendChild(weekRow);
+        // Solo agregamos la fila si contiene al menos un día válidoMODIFICACION PARA CREAR SOLO FILAS NECESARIAS
+        if (weekRow.querySelector('td:not(:empty)')) {
+            calendarioFull.appendChild(weekRow);
+        }
+        // Si hemos llegado al último día del mes, detenemos la creación de nuevas filas MODIFICACION PARA CREAR SOLO FILAS NECESARIAS
+        if (currentDate > diasTotalMes) {
+            break;
+        }
 
     }
-
-    // Solo generar horas si estamos en el mes y año actuales
-    if (selectMes === mesActual && selectAño === añoActual) {
-        generarHorasSemanaActual(selectMes, selectAño, semanaActual);
+    // CALCULAR LA SEMANA ACTUAL 
+    // 
+    if (semanaActual !== -1) {
+        generarHorasSemanaActual(selectMes, selectAño, semanaActual);  // Pasamos la semana correcta
     }
 }
 
@@ -299,7 +364,7 @@ function generarHorasSemanaActual(selectMes, selectAño, semanaActual) {
                     // Obtener la fecha de la celda
                     const diaCalendario = parseInt(cell.textContent.trim(), 10);
                     const fechaCelda = new Date(selectAño, selectMes, diaCalendario);
-            // REVISAR ESTO----
+                    // REVISAR ESTO----
                     if (fechaCelda < fechaNormalizada) {
                         // Si la fecha es anterior al día actual, elimina las horas si existen
                         limpiarHorasEnCelda(cell);
@@ -322,6 +387,70 @@ function limpiarHorasEnCelda(cell) {
     const horas = cell.querySelectorAll('.hora');
     horas.forEach(hora => hora.remove()); // Elimina todas las horas generadas en la celda
 }
+// FUNCION PARA VERIFICAR SI HAY HORAS ENTREMEDIAS DE LAS HORAS SELECCOINADA----------------------
+// Función para comprobar si hay alguna hora ocupada (con fondo rojo) FUNCIONA-----------------
+
+
+// COMPROBAR HORAS ENTREMEDIAS-----------COMPRUEBA SI HAY ALGUNA HORA RESERVADA CON SU COLOR ROJO ----------------------//////////
+
+function verificarHorasInterrumpidas(celda) {
+    // Obtener todos los elementos p con clase 'hora' dentro de la celda
+    const horas = Array.from(celda.querySelectorAll('p.hora'));
+
+    // Variables para almacenar los índices de las horas seleccionadas (azules)
+    let indiceAzul1 = -1;
+    let indiceAzul2 = -1;
+
+    // Recorrer todos los elementos
+    for (let i = 0; i < horas.length; i++) {
+        // Verificar si el fondo de la hora actual es azul
+        if (getComputedStyle(horas[i]).backgroundColor === 'rgb(0, 0, 255)') { // Azul
+            if (indiceAzul1 === -1) {
+                indiceAzul1 = i; // Guardamos el primer índice azul
+            } else {
+                indiceAzul2 = i; // Guardamos el segundo índice azul
+                break; // Ya encontramos dos azules, terminamos el recorrido
+            }
+        }
+    }
+
+    // Si tenemos dos horas azules, comprobar si hay una hora roja entre ellas
+    if (indiceAzul1 !== -1 && indiceAzul2 !== -1 && indiceAzul1 < indiceAzul2) {
+        // Ahora comprobamos si hay alguna hora roja entre estos dos índices
+        for (let i = indiceAzul1 + 1; i < indiceAzul2; i++) {
+            if (getComputedStyle(horas[i]).backgroundColor === 'rgb(255, 0, 0)') { // Rojo
+                console.log("¡Se ha encontrado una hora ocupada (roja) entre dos horas seleccionadas (azules)!");
+                alert("¡Las horas intermedias están ocupadas! Por favor, selecciona un rango sin interrupciones.");
+                return true; // Retornamos true si encontramos una hora roja entre las azules
+            }
+        }
+
+        // Si no se encuentra ninguna hora roja, pintar las horas intermedias de azul
+        for (let i = indiceAzul1 + 1; i < indiceAzul2; i++) {
+            // Simular el clic en cada una de las horas intermedias
+            const horaElement = horas[i];
+            horaElement.style.backgroundColor = 'blue';
+            horaElement.style.color = 'white'; // Mejorar visibilidad
+
+            // Agregar la hora al array de horas seleccionadas
+            const horaText = horaElement.textContent;
+            if (!horasSeleccionadas.includes(horaText)) {
+                horasSeleccionadas.push(horaText);
+            }
+
+            console.log(`Hora intermedia seleccionada: ${horaText}`);
+        }
+
+        console.log("Horas intermedias pintadas de azul y añadidas a la selección.");
+    }
+
+    console.log("No se ha encontrado una hora ocupada entre dos horas seleccionadas.");
+    return false;
+}
+
+
+
+
 // FUNCION PARA CREAR RANGO DE HORAS-----------------------------//////////////////////////////////////////////////
 async function crearRangoHoras(dia, mes, año, celda) {
     const horas = [
@@ -336,35 +465,98 @@ async function crearRangoHoras(dia, mes, año, celda) {
         "17:00 - 18:00"
     ];
 
-    // Aquí ya no obtenemos las reservas desde el servidor
-    // const reservas = await obtenerReservas(); 
 
-    // Formatear la fecha para la comparación
     const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
-    console.log("fecha formateado" + fechaSeleccionada);
-
-    // Crear las horas en el rango, sin necesidad de verificar si están ocupadas
+    console.log("Fecha formateada: " + fechaSeleccionada);
+    // Array para almacenar las horas seleccionadas
+    // HAGO ESTA VARIBALE GLOBAL-----------------------IMPORTANTE
+    // const horasSeleccionadas = [];
+    // Crear las horas en el rango
     horas.forEach(hora => {
         const horaElement = document.createElement('p');
         horaElement.textContent = hora;
         horaElement.classList.add('hora');
-
+        // Agregar evento de clic a cada hora
+        // TO FIXED: AL SELECCIONAR MAS DE 1 HORA, Y DESELECCIONAR , LA HORA QUE SE ENVIA COMO RESERVA NO ES LA CORRECTA
+        // EJ: SI SELECCIONO UN RANGO DE HORA DE 9:00 A 12:00 , Y DESELECCIONO DE 09:00-10:00,10:00-11:00, DEBERIA GUARDARSE EN LA BD LAS HORAS 11:00-12:00 
+        // FIXED funciona:
         // Agregar evento de clic a cada hora
         horaElement.addEventListener('click', () => {
-            // Cambia el color de fondo a azul al hacer clic
-            if (horaElement.style.backgroundColor === 'blue') {
-                horaElement.style.backgroundColor = ''; // Restaura el color original
-            } else {
-                horaElement.style.backgroundColor = 'blue'; // Cambia a azul
-            }
-            // Aquí puedes añadir la lógica para guardar la fecha y hora seleccionadas
-            const diaCelda = celda.dataset.fecha.split('-');
-            const diaSeleccionado = parseInt(diaCelda[2], 10);
-            const mesSeleccionado = parseInt(diaCelda[1], 10) - 1; // Ajusta porque meses son 0-index
-            const añoSeleccionado = parseInt(diaCelda[0], 10);
-            guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, hora);
-        });
 
+            // Si la hora ya está seleccionada, la removemos del array y restauramos el color
+            if (horaElement.style.backgroundColor === 'blue') {
+                horaElement.style.backgroundColor = ''; // Color original
+                // color de la letra, quitamos black, para que vuelva a su color por
+                horaElement.style.color = '';
+                const index = horasSeleccionadas.indexOf(hora);
+                if (index > -1) {
+                    horasSeleccionadas.splice(index, 1); // Elimina la hora del array
+                }
+            } else {
+                // Si no está seleccionada, la agregamos al array y cambiamos el color a azul
+                horaElement.style.backgroundColor = 'blue';
+                horaElement.style.color = 'white'; // Para mejorar visibilidad
+                horasSeleccionadas.push(hora);
+            }
+
+            console.log("Horas seleccionadas actualmente:", horasSeleccionadas);
+            // Verificar si hay al menos dos horas seleccionadas----------------------------------Y NO DEJA RESERVAR
+            if (horasSeleccionadas.length >= 2) {
+                // Verificar si las horas seleccionadas tienen interrumpidas Y MARCA EN AZUL LAS QUE NO TIENENE---
+                const interrumpidas = verificarHorasInterrumpidas(celda);
+
+                if (interrumpidas) {
+                    // Si se encontraron horas interrumpidas, restauramos el estilo de las horas seleccionadas
+                    // Revertir las horas seleccionadas (azules) a su color original
+                    horasSeleccionadas.forEach((hora) => {
+                        // Recorrer todos los elementos p.hora y buscar el que contiene el texto correspondiente
+                        const horaElements = celda.querySelectorAll('p.hora');
+                        horaElements.forEach((horaElement) => {
+                            if (horaElement.textContent === hora) {
+                                horaElement.style.backgroundColor = ''; // Restaurar color original
+                                horaElement.style.color = ''; // Restaurar color original
+                            }
+                        });
+                    });
+                    // Limpiar el array de horas seleccionadas
+                    horasSeleccionadas.length = 0;
+                    console.log("Selección de horas interrumpidas cancelada.");
+                    // PARA ELIMINAR LA INFORMACION EN FORMATO TEXTO----------------------
+                    eliminarFechaHoraSeleccionada();
+                    return; // Detener el proceso si hay interrumpidas
+
+                }
+            }
+
+            // Verificar si hay al menos una hora seleccionada
+            if (horasSeleccionadas.length > 0) {
+                // Extraer las horas de inicio y fin de las horas seleccionadas
+                const horasInicio = horasSeleccionadas.map(h => h.split(' - ')[0]); // ejemplo: ["13:00", "14:00"]
+                const horasFin = horasSeleccionadas.map(h => h.split(' - ')[1]);   // ejemplo: ["14:00", "15:00"]
+
+                // Encontrar la hora más temprana y la más tardía
+                const horaInicio = horasInicio.sort()[0]; // La más temprana
+                const horaFin = horasFin.sort().slice(-1)[0]; // La más tarde
+
+                console.log("Hora de inicio más temprana:", horaInicio);
+                console.log("Hora de fin más tardía:", horaFin);
+
+                const diaCelda = celda.dataset.fecha.split('-');
+                const diaSeleccionado = parseInt(diaCelda[2], 10);
+                const mesSeleccionado = parseInt(diaCelda[1], 10) - 1;
+                const añoSeleccionado = parseInt(diaCelda[0], 10);
+
+                guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, `${horaInicio} - ${horaFin}`);
+            } else {
+                // LLAMADA PARA ELIMINAR LOS CAMPOS CON LA FUNCION
+                eliminarFechaHoraSeleccionada();
+                console.log("No hay horas seleccionadas.");
+            }
+            // Llamar a la función para comprobar si hay horas ocupadas
+
+            // comprobarHorasOcupadas(celda);
+            // verificarHorasInterrumpidas(celda);
+        });
         celda.appendChild(horaElement);
     });
 }
@@ -407,9 +599,45 @@ function guardarFechaHoraSeleccionada(dia, mes, año, hora) {
     console.log("Fecha seleccionada:", fechaSeleccionada);
     console.log("Hora de inicio seleccionada:", horaInicio);
     console.log("Hora de fin seleccionada:", horaFin);
+    // mostrar fecha y horas seleccionada:
+    infoSeleccionada.textContent = `Fecha seleccionada: ${fechaSeleccionada} | Hora de inicio: ${horaInicio} | Hora de fin: ${horaFin}`;
 }
+// FUNICON PARA ELIMINAR LA INFORMACION ALMACENADA EN LOS CAMPOS FEHCA HORA INICIO HORA FIN:----------------------/////////////////////
+function eliminarFechaHoraSeleccionada() {
+    // Obtén los elementos de los inputs
+    const fechaInput = document.getElementById('fecha');
+    const horaInicioInput = document.getElementById('hora_inicio');
+    const horaFinInput = document.getElementById('hora_fin');
 
-// ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO A LA BASE DE DATOS------------------------------------------/////////////////////////
+    // Campos visibles para mostrar en el formulario MODIFICAR:
+    const fechaInputVisible = document.getElementById('fechaModificar');
+    const horaInicioInputVisible = document.getElementById('hora_inicioModificar');
+    const horaFinInputVisible = document.getElementById('hora_finModificar');
+
+    // Restaura los valores de los inputs a su estado original (vacíos o valores predeterminados)
+    fechaInput.value = '';
+    horaInicioInput.value = '';
+    horaFinInput.value = '';
+    // IMPRTANTE QUITAR ESTO -----------------
+    // Restaurar los valores en los campos visibles para el formulario MODIFICAR
+    // fechaInputVisible.value = '';
+    // horaInicioInputVisible.value = '';
+    // horaFinInputVisible.value = '';
+    // Limpiar la información visible en `infoSeleccionada` ----------------------------
+    const infoSeleccionada = document.getElementById('infoSeleccionada'); // Asegúrate de que el ID coincide
+    if (infoSeleccionada) {
+        infoSeleccionada.textContent = ''; // O establece un mensaje predeterminado si es necesario
+    }
+    // Consola para verificar que los valores fueron eliminados
+    console.log("Los valores de fecha y hora han sido eliminados.");
+    console.log("Fecha eliminada:", fechaInput.value);
+    console.log("Hora de inicio eliminada:", horaInicioInput.value);
+    console.log("Hora de fin eliminada:", horaFinInput.value);
+
+
+}
+// ENVIAR DATOS A LA BASE DE DATOS---------------------------------------------------------------////////////////////////////////////////////////////////-
+// ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO A LA BASE DE DATOS-----------------a-------------------------/////////////////////////
 // Utilizo API FETCH para enviar los datos al servidor sin recargar la página----------------
 formReserva.addEventListener('submit', function (event) {
     event.preventDefault(); // Evita el envío normal del formulario
@@ -421,6 +649,12 @@ formReserva.addEventListener('submit', function (event) {
     const fecha = document.getElementById('fecha').value; // La fecha que has guardado
     const horaInicio = document.getElementById('hora_inicio').value; // Hora de inicio
     const horaFin = document.getElementById('hora_fin').value; // Hora de fin
+    //  VERIFICA QUE LOS CAMPOS DE HORA INICO Y FIN TIENNE UN HORA SLEECIONADA--------IMPORTANTE
+    if (!horaInicio || !horaFin) {
+        // Si alguna de las horas no está seleccionada, mostramos una alerta
+        alert('Por favor, selecciona una hora de inicio y una hora de fin');
+        return; // Evita el envío del formulario
+    }
 
     // Creamos un objeto FormData para enviar los datos
     const formData = new FormData();
@@ -430,7 +664,7 @@ formReserva.addEventListener('submit', function (event) {
     formData.append('fecha', fecha);
     formData.append('hora_inicio', horaInicio);
     formData.append('hora_fin', horaFin);
-// ahora uso el documento enviar_correo para alamcenar y hacer la llamada a mi php email_config
+    // ahora uso el documento enviar_correo para alamcenar y hacer la llamada a mi php email_config
     // Envío de los datos al servidor
     fetch('./php/enviar_correo.php', {
         method: 'POST',
