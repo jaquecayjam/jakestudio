@@ -23,8 +23,13 @@ const calendarioFull = document.getElementById('calendario-full');
 
 
 // HAGO ESTA VARIBALE GLOBAL-----------------------
-const horasSeleccionadas = [];
+// const horasSeleccionadas = [];
+// PARA HACER COMPARACIO  DE FECHAS- NO DEJAR SELEECIONAR HORAS EN DIFERENTE DIAS-------------
+// let diaSeleccionadoAnterior = null;  // Variable global para almacenar el día seleccionado previamente
 
+let horasSeleccionadasPorDia = {};  // Objeto global que almacena las horas seleccionadas por día
+let diaSeleccionadoAnterior = null; // Variable para almacenar el día previamente seleccionado
+let horasSeleccionadas = []; // Variable global que almacena las horas seleccionadas
 // Inicializa los selectores de mes y año
 function initializeSelectors() {
     añadirMeses(); // Llenar el selector de meses
@@ -387,70 +392,64 @@ function limpiarHorasEnCelda(cell) {
     const horas = cell.querySelectorAll('.hora');
     horas.forEach(hora => hora.remove()); // Elimina todas las horas generadas en la celda
 }
-// FUNCION PARA VERIFICAR SI HAY HORAS ENTREMEDIAS DE LAS HORAS SELECCOINADA----------------------
-// Función para comprobar si hay alguna hora ocupada (con fondo rojo) FUNCIONA-----------------
-
-
 // COMPROBAR HORAS ENTREMEDIAS-----------COMPRUEBA SI HAY ALGUNA HORA RESERVADA CON SU COLOR ROJO ----------------------//////////
-
-function verificarHorasInterrumpidas(celda) {
-    // Obtener todos los elementos p con clase 'hora' dentro de la celda
+function verificarHorasInterrumpidas(celda, fechaSeleccionada) {
+    // Obtener todas las horas dentro de la celda
     const horas = Array.from(celda.querySelectorAll('p.hora'));
 
-    // Variables para almacenar los índices de las horas seleccionadas (azules)
-    let indiceAzul1 = -1;
-    let indiceAzul2 = -1;
+    // Obtener las horas seleccionadas para la fecha especificada (si existen)
+    const horasSeleccionadas = horasSeleccionadasPorDia[fechaSeleccionada] || [];
 
-    // Recorrer todos los elementos
+    // Buscar todos los índices de las horas seleccionadas (azules)
+    const indicesAzules = [];
+
     for (let i = 0; i < horas.length; i++) {
-        // Verificar si el fondo de la hora actual es azul
-        if (getComputedStyle(horas[i]).backgroundColor === 'rgb(0, 0, 255)') { // Azul
-            if (indiceAzul1 === -1) {
-                indiceAzul1 = i; // Guardamos el primer índice azul
-            } else {
-                indiceAzul2 = i; // Guardamos el segundo índice azul
-                break; // Ya encontramos dos azules, terminamos el recorrido
+        // Comprobar si el fondo de la hora es azul
+        if (getComputedStyle(horas[i]).backgroundColor === 'rgb(0, 0, 255)') {
+            indicesAzules.push(i); // Si es azul, agregar el índice al array
+        }
+    }
+
+    // Verificar si hay interrupciones (horas rojas) entre las horas seleccionadas
+    for (let i = 0; i < indicesAzules.length - 1; i++) {
+        const start = indicesAzules[i];
+        const end = indicesAzules[i + 1];
+
+        // Buscar horas rojas entre las horas seleccionadas
+        for (let j = start + 1; j < end; j++) {
+            // aqui hace la verificacion rojo
+            if (getComputedStyle(horas[j]).backgroundColor === 'rgb(255, 0, 0)') { // Rojo
+                console.log("¡Se encontró una hora ocupada entre las seleccionadas!");
+                alert("No puedes seleccionar un rango con horas ocupadas (rojas) intermedias.");
+                // IMPORTANTE PARA QUE DEJE SELECCIONAR OTRA HORA EN OTRO DIA DESPUES DE QUE ENCUTRE HORAS ROJAS
+                 diaSeleccionadoAnterior = null; // Permitir la selección en otro día
+                return true; // Bloquear acción si hay una hora roja en el medio
             }
         }
     }
 
-    // Si tenemos dos horas azules, comprobar si hay una hora roja entre ellas
-    if (indiceAzul1 !== -1 && indiceAzul2 !== -1 && indiceAzul1 < indiceAzul2) {
-        // Ahora comprobamos si hay alguna hora roja entre estos dos índices
-        for (let i = indiceAzul1 + 1; i < indiceAzul2; i++) {
-            if (getComputedStyle(horas[i]).backgroundColor === 'rgb(255, 0, 0)') { // Rojo
-                console.log("¡Se ha encontrado una hora ocupada (roja) entre dos horas seleccionadas (azules)!");
-                alert("¡Las horas intermedias están ocupadas! Por favor, selecciona un rango sin interrupciones.");
-                return true; // Retornamos true si encontramos una hora roja entre las azules
-            }
-        }
+    // Si no hay interrupciones, pintar las horas intermedias entre las horas azules
+    for (let i = 0; i < indicesAzules.length - 1; i++) {
+        const start = indicesAzules[i];
+        const end = indicesAzules[i + 1];
 
-        // Si no se encuentra ninguna hora roja, pintar las horas intermedias de azul
-        for (let i = indiceAzul1 + 1; i < indiceAzul2; i++) {
-            // Simular el clic en cada una de las horas intermedias
-            const horaElement = horas[i];
+        // Pintar de azul las horas intermedias
+        for (let j = start + 1; j < end; j++) {
+            const horaElement = horas[j];
             horaElement.style.backgroundColor = 'blue';
             horaElement.style.color = 'white'; // Mejorar visibilidad
 
-            // Agregar la hora al array de horas seleccionadas
+            // Agregar la hora seleccionada al array (si no está ya en él)
             const horaText = horaElement.textContent;
             if (!horasSeleccionadas.includes(horaText)) {
                 horasSeleccionadas.push(horaText);
             }
-
-            console.log(`Hora intermedia seleccionada: ${horaText}`);
         }
-
-        console.log("Horas intermedias pintadas de azul y añadidas a la selección.");
     }
 
-    console.log("No se ha encontrado una hora ocupada entre dos horas seleccionadas.");
-    return false;
+    console.log("Horas intermedias seleccionadas y pintadas correctamente.");
+    return false; // No hay problemas, todo ha ido bien
 }
-
-
-
-
 // FUNCION PARA CREAR RANGO DE HORAS-----------------------------//////////////////////////////////////////////////
 async function crearRangoHoras(dia, mes, año, celda) {
     const horas = [
@@ -465,51 +464,69 @@ async function crearRangoHoras(dia, mes, año, celda) {
         "17:00 - 18:00"
     ];
 
-
     const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
     console.log("Fecha formateada: " + fechaSeleccionada);
-    // Array para almacenar las horas seleccionadas
-    // HAGO ESTA VARIBALE GLOBAL-----------------------IMPORTANTE
-    // const horasSeleccionadas = [];
-    // Crear las horas en el rango
+
+    // Inicializa el array de horas seleccionadas para este día si no existe
+    if (!horasSeleccionadasPorDia[fechaSeleccionada]) {
+        horasSeleccionadasPorDia[fechaSeleccionada] = [];
+    }
+
+    // Recorrer las horas y crear los elementos visuales para cada hora
     horas.forEach(hora => {
         const horaElement = document.createElement('p');
         horaElement.textContent = hora;
         horaElement.classList.add('hora');
-        // Agregar evento de clic a cada hora
-        // TO FIXED: AL SELECCIONAR MAS DE 1 HORA, Y DESELECCIONAR , LA HORA QUE SE ENVIA COMO RESERVA NO ES LA CORRECTA
-        // EJ: SI SELECCIONO UN RANGO DE HORA DE 9:00 A 12:00 , Y DESELECCIONO DE 09:00-10:00,10:00-11:00, DEBERIA GUARDARSE EN LA BD LAS HORAS 11:00-12:00 
-        // FIXED funciona:
+
+        // Verificar si la hora está ya seleccionada visualmente para este día
+        if (horasSeleccionadasPorDia[fechaSeleccionada].includes(hora)) {
+            horaElement.style.backgroundColor = 'blue';  // Restaurar el color azul
+            horaElement.style.color = 'white';  // Para mejorar la visibilidad
+        }
+
         // Agregar evento de clic a cada hora
         horaElement.addEventListener('click', () => {
+            // Verificar si el día seleccionado es diferente al previamente seleccionado
+            // esto me esta afectando
+            if (diaSeleccionadoAnterior && dia !== diaSeleccionadoAnterior) {
+                alert('No se pueden seleccionar horas en diferentes días. Por favor, selecciona horas en el mismo día.');
+                return;  // Detener la ejecución si el día es diferente
+            }
+
+            // Si es el primer día seleccionado, guardamos el primer día
+            if (!diaSeleccionadoAnterior) {
+                diaSeleccionadoAnterior = dia;  // Guardamos el primer día seleccionado
+            }
 
             // Si la hora ya está seleccionada, la removemos del array y restauramos el color
             if (horaElement.style.backgroundColor === 'blue') {
                 horaElement.style.backgroundColor = ''; // Color original
-                // color de la letra, quitamos black, para que vuelva a su color por
-                horaElement.style.color = '';
-                const index = horasSeleccionadas.indexOf(hora);
+                horaElement.style.color = ''; // Color original
+                const index = horasSeleccionadasPorDia[fechaSeleccionada].indexOf(hora);
                 if (index > -1) {
-                    horasSeleccionadas.splice(index, 1); // Elimina la hora del array
+                    horasSeleccionadasPorDia[fechaSeleccionada].splice(index, 1); // Elimina la hora del array para este día
                 }
             } else {
                 // Si no está seleccionada, la agregamos al array y cambiamos el color a azul
                 horaElement.style.backgroundColor = 'blue';
                 horaElement.style.color = 'white'; // Para mejorar visibilidad
-                horasSeleccionadas.push(hora);
+                horasSeleccionadasPorDia[fechaSeleccionada].push(hora); // Agregamos la hora al array para este día
             }
 
-            console.log("Horas seleccionadas actualmente:", horasSeleccionadas);
-            // Verificar si hay al menos dos horas seleccionadas----------------------------------Y NO DEJA RESERVAR
-            if (horasSeleccionadas.length >= 2) {
-                // Verificar si las horas seleccionadas tienen interrumpidas Y MARCA EN AZUL LAS QUE NO TIENENE---
-                const interrumpidas = verificarHorasInterrumpidas(celda);
+            console.log("Horas seleccionadas actualmente para el día:", horasSeleccionadasPorDia[fechaSeleccionada]);
+
+            // Si no hay ninguna hora seleccionada para ese día, restablecemos el día seleccionado anterior
+            if (horasSeleccionadasPorDia[fechaSeleccionada].length === 0) {
+                diaSeleccionadoAnterior = null; // Permitir la selección en otro día
+            }
+
+            // Verificar si hay al menos dos horas seleccionadas
+            if (horasSeleccionadasPorDia[fechaSeleccionada].length >= 2) {
+                const interrumpidas = verificarHorasInterrumpidas(celda, fechaSeleccionada);
 
                 if (interrumpidas) {
-                    // Si se encontraron horas interrumpidas, restauramos el estilo de las horas seleccionadas
-                    // Revertir las horas seleccionadas (azules) a su color original
-                    horasSeleccionadas.forEach((hora) => {
-                        // Recorrer todos los elementos p.hora y buscar el que contiene el texto correspondiente
+                    // Restaurar el estado de las horas seleccionadas si se cancela
+                    horasSeleccionadasPorDia[fechaSeleccionada].forEach((hora) => {
                         const horaElements = celda.querySelectorAll('p.hora');
                         horaElements.forEach((horaElement) => {
                             if (horaElement.textContent === hora) {
@@ -518,21 +535,18 @@ async function crearRangoHoras(dia, mes, año, celda) {
                             }
                         });
                     });
-                    // Limpiar el array de horas seleccionadas
-                    horasSeleccionadas.length = 0;
+                    horasSeleccionadasPorDia[fechaSeleccionada].length = 0;
                     console.log("Selección de horas interrumpidas cancelada.");
-                    // PARA ELIMINAR LA INFORMACION EN FORMATO TEXTO----------------------
                     eliminarFechaHoraSeleccionada();
-                    return; // Detener el proceso si hay interrumpidas
-
+                    return; // Detener el proceso si hay horas interrumpidas
                 }
             }
 
             // Verificar si hay al menos una hora seleccionada
-            if (horasSeleccionadas.length > 0) {
+            if (horasSeleccionadasPorDia[fechaSeleccionada].length > 0) {
                 // Extraer las horas de inicio y fin de las horas seleccionadas
-                const horasInicio = horasSeleccionadas.map(h => h.split(' - ')[0]); // ejemplo: ["13:00", "14:00"]
-                const horasFin = horasSeleccionadas.map(h => h.split(' - ')[1]);   // ejemplo: ["14:00", "15:00"]
+                const horasInicio = horasSeleccionadasPorDia[fechaSeleccionada].map(h => h.split(' - ')[0]);
+                const horasFin = horasSeleccionadasPorDia[fechaSeleccionada].map(h => h.split(' - ')[1]);
 
                 // Encontrar la hora más temprana y la más tardía
                 const horaInicio = horasInicio.sort()[0]; // La más temprana
@@ -541,27 +555,16 @@ async function crearRangoHoras(dia, mes, año, celda) {
                 console.log("Hora de inicio más temprana:", horaInicio);
                 console.log("Hora de fin más tardía:", horaFin);
 
-                const diaCelda = celda.dataset.fecha.split('-');
-                const diaSeleccionado = parseInt(diaCelda[2], 10);
-                const mesSeleccionado = parseInt(diaCelda[1], 10) - 1;
-                const añoSeleccionado = parseInt(diaCelda[0], 10);
-
-                guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, `${horaInicio} - ${horaFin}`);
+                guardarFechaHoraSeleccionada(dia, mes, año, `${horaInicio} - ${horaFin}`);
             } else {
-                // LLAMADA PARA ELIMINAR LOS CAMPOS CON LA FUNCION
                 eliminarFechaHoraSeleccionada();
                 console.log("No hay horas seleccionadas.");
             }
-            // Llamar a la función para comprobar si hay horas ocupadas
-
-            // comprobarHorasOcupadas(celda);
-            // verificarHorasInterrumpidas(celda);
         });
+
         celda.appendChild(horaElement);
     });
 }
-
-
 
 
 // FUNCION LIMPIAR HORAS EN LAS FILAS-----------------------------/////////////////////////
