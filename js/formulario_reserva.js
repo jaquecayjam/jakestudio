@@ -682,6 +682,8 @@ formReserva.addEventListener('submit', function (event) {
         .then(data => {
             console.log(data); // Aquí puedes ver el mensaje de éxito o error
             alert(data); // Mostrar un mensaje al usuario
+                        // Recargar la página después de mostrar el mensaje
+            window.location.reload();
         })
         .catch(error => {
             console.error('Error:', error); // Manejar errores
