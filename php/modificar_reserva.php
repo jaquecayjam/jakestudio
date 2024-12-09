@@ -1,20 +1,4 @@
 <?php
-// pendiente cambiar 
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
-// // Configuración de la base de datos
-// $servername = "ww";
-// $username = "ww";
-// $password = "ww";
-// $dbname = "ww";
-
-// // Crear conexión
-// $conn = new mysqli($servername, $username, $password, $dbname);
-
-// // comprobar si la conexion funciona
-// if ($conn->connect_error) {
-//     die("Conexión fallida: " . $conn->connect_error);
-// }
 // LLAMADA SOLO AL ARCHIVO PHP_CONENCTION:
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -22,16 +6,21 @@ ini_set('display_errors', 1);
 // Incluir archivo de conexión
 require 'db_connection.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_POST['id'];
 
-    // Preparamos las variables con valores nulos por defecto
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Recibimos los datos del formulario
+    $id = $_POST['id'];
     $nombre = isset($_POST['nombre']) ? $_POST['nombre'] : null;
     $apellido = isset($_POST['apellido']) ? $_POST['apellido'] : null;
     $correo = isset($_POST['correo']) ? $_POST['correo'] : null;
     $fecha = isset($_POST['fecha']) ? $_POST['fecha'] : null;
     $hora_inicio = isset($_POST['hora_inicio']) ? $_POST['hora_inicio'] : null;
     $hora_fin = isset($_POST['hora_fin']) ? $_POST['hora_fin'] : null;
+
+    // Recibimos los datos de la nueva reserva seleccionada
+   $horaInicioSeleccionada = $_POST['hora_ranterior'] ?? '';
+    $horaFinSeleccionada = $_POST['horafin_ranterior'] ??'';
+    $fechaRanterior = $_POST['fecha_Ranterior'] ??'';
 
     // Preparamos la consulta de actualización
     $query = "UPDATE reservas SET
@@ -48,7 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("ssssssi", $nombre, $apellido, $correo, $fecha, $hora_inicio, $hora_fin, $id);
 
     if ($stmt->execute()) {
-        echo "Reserva modificada exitosamente";
+        // Llamamos al archivo de envío de correo y le pasamos los datos adicionales
+        include 'email_conf_modificar.php';
+        echo "Reserva guardada con éxito.";
     } else {
         echo "Error al modificar la reserva: " . $stmt->error;
     }
@@ -56,4 +47,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->close();
     $conn->close();
 }
+
 ?>

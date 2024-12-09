@@ -43,6 +43,7 @@
 <!-- ELIMIANOMOS action="../php/reserva.php" method="POST" PORQUE PUEDE CAUSAR CONFLICTO YA QUE UTLIZAMOS FETCH EN NUESTRO JS -->
 <form id="formularioReserva" style="display: none;">
     <h3>Introduce tus datos</h3>
+    <p id="infoSeleccionada"></p>
     <input type="text" id="nombre" placeholder="Nombre">
     <input type="text" id="apellido" placeholder="Apellido">
     <input type="email" id="correo" placeholder="Correo electrónico">
@@ -55,7 +56,7 @@
 
 <!-- FORMULARIO MODIFICAR RESERVA -->
 <!-- FORMULARIO MODIFICAR RESERVA -->
-<form id="formularioModificarReserva" action="../php/modificar_reserva.php" method="POST" style="display: none;">
+<form id="formularioModificarReserva" style="display: none;">
     <h3>Modificar Reserva</h3>
 
     <!-- Mostrar información de la reserva seleccionada -->
@@ -65,6 +66,12 @@
 
     <!-- Campo oculto para enviar el ID de la reserva seleccionada -->
     <input type="hidden" name="id" id="idReservaInput">
+     <!-- Campo oculto para enviar datos reserva anterior  -->
+     <input type="hidden" name="nombre_ranterior" id="nombReserP">
+     <input type="hidden" name="hora_ranterior" id="horaRanterior">
+     <input type="hidden" name="horafin_ranterior" id="horafinRanterior">
+     <input type="hidden" name="fecha_Ranterior" id="fechaRanterior">
+    <h3>Nueva Reserva</h3>
 
     <!-- Campos para modificar los datos -->
     <input type="text" name="nombre" id="nombreModificar" placeholder="Nombre" />
@@ -107,7 +114,7 @@
 </div>
 
      
-    <script src="../js/admin2.js"></script>
+    <script src="../js/admin.js"></script>
 
     <a href="logout.php">Cerrar sesión</a>
     <!-- <script src="./js/scroll-estudio.js"></script>  -->
