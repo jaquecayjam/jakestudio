@@ -28,6 +28,11 @@ let correoReservaSeleccionada = null;
 let fechaReservaSeleccionada = null;
 
 
+// VARIBLAE PARA HABILITAR HORAS ROJAS Y DEHABILITARLAS LLAMADA EN 
+// TOGGLEhORASrOJAS EN BOTON AÑADIR RESERVAS, BOTON CANCELAR,MARCARHORASOCUPADAS Y EN DONDE LE AÑADO EL EVENTO CLIC A LAS CELDAS (GENERARCALENDARIO)
+let deshabilitarHorasRojas = false; // Por defecto, las horas rojas están habilitadas
+
+
 
 
 // Inicializa los selectores de mes y año
@@ -221,6 +226,8 @@ function generarCalendario(selectMes, selectAño) {
                         const diasYHoras = extraerDiaYHoras(weekRow);
                         console.log(diasYHoras); // Ver en la consola las fechas y horas extraídas
                         marcarHorasOcupadas(weekRow);
+                        // Llama a toggleHorasRojas para aplicar el estado de deshabilitación según la bandera IMPORTANTANTE!!
+                         toggleHorasRojas();
                     });
                 }
 
@@ -299,7 +306,14 @@ async function compararReservasConCalendario(semanaFila) {
 
     return horasOcupadas;
 }
-
+// FUNCINOA BANDERAS----------------------//////////////
+function toggleHorasRojas() {
+    document.querySelectorAll('.hora').forEach(horaElement => {
+        if (horaElement.style.backgroundColor === 'red') {
+            horaElement.style.pointerEvents = deshabilitarHorasRojas ? 'none' : 'auto';
+        }
+    });
+}
 
 // FUNCION PARA MARCAR LOS DIAS QUE COINCIDEN EN ROJO Y  AL PULSAR Y AÑADIRLE LA ID, YA QUE NO LA TIENE, Y ASI ELIMINARLA CON POR ID--------------------//////////////////////////
 async function marcarHorasOcupadas(semanaFila) {
@@ -376,6 +390,8 @@ async function marcarHorasOcupadas(semanaFila) {
             }
         }
     });
+      // Aplicar el estado global de las horas rojas IMPORTANTE!!
+    toggleHorasRojas();
 }
 
 // FUNCION PARA CREAR LAS HORAS EN LA SEMANA ACTUAL --------------------------------/////////////////////////
@@ -461,7 +477,6 @@ function verificarHorasInterrumpidas(celda) {
 
 
 // FUNCION PARA CREAR RANGO DE HORAS-----------------------------//////////////////////////////////////////////////
-
 async function crearRangoHoras(dia, mes, año, celda) {
     const horas = [
         "09:00 - 10:00",
@@ -477,93 +492,112 @@ async function crearRangoHoras(dia, mes, año, celda) {
 
     const fechaSeleccionada = `${año}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
     console.log("Fecha formateada: " + fechaSeleccionada);
-    // Array para almacenar las horas seleccionadas
-    // const horasSeleccionadas = [];
-    // Crear las horas en el rango
-    horas.forEach(hora => {
-        const horaElement = document.createElement('p');
-        horaElement.textContent = hora;
-        horaElement.classList.add('hora');
-        // Agregar evento de clic a cada hora
-        // TO FIXED: AL SELECCIONAR MAS DE 1 HORA, Y DESELECCIONAR , LA HORA QUE SE ENVIA COMO RESERVA NO ES LA CORRECTA
-        // EJ: SI SELECCIONO UN RANGO DE HORA DE 9:00 A 12:00 , Y DESELECCIONO DE 09:00-10:00,10:00-11:00, DEBERIA GUARDARSE EN LA BD LAS HORAS 11:00-12:00 
-        // FIXED funciona:
-        // Agregar evento de clic a cada hora
-        horaElement.addEventListener('click', () => {
-            console.log("ESTOS ES DE CREAR RANGOS HORAS---***********--------")
-            // Si la hora ya está seleccionada, la removemos del array y restauramos el color
-            if (horaElement.style.backgroundColor === 'blue') {
-                horaElement.style.backgroundColor = ''; // Color original
-                horaElement.style.color = '';
-                const index = horasSeleccionadas.indexOf(hora);
-                if (index > -1) {
-                    horasSeleccionadas.splice(index, 1); // Elimina la hora del array
-                }
-            } else {
-                // Si no está seleccionada, la agregamos al array y cambiamos el color a azul
-                horaElement.style.backgroundColor = 'blue';
-                horaElement.style.color = 'white'; // Para mejorar visibilidad
-                horasSeleccionadas.push(hora);
-            }
-            console.log("Horas seleccionadas actualmente:------------------", horasSeleccionadas);
-            console.log("ESTOS ES DE CREAR RANGOS HORAS----**********-------")
-            if (horasSeleccionadas.length >= 2) {
-                // Verificar si las horas seleccionadas tienen interrumpidas Y MARCA EN AZUL LAS QUE NO TIENENE---
-                const interrumpidas = verificarHorasInterrumpidas(celda);
 
-                if (interrumpidas) {
-                    // Si se encontraron horas interrumpidas, restauramos el estilo de las horas seleccionadas
-                    // Revertir las horas seleccionadas (azules) a su color original
-                    horasSeleccionadas.forEach((hora) => {
-                        // Recorrer todos los elementos p.hora y buscar el que contiene el texto correspondiente
-                        const horaElements = celda.querySelectorAll('p.hora');
-                        horaElements.forEach((horaElement) => {
-                            if (horaElement.textContent === hora) {
-                                horaElement.style.backgroundColor = ''; // Restaurar color original
-                                horaElement.style.color = ''; // Restaurar color original
-                            }
-                        });
+horas.forEach(hora => {
+    const horaElement = document.createElement('p');
+    horaElement.textContent = hora;
+    horaElement.classList.add('hora');
+
+    horaElement.addEventListener('click', () => {
+        console.log("ESTOS ES DE CREAR RANGOS HORAS---***********--------");
+
+        // Si la hora ya está seleccionada, la removemos del array y restauramos el color
+        if (horaElement.style.backgroundColor === 'blue') {
+            horaElement.style.backgroundColor = ''; // Color original
+            horaElement.style.color = '';
+        } else {
+            // Si no está seleccionada, la agregamos y cambiamos el color a azul
+            horaElement.style.backgroundColor = 'blue';
+            horaElement.style.color = 'white'; // Mejor visibilidad
+        }
+
+        // Obtener horas seleccionadas dinámicamente
+        const horasSeleccionadas = Array.from(
+            document.querySelectorAll('p.hora[style="background-color: blue; color: white;"]')
+        );
+
+        // Verificar si hay al menos dos horas seleccionadas
+        if (horasSeleccionadas.length >= 2) {
+            // Verificar si las horas seleccionadas tienen interrumpidas
+            const interrumpidas = verificarHorasInterrumpidas(celda);
+
+            if (interrumpidas) {
+                // Si se encontraron horas interrumpidas, restauramos el estilo de las horas seleccionadas
+                horasSeleccionadas.forEach((horaSel) => {
+                    // Recorrer todos los elementos p.hora y buscar el que contiene el texto correspondiente
+                    const horaElements = celda.querySelectorAll('p.hora');
+                    horaElements.forEach((horaElement) => {
+                        if (horaElement.textContent === horaSel.textContent) {
+                            horaElement.style.backgroundColor = ''; // Restaurar color original
+                            horaElement.style.color = ''; // Restaurar color original
+                        }
                     });
-                    // Limpiar el array de horas seleccionadas
-                    horasSeleccionadas.length = 0;
-                    console.log("Selección de horas interrumpidas cancelada.");
-                    // PARA ELIMINAR LA INFORMACION EN FORMATO TEXTO----------------------
-                    eliminarFechaHoraSeleccionada();
-                    return; // Detener el proceso si hay interrumpidas
+                });
 
-                }
-            }
+                // Limpiar el array de horas seleccionadas
+                horasSeleccionadas.length = 0;
+                console.log("Selección de horas interrumpidas cancelada.");
 
-            // Verificar si hay al menos una hora seleccionada
-            if (horasSeleccionadas.length > 0) {
-                // Extraer las horas de inicio y fin de las horas seleccionadas
-                const horasInicio = horasSeleccionadas.map(h => h.split(' - ')[0]); // ejemplo: ["13:00", "14:00"]
-                const horasFin = horasSeleccionadas.map(h => h.split(' - ')[1]);   // ejemplo: ["14:00", "15:00"]
-
-                // Encontrar la hora más temprana y la más tardía
-                const horaInicio = horasInicio.sort()[0]; // La más temprana
-                const horaFin = horasFin.sort().slice(-1)[0]; // La más tarde
-                console.log("ESTOS ES DE CREAR RANGOS HORAS----********-------")
-                console.log("Hora de inicio más temprana:", horaInicio);
-                console.log("Hora de fin más tardía:", horaFin);
-                console.log("ESTOS ES DE CREAR RANGOS HORAS-------********----")
-                const diaCelda = celda.dataset.fecha.split('-');
-                const diaSeleccionado = parseInt(diaCelda[2], 10);
-                const mesSeleccionado = parseInt(diaCelda[1], 10) - 1;
-                const añoSeleccionado = parseInt(diaCelda[0], 10);
-
-                guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado, añoSeleccionado, `${horaInicio} - ${horaFin}`);
-            } else {
-                // LLAMADA PARA ELIMINAR LOS CAMPOS CON LA FUNCION
+                // Eliminar la información en formato texto
                 eliminarFechaHoraSeleccionada();
-
-                console.log("No hay horas seleccionadas.---------------------------");
-                console.log("ESTOS ES DE CREAR RANGOS HORAS---*******--------")
+                return; // Detener el proceso si hay interrumpidas
             }
-        });
-        celda.appendChild(horaElement);
+        }
+
+        // Verificar si hay al menos una hora seleccionada
+        if (horasSeleccionadas.length > 0) {
+            const fechas = [];
+            const rangos = [];
+
+            horasSeleccionadas.forEach(horaSel => {
+                // Obtener el td padre de cada hora seleccionada
+                const tdPadre = horaSel.closest('td');
+                if (tdPadre && tdPadre.dataset.fecha) {
+                    const fecha = tdPadre.dataset.fecha;
+                    if (!fechas.includes(fecha)) {
+                        fechas.push(fecha); // Evitar duplicados
+                    }
+
+                    rangos.push(horaSel.textContent); // Agregar el rango de la hora
+                }
+            });
+
+            // Encontrar las horas más tempranas y tardías dentro del rango
+            const horasInicio = rangos.map(h => h.split(' - ')[0]); // Ej: ["13:00", "14:00"]
+            const horasFin = rangos.map(h => h.split(' - ')[1]);   // Ej: ["14:00", "15:00"]
+
+            const horaInicio = horasInicio.sort()[0]; // La más temprana
+            const horaFin = horasFin.sort().slice(-1)[0]; // La más tardía
+
+            console.log("Hora de inicio más temprana:", horaInicio);
+            console.log("Hora de fin más tardía:", horaFin);
+            console.log("Fechas seleccionadas:", fechas);
+
+            // Guardar las fechas y rangos seleccionados
+            fechas.forEach(fecha => {
+       // Descomponer la fecha en año, mes y día
+    const partesFecha = fecha.split('-'); // Esto devuelve un array con [año, mes, día]
+    
+    const añoSeleccionado = Number(partesFecha[0]); // Convertir el año a número
+    const mesSeleccionado = Number(partesFecha[1]); // Convertir el mes a número
+    const diaSeleccionado = Number(partesFecha[2]); // Convertir el día a número
+    
+    // Llamar a la función para guardar la fecha con el formato adecuado
+    // Restamos 1 al mes porque en JavaScript los meses son de 0 a 11
+    guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado - 1, añoSeleccionado, `${horaInicio} - ${horaFin}`);
+
+            });
+        } else {
+            // Llamada para eliminar los campos si no hay horas seleccionadas
+            eliminarFechaHoraSeleccionada();
+            console.log("No hay horas seleccionadas.---------------------------");
+        }
     });
+
+    celda.appendChild(horaElement);
+});
 }
+
 
 // EXTRAER CON ESTA FUNCION AL HACER CLICK EN UN RANGO DE HORA PARA PANEL ADMIN
 // esta funcion me da el resultado por consola
@@ -682,6 +716,30 @@ function eliminarFechaHoraSeleccionada() {
     console.log("Hora de inicio eliminada:", horaInicioInput.value);
     console.log("Hora de fin eliminada:", horaFinInput.value);
 }
+// FUNCION PARA AÑADIR CON BOTON RESERVAD EN LA BASDE DE DATOS------------///////////
+//AÑADIR RESERVA AL HACER CLICK, MUESTRA EL FORMULARIO:
+document.getElementById('añadirReserva').addEventListener('click', function () {
+    // ocultar formulario añadir
+    ocultarFormulario();
+    document.getElementById('formularioReserva').style.display = 'block';
+    //     //REVIASARRRRRR
+    //  Deshabilitar los clics en las horas ocupadas
+    // document.querySelectorAll('.hora').forEach(horaElement => {
+    //     // Verificar si el fondo de la hora es rojo (ocupada)
+    //     if (horaElement.style.backgroundColor === 'red') {
+    //         // Deshabilitar el clic sobre este elemento
+    //         horaElement.style.pointerEvents = 'none';
+    //         // horaElement.style.opacity = '0.5'; // Opcional: cambiar la opacidad para indicar que está deshabilitado
+    //     }
+    // });
+
+
+        // Actualizar la bandera para deshabilitar horas rojas
+    deshabilitarHorasRojas = true;
+
+    // Deshabilitar las horas rojas IMPORTANTE!!!
+    toggleHorasRojas();
+});
 // ENVIAR DATOS A LA BASE DE DATOS---------------------------------------------------------------////////////////////////////////////////////////////////-
 // ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO AÑADIR RESERVA A LA BASE DE DATOS----
 // Utilizo API FETCH para enviar los datos al servidor sin recargar la página----------------ME QUEDO AQUIIIIIII REVISAR
@@ -725,7 +783,7 @@ formReserva.addEventListener('submit', function (event) {
         .then(data => {
             console.log(data); // Aquí puedes ver el mensaje de éxito o error
             alert(data); // Mostrar un mensaje al usuario
-             // Recargar la página después de mostrar el mensaje
+            // Recargar la página después de mostrar el mensaje
             window.location.reload();
         })
         .catch(error => {
@@ -733,6 +791,43 @@ formReserva.addEventListener('submit', function (event) {
             alert('Error al enviar la solicitud');
         });
 });
+
+
+// Función para el botón de "Cancelar" (para el nuevo botón)
+
+document.getElementById('cancelarR').addEventListener('click', function () {
+    console.log('Cancelando la selección de horas.');
+
+    // Restaurar horas seleccionadas a su estado original
+    const horasSeleccionadasElementos = document.querySelectorAll('.hora[style="background-color: blue; color: white;"]');
+    horasSeleccionadasElementos.forEach(horaElemento => {
+        horaElemento.style.backgroundColor = ''; // Restaurar color original
+        horaElemento.style.color = '';          // Restaurar texto original
+    });
+
+    // Actualizar la bandera para habilitar horas rojas
+    deshabilitarHorasRojas = false;
+
+    // Habilitar las horas rojas IMPORTANTE!!
+    toggleHorasRojas();
+
+    // Ocultar el formulario y restablecerlo
+    const formulario = document.getElementById('formularioReserva');
+    if (formulario) {
+        formulario.style.display = 'none';
+        formulario.reset();
+    }
+
+    // Limpiar variables globales si es necesario
+    idReservaSeleccionada = null;
+    nombreReservaSeleccionada = null;
+    horaInicioSeleccionada = null;
+    horaFinSeleccionada = null;
+    eliminarFechaHoraSeleccionada();
+
+    console.log('Formulario cancelado y estado de clic restaurado.');
+});
+
 
 // POSIBLE ELIMINACION PERO SOLO EN ADMIN2------
 slccionMes.addEventListener('change', (event) => {
@@ -778,7 +873,7 @@ document.getElementById('eliminarReserva').addEventListener('click', async funct
             alert("Reserva eliminada exitosamente.");
             // Aquí puedes actualizar la vista para reflejar el cambio sin recargar
             idReservaSeleccionada = null;
-             // Recargar la página después de mostrar el mensaje
+            // Recargar la página después de mostrar el mensaje
             window.location.reload();
         } else {
             alert("Hubo un problema al eliminar la reserva.");
@@ -788,13 +883,7 @@ document.getElementById('eliminarReserva').addEventListener('click', async funct
         alert("Error al intentar eliminar la reserva.");
     }
 });
-// FUNCION PARA AÑADIR CON BOTON RESERVAD EN LA BASDE DE DATOS------------///////////
-//AÑADIRRESERVA AL HACER CLICK, MUESTRA EL FORMULARIO:
-document.getElementById('añadirReserva').addEventListener('click', function () {
-    // ocultar formulario añadir
-    ocultarFormulario();
-    document.getElementById('formularioReserva').style.display = 'block';
-});
+
 // FUNCION PARA MODIFICAR RESERVA---------------------////////////
 
 // Función para mostrar el formulario con los datos de la reserva seleccionada
@@ -899,7 +988,7 @@ document.getElementById('formularioModificarReserva').addEventListener('submit',
     formData.append('fecha_Ranterior', document.getElementById('fechaRanterior').value);
 
     // Enviar los datos al servidor
-    fetch('../php/modificar_reserva.php', {
+    fetch('../php/modificar_reserva_dos.php', {
         method: 'POST',
         body: formData,
     })
@@ -915,3 +1004,53 @@ document.getElementById('formularioModificarReserva').addEventListener('submit',
             alert('Error al enviar la solicitud');
         });
 });
+
+// esyto vaaa
+document.getElementById('cancelarReserva').addEventListener('click', async function () {
+    console.log('Cancelando la selección de horas.');
+
+    // Obtener todas las celdas que contienen las horas en la tabla
+    const horas = document.querySelectorAll('#calendarioFull .hora');
+
+    // Iterar sobre cada hora para restaurar su estado original
+    horas.forEach(horaElemento => {
+        // Si el estilo de fondo es azul (seleccionado) y contiene "Ocupada por"
+        if (horaElemento.style.backgroundColor === 'blue' && horaElemento.textContent.includes('Ocupada por')) {
+            // Restaurar al fondo rojo (ocupado)
+            horaElemento.style.backgroundColor = 'red';
+            horaElemento.style.color = 'white';
+        }
+        // Si el estilo de fondo es azul (seleccionado) y no está ocupada
+        else if (horaElemento.style.backgroundColor === 'blue') {
+            // Restaurar al fondo original (sin fondo)
+            horaElemento.style.backgroundColor = '';
+            horaElemento.style.color = '';
+        }
+        // Si no tiene fondo (estilo vacío), verificar si está ocupada y restaurar al fondo rojo
+        else if (!horaElemento.style.backgroundColor && horaElemento.textContent.includes('Ocupada por')) {
+            horaElemento.style.backgroundColor = 'red'; // Restaurar al rojo para horas ocupadas
+            horaElemento.style.color = 'white'; // Cambiar texto a blanco
+        }
+    });
+
+    // Limpiar el array de horas seleccionadas
+    horasSeleccionadas.length = 0;
+
+    // Ocultar y limpiar el formulario de modificación
+    const formulario = document.getElementById('formularioModificarReserva');
+    if (formulario) {
+        formulario.style.display = 'none';
+        formulario.reset(); // Limpiar el formulario
+    }
+
+    // Vaciar las variables globales relacionadas con la selección
+    idReservaSeleccionada = null;
+    nombreReservaSeleccionada = null;
+    horaInicioSeleccionada = null;
+    horaFinSeleccionada = null;
+    eliminarFechaHoraSeleccionada();
+
+    console.log('Selección de horas cancelada, formulario restablecido, y colores restaurados.');
+});
+
+
