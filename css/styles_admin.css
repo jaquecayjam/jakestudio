@@ -1,7 +1,46 @@
 body{
-    color: white;
+    background-color: #a12929;
+    height: 80vh;
+    
 }
-/* Estilos general donde modifico calendario */
+/* estilo menu ------------------*/
+nav {
+    
+    background-color: black;
+    padding: 10px;    
+    border: 2px solid ;
+    border-color: white;
+    box-sizing: border-box; /* para que el borde derecho no desaparezca */
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 50px;
+    display: flex; /* Para hacer el menú horizontal */
+    justify-content: flex-end; /* Para alinear el contenido a la derecha */
+    
+}
+/* separacion entre lo elementos del menu */
+nav ul li {
+    margin-left: 50px;
+    
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+/* Estilos generales del calendario */
 #calendario-container {
     max-width: 900px;
     margin: 20px auto;
@@ -10,10 +49,15 @@ body{
 }
 
 #tituloMesAño {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
+    margin-top: 2em;
+    background-color: #000;       
+    padding: 1em;                   
+    font-size: 20px;                 
+    color: white;                   
+    text-align: center;            
+    border-radius: 5px;          
 }
+
 
 select {
     margin: 10px;
@@ -22,6 +66,14 @@ select {
 }
 
 /* Estilo de la tabla del calendario */
+thead th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 0;
+    border-radius: 4px 4px 0 0;
+    font-size: 14px;
+}
+
 #calendarioFull {
     width: 100%;
     border-collapse: collapse;
@@ -30,27 +82,26 @@ select {
 }
 
 #calendarioFull th, #calendarioFull td {
-    width: 14%;
-    height: 80px;
+  padding: 8px;
     text-align: center;
-    vertical-align: middle;
-    border: 1px solid #115c11;
-    font-size: 18px;
+    border: 1px solid #ddd;
+    cursor: pointer;
 }
 
-/* Estilo fin de semana (sábado y domingo) */
+/* Estilo para los días del fin de semana (sábado y domingo) */
 .fin-de-semana {
-    background-color: #f8d7da;
+        background-color: #ff0000;
+    color: #333;
 }
 
-/* Estilos celdas del calendario */
+/* Estilos para las celdas del calendario */
 #calendario-full td {
     cursor: pointer;
-    background-color: #dddfdd;
+    background-color: white;
 }
 
 #calendario-full td:hover {
-    background-color: #f0f0f0;
+   
 }
 
 #calendario-full td.ocupado {
@@ -62,4 +113,166 @@ select {
 #calendario-full td.vacío {
     background-color: #d4edda;
     color: #155724;
+}
+
+/* Agregar una clase activa si el día es el día actual */
+#calendario-full td.hoy {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+}
+
+
+
+/* Estilo común para ambos formularios */
+form {
+    
+    margin: 20px auto; /* Centrar los formularios horizontalmente */
+    padding: 20px;
+    background-color: #f9f9f9; /* Color de fondo claro */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+/* Estilo para los encabezados */
+form h3 {
+    text-align: center; /* Centrar el título */
+    font-size: 1.2em; /* Aumentar el tamaño del texto */
+    color: #333; /* Color del texto */
+    margin-bottom: 15px; /* Espacio debajo del título */
+}
+
+/* Estilo para los campos de entrada */
+form input[type="text"],
+form input[type="email"],
+form input[type="submit"],
+form button {
+    width: 70%; /* Los campos ocuparán todo el ancho disponible */
+    padding: 10px;
+    margin-bottom: 10px; /* Espacio entre los campos */
+    border: 1px solid #ccc; /* Borde gris */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 1em; /* Tamaño de texto uniforme */
+}
+
+/* Estilo para el botón de envío */
+form input[type="submit"] {
+    background-color: #4CAF50; /* Color de fondo verde */
+    color: white; /* Color del texto */
+    cursor: pointer; /* Cursor pointer al pasar sobre el botón */
+    border: none; /* Sin borde */
+    transition: background-color 0.3s; /* Transición suave al pasar el cursor */
+}
+
+/* Cambio de color al pasar el cursor sobre el botón de envío */
+form input[type="submit"]:hover {
+    background-color: #45a049; /* Color más oscuro al pasar el mouse */
+}
+
+/* Estilo para los botones de cancelar */
+form button {
+    background-color: #f44336; /* Color de fondo rojo */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cursor pointer al pasar sobre el botón */
+    transition: background-color 0.3s; /* Transición suave */
+}
+
+/* Cambio de color al pasar el cursor sobre el botón de cancelar */
+form button:hover {
+    background-color: #e53935; /* Color más oscuro al pasar el mouse */
+}
+
+/* Estilo para los campos ocultos (sin visibilidad, pero están presentes en el formulario) */
+form input[type="hidden"] {
+    display: none;
+}
+
+/* Estilo para el <p> que muestra la información de la reserva seleccionada */
+#infoReservaSeleccionada {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Estilo para el campo de fecha y hora seleccionada (readonly) */
+form input[readonly] {
+    background-color: #f1f1f1; /* Fondo gris claro */
+    cursor: not-allowed; /* Cursor deshabilitado */
+    color: #666; /* Color de texto gris */
+}
+/* Estilo común para todos los botones */
+button {
+    padding: 10px 20px; /* Espaciado dentro del botón */
+    font-size: 1em; /* Tamaño de fuente */
+    border: none; /* Sin bordes */
+    border-radius: 5px; /* Bordes redondeados */
+    color: white; /* Color del texto */
+    cursor: pointer; /* Cursor pointer al pasar el mouse */
+    transition: background-color 0.3s, transform 0.2s; /* Transiciones suaves */
+    margin-right: 10px; /* Espacio entre los botones */
+    margin-top: 10px; /* Margen superior */
+}
+
+/* Estilo para el botón de "Eliminar" */
+#eliminarReserva {
+    background-color: #e53935; /* Rojo para el botón de eliminar */
+}
+
+#eliminarReserva:hover {
+    background-color: #d32f2f; /* Rojo más oscuro cuando se pasa el mouse */
+    transform: scale(1.05); /* Efecto de agrandamiento al pasar el mouse */
+}
+
+/* Estilo para el botón de "Añadir reserva" */
+#añadirReserva {
+    background-color: #4CAF50; /* Verde para el botón de añadir */
+}
+
+#añadirReserva:hover {
+    background-color: #45a049; /* Verde más oscuro cuando se pasa el mouse */
+    transform: scale(1.05); /* Efecto de agrandamiento al pasar el mouse */
+}
+
+/* Estilo para el botón de "Modificar reserva" */
+#modificarReserva {
+    background-color: #ff9800; /* Naranja para el botón de modificar */
+}
+
+#modificarReserva:hover {
+    background-color: #fb8c00; /* Naranja más oscuro cuando se pasa el mouse */
+    transform: scale(1.05); /* Efecto de agrandamiento al pasar el mouse */
+}
+
+/* Estilo para los botones de cancelar */
+button:focus {
+    outline: none; /* Eliminar el borde por defecto del focus */
+}
+
+#conte-cerrar {
+    display: flex;               /* Usamos Flexbox */
+    justify-content: center;     /* Centra el contenido horizontalmente (en fila) */
+    align-items: center;         /* Centra el contenido verticalmente dentro del contenedor */
+}
+
+#cerrar-sesion {
+    display: inline-block;       /* Hace que el enlace se comporte como un bloque en línea */
+    padding: 10px 20px;          /* Espaciado dentro del enlace */
+    background-color: #007bff;   /* Color de fondo */
+    color: white;                /* Color del texto */
+    text-decoration: none;       /* Elimina el subrayado */
+    border-radius: 5px;          /* Bordes redondeados */
+    font-weight: bold;           /* Texto en negrita */
+    text-align: center;          /* Centra el texto dentro del enlace */
+}
+
+
+footer {
+    position: fixed;
+    bottom: 0;
+    background-color: black; 
+    color: white;
+    text-align: center;
+    padding: 20px; 
+    position: relative;
 }

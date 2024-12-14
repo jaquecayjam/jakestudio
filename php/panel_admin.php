@@ -12,7 +12,7 @@
  //  ACCESO CON LOGIN---------
  ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -25,9 +25,9 @@
 <body>
     <nav>
         <ul>
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="estudio.html">Estudio</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
+            <li><a href="/././index.html">Inicio</a></li>
+            <li><a href="/././estudio.html">Estudio</a></li>
+            <li><a href="/././contacto.html">Contacto</a></li>
         </ul>
     </nav>
 
@@ -52,6 +52,8 @@
         <input type="hidden" id="hora_inicio" name="hora_inicio">
         <input type="hidden" id="hora_fin" name="hora_fin">
     <input type="submit" value= "Reserva">
+        <!-- Botón cancelar -->
+    <button type="button" id="cancelarR">Cancelar</button>
 </form>
 
 <!-- FORMULARIO MODIFICAR RESERVA -->
@@ -84,6 +86,8 @@
 
     <!-- Botón para guardar cambios -->
     <input type="submit" value="Guardar cambios">
+    <!-- Botón cancelar -->
+    <button type="button" id="cancelarReserva">Cancelar</button>
 </form>
 <!-- FIN FORMULARIO MODIFICAR RESERVA -->
     <!-- Titulo del mes y año -->
@@ -115,9 +119,9 @@
 
      
     <script src="../js/admin.js"></script>
-
-    <a href="logout.php">Cerrar sesión</a>
-    <!-- <script src="./js/scroll-estudio.js"></script>  -->
+    <div id="conte-cerrar">
+    <a href="logout.php" id="cerrar-sesion">Cerrar sesión</a>
+    </div>
 
     <input type="hidden" name="hora" value="">
     <div class="footer-container"> <!-- contenedor footer-->

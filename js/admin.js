@@ -32,7 +32,9 @@ let fechaReservaSeleccionada = null;
 // TOGGLEhORASrOJAS EN BOTON AÑADIR RESERVAS, BOTON CANCELAR,MARCARHORASOCUPADAS Y EN DONDE LE AÑADO EL EVENTO CLIC A LAS CELDAS (GENERARCALENDARIO)
 let deshabilitarHorasRojas = false; // Por defecto, las horas rojas están habilitadas
 
+// VARIABLE PARA HABILITAR MODIFICAR RESERVA SOLO LAS DE LA MISMA ID SELECCIONADA
 
+let deshabilitarHorasId = false;
 
 
 // Inicializa los selectores de mes y año
@@ -88,19 +90,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // Función para agregar los eventos a los selectores de mes y año
-function agregarEventos() {
-    // Evento cuando cambia el mes
-    slccionMes.addEventListener('change', () => {
-        mesSeleccionado = parseInt(slccionMes.value); // Actualiza el mes seleccionado
-        generarCalendario(mesSeleccionado, añoSeleccionado); // Genera el calendario con el nuevo mes
-    });
+// FUNCION TOGGLE PARA CONTROLAS BLOQUE DE HORAS ROJAS SEGUN ID O NO-----------------/////////////
+function toggleHorasRojas() {
+    document.querySelectorAll('.hora').forEach(horaElement => {
+        // Verificar si la hora está seleccionada, si lo está, no la deshabilites
+        if (horaElement.dataset.seleccionada === 'true') {
+            return; // Si la hora está seleccionada, no la tocamos
+        }
 
-    // Evento cuando cambia el año
-    slccionAño.addEventListener('change', () => {
-        añoSeleccionado = parseInt(slccionAño.value); // Actualiza el año seleccionado
-        generarCalendario(mesSeleccionado, añoSeleccionado); // Genera el calendario con el nuevo año
+        // Si deshabilitarHorasRojas está activado, aplica el deshabilitar
+        if (deshabilitarHorasRojas) {
+            if (deshabilitarHorasId) {
+                // Si la hora es roja y su id no coincide con el seleccionado, deshabilitarla
+                if (horaElement.style.backgroundColor === 'red' && horaElement.dataset.id !== idReservaSeleccionada) {
+                    horaElement.style.pointerEvents = 'none';
+                } else if (horaElement.dataset.id === idReservaSeleccionada) {
+                    horaElement.style.pointerEvents = 'auto'; // Asegura que la seleccionada siga activa
+                }
+            } else {
+                // Si no se deshabilita por id, deshabilitar todas las horas rojas
+                if (horaElement.style.backgroundColor === 'red') {
+                    horaElement.style.pointerEvents = 'none';
+                }
+            }
+        } else {
+            // Si no está habilitada la deshabilitación de horas rojas, habilitar todas las horas rojas
+            if (horaElement.style.backgroundColor === 'red') {
+                horaElement.style.pointerEvents = 'auto';
+            }
+        }
     });
 }
+
+
 //OBTENGO LAS FECHAS Y HORAS DE MI BASE DE DATOS-------------------------//////////////////////////////////////////////
 async function obtenerReservas() {
     console.log("Iniciando la obtención de datos...");
@@ -221,13 +243,15 @@ function generarCalendario(selectMes, selectAño) {
                             weekRow.dataset.horasGeneradas = 'true'; // Marca que las horas han sido generadas
                             filaSemanaActual = weekRow; // Actualiza la filaSemanaActual
                         }
+                             toggleHorasRojas();
                         compararReservasConCalendario(weekRow); // Esto mostrará las coincidencias en la consola
                         // Extraer las fechas y las horas de la fila
                         const diasYHoras = extraerDiaYHoras(weekRow);
                         console.log(diasYHoras); // Ver en la consola las fechas y horas extraídas
+                        
                         marcarHorasOcupadas(weekRow);
-                        // Llama a toggleHorasRojas para aplicar el estado de deshabilitación según la bandera IMPORTANTANTE!!
-                         toggleHorasRojas();
+                        // Llama a toggleHorasRojas para aplicar el estado de deshabilitación según la bandera
+
                     });
                 }
 
@@ -246,6 +270,7 @@ function generarCalendario(selectMes, selectAño) {
     if (selectMes === mesActual && selectAño === añoActual) {
         generarHorasSemanaActual(selectMes, selectAño, semanaActual);
     }
+
 }
 
 // FUNCION PARA EXTRAER DIAS Y HORAS DE LA FILA EN LA QUE SE ENCUENTRA------------------///////////////////////////////
@@ -306,14 +331,8 @@ async function compararReservasConCalendario(semanaFila) {
 
     return horasOcupadas;
 }
-// FUNCINOA BANDERAS----------------------//////////////
-function toggleHorasRojas() {
-    document.querySelectorAll('.hora').forEach(horaElement => {
-        if (horaElement.style.backgroundColor === 'red') {
-            horaElement.style.pointerEvents = deshabilitarHorasRojas ? 'none' : 'auto';
-        }
-    });
-}
+
+
 
 // FUNCION PARA MARCAR LOS DIAS QUE COINCIDEN EN ROJO Y  AL PULSAR Y AÑADIRLE LA ID, YA QUE NO LA TIENE, Y ASI ELIMINARLA CON POR ID--------------------//////////////////////////
 async function marcarHorasOcupadas(semanaFila) {
@@ -341,19 +360,6 @@ async function marcarHorasOcupadas(semanaFila) {
                         // horaElemento.style.pointerEvents = 'none'; en admin lo quito para poder obtener
                         // Guardar el id en una variable al hacer clic ----------------
                         horaElemento.addEventListener('click', function () {
-                            //     idReservaSeleccionada = horaElemento.dataset.id;  // Guarda el id seleccionado---R
-                            //      console.log(`NOMBRE ID seleccionada : ${idReservaSeleccionada}`);
-                            //     // INTENTO GUARDAR NOMBRE----------------
-                            //    nombreReservaSeleccionada = horaElemento.dataset.nombre;  // Guarda el NOMBRE seleccionado-------------R
-                            //     console.log(`NOMBRE Reserva seleccionada : ${nombreReservaSeleccionada}`);
-                            //     // INTENTO GUARDA HORA INICIO------------------ NO FUNCIONA
-                            //    horaInicioSeleccionada = horaElemento.dataset.hora_inicio;  // Guarda HORA INICIO seleccionado-------------R
-                            //     console.log(`HORA INICIO Reserva seleccionada : ${horaInicioSeleccionada}`);
-                            //     // INTENTO GUARDAR HORA FIN---------------------
-                            //    horaFinSeleccionada = horaElemento.dataset.hora_fin;  // Guarda HORA FIN seleccionado-------------R
-                            //     console.log(`HORA FIN Reserva seleccionada : ${horaFinSeleccionada}`);
-                            //     console.log('-------------------------');
-
                             // Verifica si ya estaba seleccionado
                             console.log('ESTO ES DE MARCARENROJO-------//////////------------------');
                             if (idReservaSeleccionada === horaElemento.dataset.id) {
@@ -378,20 +384,16 @@ async function marcarHorasOcupadas(semanaFila) {
 
                             console.log('ESTO ES DE MARCARENROJO-----------///////////--------------');
 
-
-
-
-
-
-
                         });
                     }
                 });
             }
         }
     });
-      // Aplicar el estado global de las horas rojas IMPORTANTE!!
-    toggleHorasRojas();
+      // Aplicar el estado global de las horas rojas, esto si esta activo aqui, hace que no se rellenen los campos de fehc,hora de modificar reserva
+      // si lo quito de aqui, entonces no se descativan ni activan el poder hacer clic, ya que las horas se generan siempre.
+    //   si lo quito de aqui mi modificareseva funciona
+       toggleHorasRojas();
 }
 
 // FUNCION PARA CREAR LAS HORAS EN LA SEMANA ACTUAL --------------------------------/////////////////////////
@@ -419,8 +421,6 @@ function generarHorasSemanaActual(selectMes, selectAño, semanaActual) {
 
 // FUNCION PARA VERIFICAR SI HAY HORAS ENTREMEDIAS DE LAS HORAS SELECCOINADA----------------------
 // Función para comprobar si hay alguna hora ocupada (con fondo rojo) FUNCIONA-----------------
-
-
 // COMPROBAR HORAS ENTREMEDIAS-----------COMPRUEBA SI HAY ALGUNA HORA RESERVADA CON SU COLOR ROJO ----------------------//////////
 
 function verificarHorasInterrumpidas(celda) {
@@ -499,56 +499,53 @@ horas.forEach(hora => {
     horaElement.classList.add('hora');
 
     horaElement.addEventListener('click', () => {
-        console.log("ESTOS ES DE CREAR RANGOS HORAS---***********--------");
-
-        // Si la hora ya está seleccionada, la removemos del array y restauramos el color
-        if (horaElement.style.backgroundColor === 'blue') {
-            horaElement.style.backgroundColor = ''; // Color original
-            horaElement.style.color = '';
+        // Verificamos si la hora está seleccionada
+        if (horaElement.dataset.seleccionada === 'true') {
+            // Si ya está seleccionada, deseleccionamos y restauramos el color original
+            horaElement.dataset.seleccionada = 'false';
+            horaElement.style.backgroundColor = '';  // Restaurar color original
+            horaElement.style.color = '';  // Restaurar color original
+    
         } else {
-            // Si no está seleccionada, la agregamos y cambiamos el color a azul
-            horaElement.style.backgroundColor = 'blue';
-            horaElement.style.color = 'white'; // Mejor visibilidad
+            // Si no está seleccionada, la seleccionamos y cambiamos el color
+            horaElement.dataset.seleccionada = 'true';
+            horaElement.style.backgroundColor = 'blue';  // Color de selección
+            horaElement.style.color = 'white';  // Mejor visibilidad
         }
-
-        // Obtener horas seleccionadas dinámicamente
+    
+        // Obtener todas las horas seleccionadas
         const horasSeleccionadas = Array.from(
-            document.querySelectorAll('p.hora[style="background-color: blue; color: white;"]')
+            document.querySelectorAll('p.hora[data-seleccionada="true"]')
         );
-
+    
         // Verificar si hay al menos dos horas seleccionadas
         if (horasSeleccionadas.length >= 2) {
-            // Verificar si las horas seleccionadas tienen interrumpidas
-            const interrumpidas = verificarHorasInterrumpidas(celda);
-
+            // Verificar si las horas seleccionadas están interrumpidas
+            const interrumpidas = verificarHorasInterrumpidas(celda); // Aquí asumo que 'celda' es el contenedor adecuado
+    
             if (interrumpidas) {
-                // Si se encontraron horas interrumpidas, restauramos el estilo de las horas seleccionadas
-                horasSeleccionadas.forEach((horaSel) => {
-                    // Recorrer todos los elementos p.hora y buscar el que contiene el texto correspondiente
-                    const horaElements = celda.querySelectorAll('p.hora');
-                    horaElements.forEach((horaElement) => {
-                        if (horaElement.textContent === horaSel.textContent) {
-                            horaElement.style.backgroundColor = ''; // Restaurar color original
-                            horaElement.style.color = ''; // Restaurar color original
-                        }
-                    });
+                // Si las horas están interrumpidas, restauramos el color de todas las horas seleccionadas
+                horasSeleccionadas.forEach(horaSel => {
+                    horaSel.style.backgroundColor = ''; // Restaurar color original
+                    horaSel.style.color = '';  // Restaurar color original
+                    horaSel.dataset.seleccionada = 'false';  // Marcar como no seleccionada
                 });
-
+    
                 // Limpiar el array de horas seleccionadas
                 horasSeleccionadas.length = 0;
                 console.log("Selección de horas interrumpidas cancelada.");
-
-                // Eliminar la información en formato texto
+    
+                // Llamar a la función para eliminar la información de fechas y horas seleccionadas
                 eliminarFechaHoraSeleccionada();
                 return; // Detener el proceso si hay interrumpidas
             }
         }
-
+    
         // Verificar si hay al menos una hora seleccionada
         if (horasSeleccionadas.length > 0) {
             const fechas = [];
             const rangos = [];
-
+    
             horasSeleccionadas.forEach(horaSel => {
                 // Obtener el td padre de cada hora seleccionada
                 const tdPadre = horaSel.closest('td');
@@ -557,85 +554,49 @@ horas.forEach(hora => {
                     if (!fechas.includes(fecha)) {
                         fechas.push(fecha); // Evitar duplicados
                     }
-
+    
                     rangos.push(horaSel.textContent); // Agregar el rango de la hora
                 }
             });
-
+    
             // Encontrar las horas más tempranas y tardías dentro del rango
             const horasInicio = rangos.map(h => h.split(' - ')[0]); // Ej: ["13:00", "14:00"]
             const horasFin = rangos.map(h => h.split(' - ')[1]);   // Ej: ["14:00", "15:00"]
-
+    
             const horaInicio = horasInicio.sort()[0]; // La más temprana
             const horaFin = horasFin.sort().slice(-1)[0]; // La más tardía
-
+    
             console.log("Hora de inicio más temprana:", horaInicio);
             console.log("Hora de fin más tardía:", horaFin);
             console.log("Fechas seleccionadas:", fechas);
-
+    
             // Guardar las fechas y rangos seleccionados
             fechas.forEach(fecha => {
-       // Descomponer la fecha en año, mes y día
-    const partesFecha = fecha.split('-'); // Esto devuelve un array con [año, mes, día]
+                // Descomponer la fecha en año, mes y día
+                const partesFecha = fecha.split('-'); // Esto devuelve un array con [año, mes, día]
     
-    const añoSeleccionado = Number(partesFecha[0]); // Convertir el año a número
-    const mesSeleccionado = Number(partesFecha[1]); // Convertir el mes a número
-    const diaSeleccionado = Number(partesFecha[2]); // Convertir el día a número
+                const añoSeleccionado = Number(partesFecha[0]); // Convertir el año a número
+                const mesSeleccionado = Number(partesFecha[1]); // Convertir el mes a número
+                const diaSeleccionado = Number(partesFecha[2]); // Convertir el día a número
     
-    // Llamar a la función para guardar la fecha con el formato adecuado
-    // Restamos 1 al mes porque en JavaScript los meses son de 0 a 11
-    guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado - 1, añoSeleccionado, `${horaInicio} - ${horaFin}`);
-
+                // Llamar a la función para guardar la fecha con el formato adecuado
+                // Restamos 1 al mes porque en JavaScript los meses son de 0 a 11
+                guardarFechaHoraSeleccionada(diaSeleccionado, mesSeleccionado - 1, añoSeleccionado, `${horaInicio} - ${horaFin}`);
             });
         } else {
             // Llamada para eliminar los campos si no hay horas seleccionadas
             eliminarFechaHoraSeleccionada();
             console.log("No hay horas seleccionadas.---------------------------");
         }
+    
+        // Después de cada selección o deselección, actualizar las horas (esto puede implicar más lógica)
+        toggleHorasRojas();
     });
+    
 
     celda.appendChild(horaElement);
 });
 }
-
-
-// EXTRAER CON ESTA FUNCION AL HACER CLICK EN UN RANGO DE HORA PARA PANEL ADMIN
-// esta funcion me da el resultado por consola
-function extraerClick(horaElement) {
-    // Obtener la celda <td> que contiene la hora. Suponemos que 'horaElement' es un <p> dentro de un <td>.
-    const celda = horaElement.closest('td');  // Encuentra el <td> más cercano al <p> de la hora
-    const fechaSeleccionada = celda ? celda.dataset.fecha : '';  // Extraemos la fecha desde el data-attribute de la celda
-
-    if (!fechaSeleccionada) {
-        console.warn('No se pudo obtener la fecha desde la celda.');
-        return;  // Si no se obtiene la fecha, salimos de la función
-    }
-
-    const horaSeleccionada = horaElement.textContent;  // Obtenemos la hora del <p class="hora"> clickeado
-
-    // Mostrar la fecha y la hora seleccionada en la consola
-    console.log(`Fecha seleccionada BIEN: ${fechaSeleccionada}`);
-    console.log(`Hora seleccionada BIEN: ${horaSeleccionada}`);
-}
-
-async function compararSeleccionesConReservas() {
-    const reservas = await obtenerReservas(); // Obtener las reservas de la base de datos
-    selecciones.forEach(({ fecha, hora }) => {
-        // Buscar las reservas para esa fecha
-        const reservasDelDia = reservas.filter(reserva => reserva.fecha === fecha);
-
-        // Verificar si la hora seleccionada coincide con alguna de las reservas
-        reservasDelDia.forEach(reserva => {
-            // Compara la hora seleccionada con la hora de inicio y fin de la reserva
-            if (reserva.hora_inicio === hora || reserva.hora_fin === hora) {
-                console.log(`¡Coincidencia encontrada! La hora ${hora} está ocupada para el ${fecha} por ${reserva.nombre}.`);
-            } else {
-                console.log(`La hora ${hora} está libre para el ${fecha}.`);
-            }
-        });
-    });
-}
-
 
 // FUNCION LIMPIAR HORAS EN LAS FILAS-----------------------------/////////////////////////
 function limpiarHorasEnFila(fila) {
@@ -718,27 +679,19 @@ function eliminarFechaHoraSeleccionada() {
 }
 // FUNCION PARA AÑADIR CON BOTON RESERVAD EN LA BASDE DE DATOS------------///////////
 //AÑADIR RESERVA AL HACER CLICK, MUESTRA EL FORMULARIO:
+// Seleccionamos todos los elementos <p> con fondo rojo
+let elementosConFondoRojo = document.querySelectorAll('.hora[style*="background-color: red;"]');
 document.getElementById('añadirReserva').addEventListener('click', function () {
     // ocultar formulario añadir
     ocultarFormulario();
     document.getElementById('formularioReserva').style.display = 'block';
-    //     //REVIASARRRRRR
-    //  Deshabilitar los clics en las horas ocupadas
-    // document.querySelectorAll('.hora').forEach(horaElement => {
-    //     // Verificar si el fondo de la hora es rojo (ocupada)
-    //     if (horaElement.style.backgroundColor === 'red') {
-    //         // Deshabilitar el clic sobre este elemento
-    //         horaElement.style.pointerEvents = 'none';
-    //         // horaElement.style.opacity = '0.5'; // Opcional: cambiar la opacidad para indicar que está deshabilitado
-    //     }
-    // });
+    // Actualizar la bandera para deshabilitar horas rojas
+     deshabilitarHorasRojas = true;
+    deshabilitarHorasId = false;
+    
+    // // Deshabilitar las horas rojas
+      toggleHorasRojas();
 
-
-        // Actualizar la bandera para deshabilitar horas rojas
-    deshabilitarHorasRojas = true;
-
-    // Deshabilitar las horas rojas IMPORTANTE!!!
-    toggleHorasRojas();
 });
 // ENVIAR DATOS A LA BASE DE DATOS---------------------------------------------------------------////////////////////////////////////////////////////////-
 // ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO AÑADIR RESERVA A LA BASE DE DATOS----
@@ -806,10 +759,10 @@ document.getElementById('cancelarR').addEventListener('click', function () {
     });
 
     // Actualizar la bandera para habilitar horas rojas
-    deshabilitarHorasRojas = false;
+ deshabilitarHorasRojas = false;
 
-    // Habilitar las horas rojas IMPORTANTE!!
-    toggleHorasRojas();
+    // // Habilitar las horas rojas
+     toggleHorasRojas();
 
     // Ocultar el formulario y restablecerlo
     const formulario = document.getElementById('formularioReserva');
@@ -829,20 +782,6 @@ document.getElementById('cancelarR').addEventListener('click', function () {
 });
 
 
-// POSIBLE ELIMINACION PERO SOLO EN ADMIN2------
-slccionMes.addEventListener('change', (event) => {
-    mesSeleccionado = parseInt(event.target.value); // Actualiza el mes seleccionado
-    generarCalendario(mesSeleccionado, añoSeleccionado); // Genera el calendario con el mes seleccionado
-});
-
-slccionAño.addEventListener('change', (event) => {
-    añoSeleccionado = parseInt(event.target.value); // Actualiza el año seleccionado
-    generarCalendario(mesSeleccionado, añoSeleccionado); // Genera el calendario con el año seleccionado
-});
-
-// Inicializa la aplicacióN TO FIX: HACE QUE LOS SELECTORES SE DUPLIQUEN ASI QUE HAY QUE DESCATIVARLO
-// FIXED: COMENTAR LA LLAMADA A LA FUNCION
-//initializeSelectors(); // Llama a la función para inicializar los select
 // FUNCION PARA OCULTAR LOS FORMULARIOS DE AÑADIR O MODIFICAR--------------------------//////////
 function ocultarFormulario() {
     document.getElementById('formularioReserva').style.display = 'none';
@@ -885,8 +824,7 @@ document.getElementById('eliminarReserva').addEventListener('click', async funct
 });
 
 // FUNCION PARA MODIFICAR RESERVA---------------------////////////
-
-// Función para mostrar el formulario con los datos de la reserva seleccionada
+// Función para mostrar el formulario con los datos de la reserva seleccionada MODIFICAR RESERVA--------------///
 document.getElementById('modificarReserva').addEventListener('click', function () {
     if (!idReservaSeleccionada) {
         alert("Por favor, selecciona una reserva marcada en rojo para modificar.");
@@ -894,7 +832,15 @@ document.getElementById('modificarReserva').addEventListener('click', function (
     }
 
     // Llamar a la función para obtener los datos de la reserva seleccionada desde el servidor
-    obtenerReservaPorId(idReservaSeleccionada); // Cambiar esta función por la que ya hemos creado
+    obtenerReservaPorId(idReservaSeleccionada);
+     // Configurar los estados globales
+    deshabilitarHorasRojas = true; // Desactivar la deshabilitación general
+    deshabilitarHorasId = true; // Activar la deshabilitación basada en ID
+
+    // Llamar a la función que maneja las horas rojas por ID
+    toggleHorasRojas();
+    console.log('Horas rojas deshabilitadas, excepto la seleccionada.');
+
 });
 
 // Función para obtener los detalles de la reserva por su ID
@@ -957,9 +903,6 @@ document.getElementById('formularioModificarReserva').addEventListener('submit',
     event.preventDefault();  // Evita el envío normal del formulario
 
 
-    // Actualizar el campo oculto con la hora de inicio de la reserva anterior
-    // document.getElementById('horaRanterior').value = reserva.hora_inicio;
-
     const formData = new FormData();
 
     // Recogemos los datos solo si han sido modificados
@@ -1005,14 +948,13 @@ document.getElementById('formularioModificarReserva').addEventListener('submit',
         });
 });
 
-// esyto vaaa
+// Función para cancelar reserva
 document.getElementById('cancelarReserva').addEventListener('click', async function () {
     console.log('Cancelando la selección de horas.');
 
-    // Obtener todas las celdas que contienen las horas en la tabla
+    // Restaurar el estado de clic de las horas deshabilitadas
     const horas = document.querySelectorAll('#calendarioFull .hora');
 
-    // Iterar sobre cada hora para restaurar su estado original
     horas.forEach(horaElemento => {
         // Si el estilo de fondo es azul (seleccionado) y contiene "Ocupada por"
         if (horaElemento.style.backgroundColor === 'blue' && horaElemento.textContent.includes('Ocupada por')) {
@@ -1033,6 +975,12 @@ document.getElementById('cancelarReserva').addEventListener('click', async funct
         }
     });
 
+   
+    // Actualizar la bandera para habilitar horas rojas
+     deshabilitarHorasRojas = false;
+
+    // // Habilitar las horas rojas
+     toggleHorasRojas();
     // Limpiar el array de horas seleccionadas
     horasSeleccionadas.length = 0;
 
@@ -1053,4 +1001,31 @@ document.getElementById('cancelarReserva').addEventListener('click', async funct
     console.log('Selección de horas cancelada, formulario restablecido, y colores restaurados.');
 });
 
+
+// Función para manejar el clic en una hora
+function manejarClicHora() {
+    document.querySelectorAll('.hora').forEach(horaElement => {
+        horaElement.addEventListener('click', function () {
+            const horaId = horaElement.dataset.id;
+            
+            // Si la hora no tiene el atributo data-seleccionada, la seleccionamos
+            if (!horaElement.hasAttribute('data-seleccionada')) {
+                horaElement.setAttribute('data-seleccionada', 'true');
+                horaElement.style.backgroundColor = 'blue'; // Marcar como seleccionada
+                horaElement.style.pointerEvents = 'auto'; // Asegurar que sea clickeable
+            } else {
+                // Si ya está seleccionada, desmarcarla
+                horaElement.removeAttribute('data-seleccionada');
+                horaElement.style.backgroundColor = ''; // Restaurar el color original
+                horaElement.style.pointerEvents = 'auto'; // Asegurar que sea clickeable
+            }
+        });
+    });
+}
+
+// Función que se llama al cambiar de semana o fila
+function manejarCambioDeSemana() {
+    // Aseguramos que las horas seleccionadas se mantengan
+    toggleHorasRojas();
+}
 
