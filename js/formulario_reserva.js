@@ -1,12 +1,11 @@
 // Creación del modal-------------
-// Elementos del DOM
 // Inicializa las variables necesarias
 let mesSeleccionado = new Date().getMonth(); // Inicializa con el mes actual
 let añoSeleccionado = new Date().getFullYear(); // Inicializa con el año actual
 let fechaSeleccionadaGlobal = null;
 let filaAnterior = null;
 let filaSemanaActual = null;
-let horasGeneradas = {}; // ********
+// let horasGeneradas = {}; // ********
 const formReserva = document.getElementById("form-reserva");
 
 // Inicializa el calendario cuando se carga la página
@@ -120,9 +119,6 @@ function generarCalendario(selectMes, selectAño) {
     tituloMesAño.textContent = nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
     // nos dice en que dia de la semana cae el dia 1, lunes 1, martes 1, miercoles 2, jueves 3, viernes 4, sabado 5,domingo 0:
     const primerDiaMes = new Date(selectAño, selectMes, 1).getDay();
-    // Una fumada:
-    // select +1 es el mes que seleciona el usuario+1,
-    // select +1, 0: al pasarle 0 como prametro de DIA, retrocede un dia desde el primer dia del mes siguiente para saber cuatos dias tienen el mes seleccionado  
 
     const diasTotalMes = new Date(selectAño, selectMes + 1, 0).getDate();
     const initialOffset = (primerDiaMes + 6) % 7;
@@ -137,8 +133,6 @@ function generarCalendario(selectMes, selectAño) {
     const mesActual = fechaActual.getMonth();
     const añoActual = fechaActual.getFullYear();
     const diaDeLaSemanaActual = fechaActual.getDay(); // 0 = Domingo, 1 = Lunes, ..., 6 = Sábado
-    // const semanaActual = Math.floor((diaActual + primerDiaMes - 1) / 7); // Semana actual (0-5)
-    // cambios para buena asignacion de semana sugun su dia: CALCULAR LA SEMANA ACTUAL 
     let semanaActual = -1;
 
 
@@ -159,20 +153,6 @@ function generarCalendario(selectMes, selectAño) {
 
                 // Asignar un data-attribute con la fecha completa
                 celdaDia.dataset.fecha = `${selectAño}-${String(selectMes + 1).padStart(2, '0')}-${String(currentDate).padStart(2, '0')}`;
-                // Comparar si la celda corresponde a un día anterior al día actual y los tacha----
-                // // Comparar si la celda corresponde a un día anterior al día actual y los tacha
-                // const diaComparado = new Date(selectAño, selectMes, currentDate);
-                // if (diaComparado < fechaActual) {
-                //     const fechaNormalizada = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
-                //     const diaNormalizado = new Date(diaComparado.getFullYear(), diaComparado.getMonth(), diaComparado.getDate());
-
-                //     // Excluye el día actual
-                //     if (diaNormalizado < fechaNormalizada && !(diaNormalizado.getTime() === fechaNormalizada.getTime())) {
-                //         celdaDia.querySelector('span').style.textDecoration = 'line-through';
-                //         celdaDia.querySelector('span').style.color = 'gray'; // Opcional: cambia el color a gris
-                //         celdaDia.style.pointerEvents = 'none'; // Desactiva los clics en estos días
-                //     }
-                // } el anterio REVISAR
                 // Comparar si la celda corresponde a un día anterior al día actual y los tacha-------
                 const diaComparado = new Date(selectAño, selectMes, currentDate);
                 const fechaNormalizada = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
@@ -392,7 +372,13 @@ function limpiarHorasEnCelda(cell) {
     const horas = cell.querySelectorAll('.hora');
     horas.forEach(hora => hora.remove()); // Elimina todas las horas generadas en la celda
 }
+// FUNCION PARA VERIFICAR SI HAY HORAS ENTREMEDIAS DE LAS HORAS SELECCOINADA----------------------
+// Función para comprobar si hay alguna hora ocupada (con fondo rojo) FUNCIONA-----------------
+
+
 // COMPROBAR HORAS ENTREMEDIAS-----------COMPRUEBA SI HAY ALGUNA HORA RESERVADA CON SU COLOR ROJO ----------------------//////////
+
+
 function verificarHorasInterrumpidas(celda, fechaSeleccionada) {
     // Obtener todas las horas dentro de la celda
     const horas = Array.from(celda.querySelectorAll('p.hora'));
@@ -450,7 +436,7 @@ function verificarHorasInterrumpidas(celda, fechaSeleccionada) {
     console.log("Horas intermedias seleccionadas y pintadas correctamente.");
     return false; // No hay problemas, todo ha ido bien
 }
-// FUNCION PARA CREAR RANGO DE HORAS-----------------------------//////////////////////////////////////////////////
+// FUNCION PARA CREAR LOS RANGOS DE HORA-------------------------------------////////////////////
 async function crearRangoHoras(dia, mes, año, celda) {
     const horas = [
         "09:00 - 10:00",
@@ -621,11 +607,6 @@ function eliminarFechaHoraSeleccionada() {
     fechaInput.value = '';
     horaInicioInput.value = '';
     horaFinInput.value = '';
-    // IMPRTANTE QUITAR ESTO -----------------
-    // Restaurar los valores en los campos visibles para el formulario MODIFICAR
-    // fechaInputVisible.value = '';
-    // horaInicioInputVisible.value = '';
-    // horaFinInputVisible.value = '';
     // Limpiar la información visible en `infoSeleccionada` ----------------------------
     const infoSeleccionada = document.getElementById('infoSeleccionada'); // Asegúrate de que el ID coincide
     if (infoSeleccionada) {
@@ -640,7 +621,7 @@ function eliminarFechaHoraSeleccionada() {
 
 }
 // ENVIAR DATOS A LA BASE DE DATOS---------------------------------------------------------------////////////////////////////////////////////////////////-
-// ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO A LA BASE DE DATOS-----------------a-------------------------/////////////////////////
+// ENVIAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO A LA BASE DE DATOS------------------------------------------/////////////////////////
 // Utilizo API FETCH para enviar los datos al servidor sin recargar la página----------------
 formReserva.addEventListener('submit', function (event) {
     event.preventDefault(); // Evita el envío normal del formulario
@@ -689,21 +670,9 @@ formReserva.addEventListener('submit', function (event) {
             console.error('Error:', error); // Manejar errores
             alert('Error al enviar la solicitud');
         });
+
 });
 
-// FUNCION PARA MOSTRAR SOLO LA CELDA DEL DIA ACTUAL EN DISPOSITIVOS MOVIL-----------------------/////////////////////////
-
-
-
-// Actualizamos esta parte de codigo, ya que el anterio hace que cargara siempre al mes actual, ej:
-// al hacer click en un mes difrente al actual,no nos deja interactuar con los dias del mes.
-
-// calendarioFull.addEventListener('click', () => {
-//     const hoy = new Date();
-//     slccionMes.value = hoy.getMonth(); // Establece el mes actual
-//     slccionAño.value = hoy.getFullYear(); // Establece el año actual
-//     generarCalendario(hoy.getMonth(), hoy.getFullYear()); // Genera el calendario para la fecha actual
-// }
 slccionMes.addEventListener('change', (event) => {
     mesSeleccionado = parseInt(event.target.value); // Actualiza el mes seleccionado
     generarCalendario(mesSeleccionado, añoSeleccionado); // Genera el calendario con el mes seleccionado
