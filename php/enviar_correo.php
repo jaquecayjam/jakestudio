@@ -1,27 +1,11 @@
-
 <?php
-// Habilitar errores para depuración
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
-// // Configuración de la base de datos
-// $servername = "";
-// $username = "";
-// $password = "";
-// $dbname = "";
-
-// // Crear conexión
-// $conn = new mysqli($servername, $username, $password, $dbname);
-
-// // comprobar si la conexion funciona
-// if ($conn->connect_error) {
-//     die("Conexión fallida: " . $conn->connect_error);
-// }
 // LLAMADA SOLO AL ARCHIVO PHP_CONENCTION:
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Incluir archivo de conexión
 require 'db_connection.php';
+
 
 // Guardamos datos del formulario en la BD jakestudio_v1----------
 // guardamos los datos del formulario en las variables

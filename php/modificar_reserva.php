@@ -1,4 +1,5 @@
 <?php
+
 // LLAMADA SOLO AL ARCHIVO PHP_CONENCTION:
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -39,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($stmt->execute()) {
         // Llamamos al archivo de envío de correo y le pasamos los datos adicionales
         include 'email_conf_modificar.php';
-        echo "Reserva guardada con éxito.";
+        echo "Reserva modificada con éxito.";
     } else {
         echo "Error al modificar la reserva: " . $stmt->error;
     }

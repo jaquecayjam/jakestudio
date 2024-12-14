@@ -30,12 +30,12 @@ try {
     $mail->isSMTP();
     $mail->Host = 'smtp.gmail.com';  // Servidor SMTP de Gmail
     $mail->SMTPAuth = true;
-    $mail->Username = '';  // Tu correo
-    $mail->Password = '';  // Tu contraseña de correo
+    $mail->Username = 'g.j.cayo.17@gmail.com';  // Tu correo
+    $mail->Password = 'jqxx mfpl hoxk bsyt';  // Tu contraseña de correo
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 
-    $mail->setFrom('', 'jaque');
+    $mail->setFrom('g.j.cayo.17@gmail.com', 'jaque');
     $mail->addAddress($correo, "$nombre $apellido");  // Correo de la persona que hace la reserva
 
     $mail->Subject = 'Confirmación de Reserva';
