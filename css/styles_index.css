@@ -1,0 +1,184 @@
+body{
+    background-color: #a12929;
+    height: 80vh;
+    
+}
+/* estilo menu ------------------*/
+nav {
+    
+    background-color: black;
+    padding: 10px;    
+    border: 2px solid ;
+    border-color: white;
+    box-sizing: border-box; /* para que el borde derecho no desaparezca */
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 50px;
+    display: flex; /* Para hacer el menú horizontal */
+    justify-content: flex-end; /* Para alinear el contenido a la derecha */
+    
+}
+/* separacion entre lo elementos del menu */
+nav ul li {
+    margin-left: 50px;
+    
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+/* Estilo BVDOS JakeStudio contenedores--------- */
+#container-1 {
+    text-align: center; /* Centra el texto dentro del div */
+    margin: 20px; /* Añade un margen alrededor del div */
+}
+/* estilo contenedor ¿Que ofrecemos? 2---------- */
+#container-2 {
+    background-color: aliceblue;
+    display: flex;
+    justify-content: center;  
+    padding: 20px;
+    border: 2px solid #000;
+
+}
+section#contenedor_Jake {
+    color: white;
+    text-align: center;
+}
+/* Estilo  para la sección "¿Qué Ofrecemos?" ---------*/
+#section-ofrecemos {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    border: 2px solid #000;
+}
+/* Estilo específico para la sección "¿Qué Ofrecemos?" */
+#section-ofrecemos h2 {
+    margin-right: 20px;
+    padding-left: 50px;
+}
+
+/* Estilo de la lista ¿Que ofrecemos?*/
+#section-ofrecemos ul {
+   
+    list-style-type: none; 
+   
+}
+
+/* lista de ofrecemos index*/
+#section-ofrecemos li {
+    margin-right: 30px; /* Espacio entre los elementos de la lista en index */
+}
+
+
+/* estilos container Un espacio Diseñado para crear  */
+#container-espacio {
+    display: flex;             /* Usamos Flexbox para centrar los elementos dentro */
+    justify-content: center;   /* Centra el contenido horizontalmente */
+    align-items: center;       /* Centra el contenido verticalmente (si es necesario) */
+    padding: 20px;             /* Agrega algo de espacio alrededor */
+    width: 100%;               /* Asegúrate de que ocupe todo el ancho disponible */
+    box-sizing: border-box;    /* Asegura que el padding no afecte el ancho */
+}
+
+/* Estilo para la sección que contiene el botón */
+#section-espacio {
+    display: flex;             /* Flexbox también para la sección */
+    justify-content: center;   /* Centra el contenido horizontalmente */
+    align-items: center;       /* Centra el contenido verticalmente */
+    width: 100%;               /* Ocupa el 100% del contenedor */
+}
+
+/* Estilo para el botón */
+.boton-reservar {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+/* FIN * estilos container Un espacio Diseñado para crear  */ */
+/* estilo botones reserva --------------------*/
+.boton-reservar {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+
+}
+.boton-contacto {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    
+}
+
+/* -------------------------*/
+/* Estilo foooter------------ */
+footer {
+    position: fixed;
+    bottom: 0;
+    background-color: black; 
+    color: white;
+    text-align: center;
+    padding: 20px; 
+    position: relative;
+}
+footer p {
+    text-align: center; /* Centra el texto dentro del <p> */
+    margin: 0 20px; /* Añade margen en los lados izquierdo y derecho */
+    padding: 10px 0; /* Opcional: Añade algo de padding arriba y abajo */
+}
+footer p a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff; /* El color de fondo */
+    color: white; /* Color del texto */
+    text-decoration: none; /* Elimina el subrayado */
+    border-radius: 5px; /* Bordes redondeados */
+    font-weight: bold; /* Texto en negrita */
+    transition: background-color 0.3s ease; /* Transición suave para el color */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+}
+
+/* Cambio de color al pasar el ratón */
+footer p a:hover {
+    background-color: #0056b3; /* Color más oscuro al pasar el mouse */
+}
+
+/* Estilo para el <p> que contiene el enlace "Contáctanos" */
+footer p {
+    text-align: center; /* Centra el <p> dentro del footer */
+    margin: 0; /* Elimina márgenes adicionales */
+}
+
+@media screen and (max-width: 768px) {
+    #section-ofrecemos {
+        width: 100%;
+        flex-direction: column; /* Apila los elementos en una columna */
+        padding: 10px; /* Agrega algo de espacio interno */
+    }
+}
