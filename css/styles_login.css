@@ -1,0 +1,76 @@
+/* Estilo para el cuerpo de la página */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #A12929; /* Fondo rojo oscuro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    color: white; /* Texto blanco para contraste */
+}
+/* Centrar el contenido dentro de un div */
+/* Centrar el contenido dentro de un div */
+.centrado {
+    text-align: center; /* Alinea el texto dentro del div */
+    margin-bottom: 20px; /* Espacio inferior */
+}
+h2 {
+    color: white; /* Color blanco para el texto */
+    font-size: 36px; /* Tamaño grande */
+    margin: 0;
+}
+/* Estilo del formulario */
+form {
+    background-color: #fff; /* Fondo blanco para el formulario */
+    padding: 30px;
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    width: 100%;
+    max-width: 400px;
+    text-align: center; /* Alinea el contenido del formulario al centro */
+}
+
+/* Título dentro del formulario */
+form h2 {
+    color: #A12929; /* Rojo para el título */
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Estilo para las etiquetas */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Estilo para los campos de entrada */
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* Estilo para el botón de envío */
+input[type="submit"] {
+    background-color: #A12929; /* Color rojo para el botón */
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background-color: #8F2424; /* Color más oscuro cuando pasa el ratón */
+}

@@ -8,7 +8,6 @@ if (isset($_SESSION['usuario'])) {
     exit();
 }
 
-
 // LLAMADA SOLO AL ARCHIVO PHP_CONENCTION:
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -63,9 +62,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar sesión</title>
+    <link rel="stylesheet" href="/css/styles_login.css">
+
 </head>
 <body>
-    <h2>Iniciar sesión</h2>
     <form action="login.php" method="POST">
         <label for="email">Correo electrónico:</label>
         <input type="email" name="email" id="email" required><br>
